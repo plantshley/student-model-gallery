@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Mental Model Gallery</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="other-files/spark.png">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +40,7 @@
                 Student Mental Model Gallery
                 <span class="title-decoration">&#10022;</span>
             </h1>
-            <p class="subtitle">Explore the creative mental models crafted by our students</p>
+            <p class="subtitle">Explore the creative mental models crafted by our students!</p>
             <div class="sparkles">
                 <span>&#10024;</span>
                 <span>&#11088;</span>
@@ -68,6 +71,31 @@
             </div>
         </section>
     </main>
+
+    <!-- Project Detail Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+            <button class="modal-nav modal-nav-prev" id="modalPrev" aria-label="Previous project">&#8249;</button>
+            <button class="modal-nav modal-nav-next" id="modalNext" aria-label="Next project">&#8250;</button>
+            <div class="modal-body">
+                <div class="modal-image-container">
+                    <img src="" alt="" id="modalImage" class="modal-image">
+                </div>
+                <div class="modal-info">
+                    <p class="modal-name" id="modalName"></p>
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                    <p class="modal-description" id="modalDescription"></p>
+                    <div class="modal-link-container" id="modalLinkContainer">
+                        <a href="#" id="modalLink" class="modal-link" target="_blank" rel="noopener noreferrer">
+                            View External Project &#8599;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">

@@ -350,7 +350,7 @@ body {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: var(--space-lg);
 }
 
@@ -414,7 +414,7 @@ body {
 .card-image-container {
     position: relative;
     width: 100%;
-    height: 200px;
+    height: 160px;
     overflow: hidden;
     background: var(--bg-tertiary);
 }
@@ -442,7 +442,7 @@ body {
 }
 
 .card-content {
-    padding: var(--space-lg);
+    padding: var(--space-md);
 }
 
 .card-name {
@@ -455,7 +455,7 @@ body {
 }
 
 .card-title {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
     margin-bottom: var(--space-md);
     color: var(--text-primary);
@@ -477,24 +477,18 @@ body {
     background: var(--gradient-aurora);
     color: white;
     text-decoration: none;
+    border: none;
     border-radius: var(--radius-sm);
     font-size: 0.85rem;
     font-weight: 500;
+    font-family: var(--font-body);
+    cursor: pointer;
     transition: all var(--transition-normal);
 }
 
 .card-link:hover {
-    transform: translateX(5px);
+    transform: scale(1.05);
     box-shadow: 0 0 20px var(--glow-purple);
-}
-
-.card-link::after {
-    content: '\2192';
-    transition: transform var(--transition-fast);
-}
-
-.card-link:hover::after {
-    transform: translateX(5px);
 }
 
 /* ========================================
@@ -623,6 +617,234 @@ body {
 }
 
 /* ========================================
+   Project Detail Modal
+   ======================================== */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.modal.visible {
+    display: flex;
+    animation: modalFadeIn 0.3s ease forwards;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 26, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+[data-theme="light"] .modal-backdrop {
+    background: rgba(240, 244, 255, 0.95);
+}
+
+.modal-content {
+    position: relative;
+    max-width: 1400px;
+    width: 95%;
+    max-height: 90vh;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 2px solid rgba(168, 85, 247, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px var(--glow-purple);
+    overflow: hidden;
+    animation: modalSlideUp 0.4s ease;
+    z-index: 1001;
+}
+
+@keyframes modalSlideUp {
+    from {
+        transform: translateY(50px) scale(0.95);
+    }
+    to {
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 2rem;
+    line-height: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    background: var(--accent-pink);
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 0 20px var(--glow-pink);
+}
+
+.modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 2.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+}
+
+.modal-nav:hover {
+    background: var(--accent-purple);
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 0 20px var(--glow-purple);
+}
+
+.modal-nav-prev {
+    left: var(--space-md);
+}
+
+.modal-nav-next {
+    right: var(--space-md);
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-lg);
+    padding: var(--space-xl);
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-image-container {
+    flex: 2;
+    min-width: 400px;
+    max-width: 65%;
+    max-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 70vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+}
+
+.modal-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.modal-name {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin-bottom: var(--space-sm);
+}
+
+.modal-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--space-lg);
+}
+
+.modal-description.desc-small {
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+.modal-description.desc-tiny {
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+.modal-link-container {
+    margin-top: auto;
+}
+
+.modal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--gradient-sunset);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all var(--transition-normal);
+}
+
+.modal-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px var(--glow-pink);
+}
+
+.modal-link-container.hidden {
+    display: none;
+}
+
+/* ========================================
    Sparkle Burst Effect
    ======================================== */
 
@@ -678,11 +900,62 @@ body {
     }
 
     .gallery-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-md);
     }
 
     .card-image-container {
         height: 180px;
+    }
+
+    .modal-body {
+        flex-direction: column;
+        padding: var(--space-lg);
+    }
+
+    .modal-image-container {
+        max-width: 100%;
+        min-width: 100%;
+        max-height: 60vh;
+    }
+
+    .modal-image {
+        max-height: 60vh;
+    }
+
+    .modal-title {
+        font-size: 1.4rem;
+    }
+
+    .modal-description {
+        font-size: 0.9rem;
+    }
+
+    .modal-description.desc-small {
+        font-size: 0.85rem;
+    }
+
+    .modal-description.desc-tiny {
+        font-size: 0.75rem;
+    }
+
+    .modal-close {
+        top: var(--space-sm);
+        right: var(--space-sm);
+    }
+
+    .modal-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 2rem;
+    }
+
+    .modal-nav-prev {
+        left: var(--space-sm);
+    }
+
+    .modal-nav-next {
+        right: var(--space-sm);
     }
 }
 
@@ -691,17 +964,43 @@ body {
         display: none;
     }
 
+    .hero {
+        padding: var(--space-md) 0;
+        margin-bottom: var(--space-md);
+    }
+
     .sparkles {
         gap: var(--space-md);
         font-size: 1.2rem;
+        margin-bottom: var(--space-xxs);
+    }
+
+    .gallery-grid {
+        gap: var(--space-sm);
     }
 
     .card-content {
-        padding: var(--space-md);
+        padding: var(--space-sm);
+    }
+
+    .card-name {
+        font-size: 0.5rem;
+        margin-bottom: 0.15rem;
     }
 
     .card-title {
-        font-size: 1rem;
+        font-size: 0.7rem;
+        margin-bottom: 0.4rem;
+        line-height: 1.3;
+    }
+
+    .card-link {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.65rem;
+    }
+
+    .card-image-container {
+        height: 120px;
     }
 }
 
