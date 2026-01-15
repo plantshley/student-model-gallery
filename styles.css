@@ -27,7 +27,7 @@
 
     /* Gradients */
     --gradient-cosmic: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-sunset: linear-gradient(135deg, #cca31c 0%, #b70b8c 100%);
+    --gradient-sunset: linear-gradient(135deg, #eac64e 0%, #e83cbd 100%);
     --gradient-aurora: linear-gradient(135deg, #f755e1 0%, #6366f1 100%);
 
     /* Spacing */
@@ -111,7 +111,7 @@ body {
     position: fixed;
     width: 4px;
     height: 4px;
-    background: white;
+    background: rgb(255, 192, 20);
     border-radius: 50%;
     box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
     animation: shootingStar 3s linear infinite;
@@ -122,10 +122,10 @@ body {
 .shooting-star::before {
     content: '';
     position: absolute;
-    width: 80px;
+    width: 50px;
     height: 2px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), transparent);
-    transform: translateX(-100%);
+    background: linear-gradient(90deg, rgba(255, 87, 207, 0.8), transparent);
+    transform: translateX(0%);
     top: 50%;
     margin-top: -1px;
 }
@@ -154,7 +154,7 @@ body {
 }
 
 [data-theme="light"] .shooting-star::before {
-    background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink), transparent);
+    background: linear-gradient(90deg, rgba(255, 179, 207, 0.8),rgba(255, 228, 92, 0.8) transparent);
 }
 
 @keyframes shootingStar {
