@@ -12,7 +12,8 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 - You have gone on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/) and chosen a tool for creating your final mental model
 - You have completed your final mental model using your tool of choice.
-- You have downloaded a file of your mental model **and/or** have a public URL for your project (a shareable link or webpage hosted via GitHub pages).
+- You have an image file of your mental model (either something you downloaded from the tool you used, or a screenshot of/from your project).
+- *[Optional]* You have a public URL for your project if it's hosted online (e.g., shareable link or webpage such as one hosted via GitHub pages).
 
 ### Step-by-Step Instructions
 
@@ -27,7 +28,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
    - Open the repository folder.
    - Navigate to `submissions/images/`.
    - Paste your image file here.
-   - **Rename the file** to match your GitHub username exactly (e.g., `jdoe.png`). This prevents overwriting other students' files.
+   - **Rename the file** to match your GitHub username exactly (e.g., `twinkle-fairy.png`). This prevents overwriting other students' files.
 
 4. **Create Your Data File**
    - Open your project in **VS Code**.
@@ -39,13 +40,15 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 5. **Add Your Data**
    - Copy and paste the code block below into your new JSON file.
-   - Replace the values with your actual information.
+   - Replace the values with your actual information. 
+   - For the `description` field, you can add multiple paragraphs to fully explain your work, or just a concise sentence or two.
+   - **Note:** The `projectUrl` field is optional. If you don't have an external link to your project, you can remove that entire line.
 
 ```json
 {
   "name": "Your Real Name",
   "projectTitle": "Title of Your Mental Model",
-  "description": "A one-sentence description of your project.",
+  "description": "A description of your project.",
   "projectUrl": "https://your-username.github.io/your-project-repo",
   "imagePath": "images/your-username.png"
 }
@@ -54,7 +57,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 6. **Register Your Submission**
    - Open the file `submissions/submissions.json`.
    - Add your GitHub username to the array.
-   - For example, if the file contains `["alice", "bob"]` and your username is `charlie`, change it to `["alice", "bob", "charlie"]`.
+   - For example, if the file contains `["glitterheart", "magic-pegasus"]` and your username is `twinkle-fairy`, change it to `["glitterheart", "magic-pegasus", "twinkle-fairy"]`.
    - **Important:** Make sure to add a comma before your username if there are existing entries!
 
 7. **Check Your JSON Syntax**

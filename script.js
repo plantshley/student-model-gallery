@@ -7,6 +7,103 @@ const galleryGrid = document.getElementById('galleryGrid');
 const emptyState = document.getElementById('emptyState');
 const loadingState = document.getElementById('loadingState');
 const themeToggle = document.getElementById('themeToggle');
+const projectModal = document.getElementById('projectModal');
+const modalClose = document.getElementById('modalClose');
+const modalBackdrop = document.querySelector('.modal-backdrop');
+const modalImage = document.getElementById('modalImage');
+const modalName = document.getElementById('modalName');
+const modalTitle = document.getElementById('modalTitle');
+const modalDescription = document.getElementById('modalDescription');
+const modalLink = document.getElementById('modalLink');
+const modalLinkContainer = document.getElementById('modalLinkContainer');
+const modalPrev = document.getElementById('modalPrev');
+const modalNext = document.getElementById('modalNext');
+
+// Gallery State
+let allSubmissions = [];
+let currentSubmissionIndex = 0;
+
+// ========================================
+// Modal Functions
+// ========================================
+
+function openModal(index) {
+    if (allSubmissions.length === 0) return;
+
+    currentSubmissionIndex = index;
+    const submission = allSubmissions[currentSubmissionIndex];
+
+    const imagePath = submission.imagePath
+        ? `submissions/${submission.imagePath}`
+        : null;
+
+    // Populate modal content
+    modalImage.src = imagePath || '';
+    modalImage.alt = submission.projectTitle;
+    modalName.textContent = submission.name;
+    modalTitle.textContent = submission.projectTitle;
+    modalDescription.textContent = submission.description;
+
+    // Adjust description font size based on length
+    const descLength = submission.description.length;
+    modalDescription.classList.remove('desc-small', 'desc-tiny');
+
+    if (descLength > 500) {
+        modalDescription.classList.add('desc-tiny');
+    } else if (descLength > 300) {
+        modalDescription.classList.add('desc-small');
+    }
+
+    // Handle optional project URL
+    if (submission.projectUrl) {
+        modalLink.href = submission.projectUrl;
+        modalLinkContainer.classList.remove('hidden');
+    } else {
+        modalLinkContainer.classList.add('hidden');
+    }
+
+    // Show/hide navigation arrows
+    modalPrev.style.display = allSubmissions.length > 1 ? 'flex' : 'none';
+    modalNext.style.display = allSubmissions.length > 1 ? 'flex' : 'none';
+
+    // Show modal
+    projectModal.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    projectModal.classList.remove('visible');
+    document.body.style.overflow = '';
+}
+
+function showPreviousSubmission() {
+    currentSubmissionIndex = (currentSubmissionIndex - 1 + allSubmissions.length) % allSubmissions.length;
+    openModal(currentSubmissionIndex);
+}
+
+function showNextSubmission() {
+    currentSubmissionIndex = (currentSubmissionIndex + 1) % allSubmissions.length;
+    openModal(currentSubmissionIndex);
+}
+
+// Modal close event listeners
+modalClose.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', closeModal);
+modalPrev.addEventListener('click', showPreviousSubmission);
+modalNext.addEventListener('click', showNextSubmission);
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+    if (projectModal.classList.contains('visible')) {
+        if (e.key === 'Escape') {
+            closeModal();
+        } else if (e.key === 'ArrowLeft') {
+            showPreviousSubmission();
+        } else if (e.key === 'ArrowRight') {
+            showNextSubmission();
+        }
+    }
+});
 
 // ========================================
 // Theme Toggle
@@ -191,6 +288,9 @@ function renderGallery(submissions) {
     emptyState.classList.remove('visible');
     galleryGrid.innerHTML = '';
 
+    // Store submissions globally for modal navigation
+    allSubmissions = submissions;
+
     submissions.forEach((submission, index) => {
         const card = createCard(submission, index);
         galleryGrid.appendChild(card);
@@ -209,19 +309,31 @@ function createCard(submission, index) {
     card.innerHTML = `
         <div class="card-image-container">
             ${imagePath
-                ? `<img src="${imagePath}" alt="${submission.projectTitle}" class="card-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-image-placeholder\\'>&#127912;</div>'">`
+                ? `<img src="${imagePath}" alt="${escapeHtml(submission.projectTitle)}" class="card-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-image-placeholder\\'>&#127912;</div>'">`
                 : '<div class="card-image-placeholder">&#127912;</div>'
             }
         </div>
         <div class="card-content">
             <p class="card-name">${escapeHtml(submission.name)}</p>
             <h3 class="card-title">${escapeHtml(submission.projectTitle)}</h3>
-            <p class="card-description">${escapeHtml(submission.description)}</p>
-            <a href="${escapeHtml(submission.projectUrl)}" class="card-link" target="_blank" rel="noopener noreferrer">
-                View Project
-            </a>
+            <button class="card-link">
+                View Details
+            </button>
         </div>
     `;
+
+    // Make card clickable to open modal
+    const viewButton = card.querySelector('.card-link');
+    viewButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openModal(index);
+    });
+
+    // Also make whole card clickable
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+        openModal(index);
+    });
 
     // Add sparkle effect on hover
     card.addEventListener('mouseenter', (e) => {
