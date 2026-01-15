@@ -146,8 +146,8 @@ async function initParticles() {
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
 
     const particleColors = isLight
-        ? ['#a855f7', '#6366f1', '#3b82f6']
-        : ['#ffffff', '#a855f7', '#ff6b9d', '#06b6d4'];
+        ? ['#a855f7', '#63f1e8ff', '#f63bddff']
+        : ['#ffffff', '#a855f7', '#ff6bbfff', '#06b6d4'];
 
     const linkColor = isLight ? '#a855f7' : '#a855f7';
 
@@ -359,7 +359,7 @@ function showEmptyState() {
 }
 
 function createSparkles(element, event) {
-    const sparkleChars = ['✨', '⭐', '💫', '✦', '★'];
+    const sparkleChars = ['✨', '🌟', '🌈', "🤍"];
     const rect = element.getBoundingClientRect();
 
     for (let i = 0; i < 5; i++) {
