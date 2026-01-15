@@ -14,7 +14,7 @@
     --text-muted: #6868a8;
 
     /* Accent Colors */
-    --accent-pink: #ff6b9d;
+    --accent-pink: #ff41c3;
     --accent-purple: #a855f7;
     --accent-cyan: #06b6d4;
     --accent-blue: #3b82f6;
@@ -27,8 +27,8 @@
 
     /* Gradients */
     --gradient-cosmic: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-sunset: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
-    --gradient-aurora: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+    --gradient-sunset: linear-gradient(135deg, #cca31c 0%, #b70b8c 100%);
+    --gradient-aurora: linear-gradient(135deg, #f755e1 0%, #6366f1 100%);
 
     /* Spacing */
     --space-xs: 0.25rem;
@@ -396,7 +396,7 @@ body {
 .gallery-card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 20px 40px rgba(255, 8, 243, 0.3),
         0 0 30px var(--glow-purple);
 }
 
