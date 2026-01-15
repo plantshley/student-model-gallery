@@ -146,7 +146,7 @@ async function initParticles() {
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
 
     const particleColors = isLight
-        ? ['#a855f7', '#63f1e8ff', '#f63bddff']
+        ? ['#a855f7', '#63f1e8ff', '#f63bddff', "#ffc94aff"]
         : ['#ffffff', '#a855f7', '#ff6bbfff', '#06b6d4'];
 
     const linkColor = isLight ? '#a855f7' : '#a855f7';
