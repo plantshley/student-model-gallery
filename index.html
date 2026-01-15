@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Mental Model Gallery</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+
+    <!-- Shooting Stars -->
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon moon">&#127769;</span>
+        <span class="theme-icon sun">&#9728;</span>
+    </button>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Section -->
+        <header class="hero">
+            <h1 class="title">
+                <span class="title-decoration">&#10022;</span>
+                Student Mental Model Gallery
+                <span class="title-decoration">&#10022;</span>
+            </h1>
+            <p class="subtitle">Explore the creative mental models crafted by our students</p>
+            <div class="sparkles">
+                <span>&#10024;</span>
+                <span>&#11088;</span>
+                <span>&#128171;</span>
+            </div>
+        </header>
+
+        <!-- Gallery Section -->
+        <section class="gallery-section">
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Cards will be dynamically inserted here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">&#128640;</div>
+                <h2>No Submissions Yet</h2>
+                <p>Be the first to launch your mental model into the gallery!</p>
+                <a href="https://github.com/plantshley/student-model-gallery" class="cta-button" target="_blank">
+                    Learn How to Contribute
+                </a>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState">
+                <div class="loader"></div>
+                <p>Loading submissions...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            <a href="https://github.com/plantshley/student-model-gallery" target="_blank">
+                View Repository on GitHub
+            </a>
+        </p>
+        <p class="footer-note">Made with &#10024; for Making Thinking Visual</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

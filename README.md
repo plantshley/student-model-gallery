@@ -51,16 +51,22 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 }
 ```
 
-6. **Check Your JSON Syntax**
+6. **Register Your Submission**
+   - Open the file `submissions/submissions.json`.
+   - Add your GitHub username to the array.
+   - For example, if the file contains `["alice", "bob"]` and your username is `charlie`, change it to `["alice", "bob", "charlie"]`.
+   - **Important:** Make sure to add a comma before your username if there are existing entries!
+
+7. **Check Your JSON Syntax**
    - Ensure there are quotes `""` around every key and value.
    - Ensure there are no trailing commas after the last item.
 
-7. **Commit and Push**
-   - Save your file.
+8. **Commit and Push**
+   - Save your files.
    - Commit the change with a message like: "Add submission for [Name]".
    - Push the changes to your forked repository.
 
-8. **Submit a Pull Request**
+9. **Submit a Pull Request**
    - Go back to the **original** [Student Gallery repository](https://github.com/plantshley/student-model-gallery.git) page on GitHub.
    - Click the **Pull Requests** tab.
    - Click **New Pull Request**.
