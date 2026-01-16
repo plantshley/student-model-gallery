@@ -206,7 +206,9 @@ body {
 }
 
 .theme-icon {
-    font-size: 1.5rem;
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
     transition: all var(--transition-normal);
     position: absolute;
 }
@@ -307,7 +309,7 @@ body {
 }
 
 .subtitle {
-    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
     color: var(--text-secondary);
     margin-bottom: var(--space-lg);
 }
@@ -419,14 +421,16 @@ body {
     background: var(--bg-tertiary);
 }
 
-.card-image {
+.card-image,
+.card-image-container video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform var(--transition-slow);
 }
 
-.gallery-card:hover .card-image {
+.gallery-card:hover .card-image,
+.gallery-card:hover .card-image-container video {
     transform: scale(1.1);
 }
 
@@ -436,9 +440,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 4rem;
-    background: var(--gradient-aurora);
-    opacity: 0.8;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: rgb(228, 228, 228);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(135deg,
+        rgba(234, 107, 166, 0.5) 0%,
+        rgba(251, 208, 38, 0.5) 16.66%,
+        rgba(155, 232, 195, 0.5) 50%,
+        rgba(144, 145, 247, 0.5) 66.66%,
+        rgba(203, 149, 242, 0.5) 83.33%,
+        rgba(253, 131, 206, 0.5) 100%);
 }
 
 .card-content {
@@ -484,6 +496,7 @@ body {
     font-family: var(--font-body);
     cursor: pointer;
     transition: all var(--transition-normal);
+    opacity: 1;
 }
 
 .card-link:hover {
@@ -546,6 +559,7 @@ body {
     border-radius: var(--radius-md);
     font-weight: 600;
     transition: all var(--transition-normal);
+    opacity: 0.9;
 }
 
 .cta-button:hover {
@@ -689,12 +703,12 @@ body {
     position: absolute;
     top: var(--space-md);
     right: var(--space-md);
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border: none;
     background: var(--bg-tertiary);
     color: var(--text-primary);
-    font-size: 2rem;
+    font-size: 1.5rem;
     line-height: 1;
     border-radius: 50%;
     cursor: pointer;
@@ -715,12 +729,12 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
+    width: 36px;
+    height: 36px;
     border: none;
     background: var(--bg-tertiary);
     color: var(--text-primary);
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     border-radius: 50%;
     cursor: pointer;
     transition: all var(--transition-normal);
@@ -757,7 +771,7 @@ body {
 
 .modal-image-container {
     flex: 2;
-    min-width: 400px;
+    min-width: 300px;
     max-width: 65%;
     max-height: 70vh;
     display: flex;
@@ -768,12 +782,41 @@ body {
     overflow: hidden;
 }
 
-.modal-image {
+.modal-image,
+.modal-image-container video {
     max-width: 100%;
     max-height: 70vh;
     width: auto;
     height: auto;
     object-fit: contain;
+    border-radius: var(--radius-md);
+    cursor: zoom-in;
+    transition: transform var(--transition-normal);
+}
+
+.modal-image:hover,
+.modal-image-container video:hover {
+    transform: scale(1.02);
+}
+
+.modal-image-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(135deg,
+        rgba(234, 107, 166, 0.5) 0%,
+        rgba(251, 208, 38, 0.5) 16.66%,
+        rgba(155, 232, 195, 0.5) 50%,
+        rgba(144, 145, 247, 0.5) 66.66%,
+        rgba(203, 149, 242, 0.5) 83.33%,
+        rgba(253, 131, 206, 0.5) 100%);
     border-radius: var(--radius-md);
 }
 
@@ -833,15 +876,103 @@ body {
     font-size: 1rem;
     font-weight: 600;
     transition: all var(--transition-normal);
+    opacity: 0.7;
 }
 
 .modal-link:hover {
     transform: translateY(-3px);
     box-shadow: 0 0 30px var(--glow-pink);
+    opacity: 1;
 }
 
 .modal-link-container.hidden {
     display: none;
+}
+
+/* ========================================
+   Fullscreen Image Viewer
+   ======================================== */
+
+.fullscreen-viewer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.fullscreen-viewer.visible {
+    display: flex;
+    animation: modalFadeIn 0.3s ease forwards;
+}
+
+.fullscreen-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    cursor: zoom-out;
+}
+
+.fullscreen-image,
+.fullscreen-viewer video {
+    position: relative;
+    max-width: 95vw;
+    max-height: 95vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    z-index: 2001;
+    cursor: zoom-out;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 0 50px rgba(168, 85, 247, 0.5);
+}
+
+.fullscreen-close {
+    position: absolute;
+    top: var(--space-lg);
+    right: var(--space-lg);
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    line-height: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    z-index: 2002;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+}
+
+.fullscreen-close:hover {
+    background: var(--accent-pink);
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 0 20px var(--glow-pink);
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .fullscreen-close {
+        top: var(--space-md);
+        right: var(--space-md);
+        width: 32px;
+        height: 32px;
+        font-size: 1.5rem;
+    }
 }
 
 /* ========================================
@@ -851,7 +982,7 @@ body {
 .sparkle {
     position: absolute;
     pointer-events: none;
-    animation: sparkleBurst 1s ease forwards;
+    animation: sparkleBurst 2s ease forwards;
     z-index: 10;
 }
 
@@ -919,8 +1050,14 @@ body {
         max-height: 60vh;
     }
 
-    .modal-image {
+    .modal-image,
+    .modal-image-container video {
         max-height: 60vh;
+    }
+
+    .modal-image-placeholder {
+        min-height: 200px;
+        font-size: 1.5rem;
     }
 
     .modal-title {
@@ -942,12 +1079,15 @@ body {
     .modal-close {
         top: var(--space-sm);
         right: var(--space-sm);
+        width: 28px;
+        height: 28px;
+        font-size: 1.3rem;
     }
 
     .modal-nav {
-        width: 40px;
-        height: 40px;
-        font-size: 2rem;
+        width: 32px;
+        height: 32px;
+        font-size: 1.5rem;
     }
 
     .modal-nav-prev {
@@ -956,6 +1096,21 @@ body {
 
     .modal-nav-next {
         right: var(--space-sm);
+    }
+
+    .modal-link {
+        font-size: 0.9rem;
+        padding: var(--space-sm) var(--space-md);
+    }
+}
+
+@media (max-width: 600px) {
+    .modal-image-container {
+        min-width: 0;
+    }
+
+    .modal-body {
+        padding: var(--space-lg) var(--space-md);
     }
 }
 
@@ -1001,6 +1156,52 @@ body {
 
     .card-image-container {
         height: 120px;
+    }
+
+    .modal-body {
+        padding: var(--space-md);
+        gap: var(--space-md);
+    }
+
+    .modal-content {
+        width: 98%;
+    }
+
+    .modal-image-container {
+        min-width: 0;
+        max-height: 50vh;
+    }
+
+    .modal-image,
+    .modal-image-container video {
+        max-height: 50vh;
+    }
+
+    .modal-image-placeholder {
+        min-height: 150px;
+        font-size: 1.2rem;
+    }
+
+    .modal-title {
+        font-size: 1.2rem;
+    }
+
+    .modal-description {
+        font-size: 0.85rem;
+    }
+
+    .modal-description.desc-small {
+        font-size: 0.8rem;
+    }
+
+    .modal-description.desc-tiny {
+        font-size: 0.7rem;
+    }
+
+    .modal-link {
+        font-size: 0.8rem;
+        padding: var(--space-sm);
+        white-space: nowrap;
     }
 }
 

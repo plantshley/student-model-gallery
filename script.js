@@ -18,10 +18,32 @@ const modalLink = document.getElementById('modalLink');
 const modalLinkContainer = document.getElementById('modalLinkContainer');
 const modalPrev = document.getElementById('modalPrev');
 const modalNext = document.getElementById('modalNext');
+const fullscreenViewer = document.getElementById('fullscreenViewer');
+const fullscreenClose = document.getElementById('fullscreenClose');
+const fullscreenBackdrop = document.querySelector('.fullscreen-backdrop');
 
 // Gallery State
 let allSubmissions = [];
 let currentSubmissionIndex = 0;
+
+// ========================================
+// Helper Functions
+// ========================================
+
+function isVideoFile(path) {
+    if (!path) return false;
+    const videoExtensions = ['.mp4', '.webm', '.mov', '.avi'];
+    const ext = path.toLowerCase().substring(path.lastIndexOf('.'));
+    return videoExtensions.includes(ext);
+}
+
+function createMediaElement(imagePath, altText, className, onError) {
+    if (isVideoFile(imagePath)) {
+        return `<video src="${imagePath}" class="${className}" autoplay loop muted playsinline onerror="${onError}"></video>`;
+    } else {
+        return `<img src="${imagePath}" alt="${altText}" class="${className}" loading="lazy" onerror="${onError}">`;
+    }
+}
 
 // ========================================
 // Modal Functions
@@ -38,8 +60,19 @@ function openModal(index) {
         : null;
 
     // Populate modal content
-    modalImage.src = imagePath || '';
-    modalImage.alt = submission.projectTitle;
+    const modalImageContainer = document.querySelector('.modal-image-container');
+
+    if (imagePath) {
+        const mediaElement = createMediaElement(
+            imagePath,
+            escapeHtml(submission.projectTitle),
+            'modal-image',
+            "this.parentElement.innerHTML='<div class=\\'modal-image-placeholder\\'>no image :-(</div>'"
+        );
+        modalImageContainer.innerHTML = mediaElement.replace('class="modal-image"', 'id="modalImage" class="modal-image"');
+    } else {
+        modalImageContainer.innerHTML = '<div class="modal-image-placeholder">no image :-(</div>';
+    }
     modalName.textContent = submission.name;
     modalTitle.textContent = submission.projectTitle;
     modalDescription.textContent = submission.description;
@@ -69,6 +102,14 @@ function openModal(index) {
     // Show modal
     projectModal.classList.add('visible');
     document.body.style.overflow = 'hidden';
+
+    // Add click listener to modal image for fullscreen
+    setTimeout(() => {
+        const currentModalImage = document.getElementById('modalImage');
+        if (currentModalImage) {
+            currentModalImage.addEventListener('click', openFullscreenImage);
+        }
+    }, 100);
 }
 
 function closeModal() {
@@ -94,7 +135,11 @@ modalNext.addEventListener('click', showNextSubmission);
 
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
-    if (projectModal.classList.contains('visible')) {
+    if (fullscreenViewer.classList.contains('visible')) {
+        if (e.key === 'Escape') {
+            closeFullscreenImage();
+        }
+    } else if (projectModal.classList.contains('visible')) {
         if (e.key === 'Escape') {
             closeModal();
         } else if (e.key === 'ArrowLeft') {
@@ -104,6 +149,56 @@ document.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// ========================================
+// Fullscreen Image Functions
+// ========================================
+
+function openFullscreenImage(e) {
+    e.stopPropagation();
+    const modalMedia = document.getElementById('modalImage');
+    if (!modalMedia || !modalMedia.src) return;
+
+    const fullscreenContainer = document.querySelector('.fullscreen-viewer');
+    const isVideo = modalMedia.tagName.toLowerCase() === 'video';
+
+    // Replace the img element with appropriate media element
+    const existingMedia = document.getElementById('fullscreenImage');
+    if (existingMedia) {
+        existingMedia.remove();
+    }
+
+    if (isVideo) {
+        const video = document.createElement('video');
+        video.id = 'fullscreenImage';
+        video.className = 'fullscreen-image';
+        video.src = modalMedia.src;
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.addEventListener('click', closeFullscreenImage);
+        fullscreenContainer.appendChild(video);
+    } else {
+        const img = document.createElement('img');
+        img.id = 'fullscreenImage';
+        img.className = 'fullscreen-image';
+        img.src = modalMedia.src;
+        img.alt = modalMedia.alt || '';
+        img.addEventListener('click', closeFullscreenImage);
+        fullscreenContainer.appendChild(img);
+    }
+
+    fullscreenViewer.classList.add('visible');
+}
+
+function closeFullscreenImage() {
+    fullscreenViewer.classList.remove('visible');
+}
+
+// Fullscreen close event listeners
+fullscreenClose.addEventListener('click', closeFullscreenImage);
+fullscreenBackdrop.addEventListener('click', closeFullscreenImage);
 
 // ========================================
 // Theme Toggle
@@ -306,30 +401,26 @@ function createCard(submission, index) {
         ? `submissions/${submission.imagePath}`
         : null;
 
+    const mediaContent = imagePath
+        ? createMediaElement(
+            imagePath,
+            escapeHtml(submission.projectTitle),
+            'card-image',
+            "this.parentElement.innerHTML='<div class=\\'card-image-placeholder\\'>no image :-(</div>'"
+        )
+        : '<div class="card-image-placeholder">no image :-(</div>';
+
     card.innerHTML = `
         <div class="card-image-container">
-            ${imagePath
-                ? `<img src="${imagePath}" alt="${escapeHtml(submission.projectTitle)}" class="card-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-image-placeholder\\'>&#127912;</div>'">`
-                : '<div class="card-image-placeholder">&#127912;</div>'
-            }
+            ${mediaContent}
         </div>
         <div class="card-content">
             <p class="card-name">${escapeHtml(submission.name)}</p>
             <h3 class="card-title">${escapeHtml(submission.projectTitle)}</h3>
-            <button class="card-link">
-                View Details
-            </button>
         </div>
     `;
 
-    // Make card clickable to open modal
-    const viewButton = card.querySelector('.card-link');
-    viewButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        openModal(index);
-    });
-
-    // Also make whole card clickable
+    // Make whole card clickable
     card.style.cursor = 'pointer';
     card.addEventListener('click', () => {
         openModal(index);
@@ -367,15 +458,15 @@ function createSparkles(element, event) {
         sparkle.className = 'sparkle';
         sparkle.textContent = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
 
-        // Random position within the card
+        // Random position within the entire card (full height)
         sparkle.style.left = `${Math.random() * rect.width}px`;
-        sparkle.style.top = `${Math.random() * 50}px`;
+        sparkle.style.top = `${Math.random() * rect.height}px`;
         sparkle.style.fontSize = `${10 + Math.random() * 10}px`;
 
         element.appendChild(sparkle);
 
-        // Remove after animation
-        setTimeout(() => sparkle.remove(), 1000);
+        // Remove after animation (increased to 2 seconds)
+        setTimeout(() => sparkle.remove(), 2000);
     }
 }
 

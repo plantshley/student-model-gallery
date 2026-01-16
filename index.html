@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Mental Model Gallery</title>
+    <title>Making Thinking Visual: Student Gallery</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="other-files/spark.png">
@@ -27,8 +27,8 @@
 
     <!-- Theme Toggle -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <span class="theme-icon moon">&#127769;</span>
-        <span class="theme-icon sun">&#9728;</span>
+        <img src="other-files/moonlight.png" alt="Dark theme" class="theme-icon moon">
+        <img src="other-files/sunshine.png" alt="Light theme" class="theme-icon sun">
     </button>
 
     <!-- Main Content -->
@@ -36,11 +36,12 @@
         <!-- Hero Section -->
         <header class="hero">
             <h1 class="title">
+                Making Thinking Visual<br>
                 <span class="title-decoration">&#10022;</span>
-                Student Mental Model Gallery
+                Student Gallery
                 <span class="title-decoration">&#10022;</span>
             </h1>
-            <p class="subtitle">Explore the creative mental models crafted by our students!</p>
+            <p class="subtitle">Explore the creative mental models crafted by our students!<br><br>✨ Click on a card to view details ✨</p>
             <div class="sparkles">
                 <span>🌈</span>
                 <span>🌟</span>
@@ -95,6 +96,13 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Fullscreen Image Viewer -->
+    <div class="fullscreen-viewer" id="fullscreenViewer">
+        <div class="fullscreen-backdrop"></div>
+        <button class="fullscreen-close" id="fullscreenClose" aria-label="Close fullscreen">&times;</button>
+        <!-- Media element will be inserted here dynamically -->
     </div>
 
     <!-- Footer -->

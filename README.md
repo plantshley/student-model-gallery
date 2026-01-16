@@ -12,7 +12,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 - You have gone on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/) and chosen a tool for creating your final mental model
 - You have completed your final mental model using your tool of choice.
-- You have an image file of your mental model (either something you downloaded from the tool you used, or a screenshot of/from your project).
+- You have an image or video file of your mental model (supported formats: PNG, JPG, GIF, MP4, WebM, MOV, AVI).
 - *[Optional]* You have a public URL for your project if it's hosted online (e.g., shareable link or webpage such as one hosted via GitHub pages).
 
 ### Step-by-Step Instructions
@@ -24,11 +24,11 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 2. **Clone Your Fork**
    - Clone your forked repository to your local machine.
 
-3. **Upload Your Image**
+3. **Upload Your Image/Video**
    - Open the repository folder.
    - Navigate to `submissions/images/`.
-   - Paste your image file here.
-   - **Rename the file** to match your GitHub username exactly (e.g., `twinkle-fairy.png`). This prevents overwriting other students' files.
+   - Paste your image or video file here.
+   - **Rename the file** to match your GitHub username exactly (e.g., `twinkle-fairy.png` or `twinkle-fairy.mp4`). This prevents overwriting other students' files.
 
 4. **Create Your Data File**
    - Open your project in **VS Code**.
@@ -54,6 +54,8 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 }
 ```
 
+**Note:** The `imagePath` can point to an image (PNG, JPG, GIF) or video file (MP4, WebM, MOV, AVI). For example: `"imagePath": "images/your-username.mp4"`
+
 6. **Register Your Submission**
    - Open the file `submissions/submissions.json`.
    - Add your GitHub username to the array.
@@ -64,18 +66,29 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
    - Ensure there are quotes `""` around every key and value.
    - Ensure there are no trailing commas after the last item.
 
-8. **Commit and Push**
+8. **Preview Your Submission Locally**
+   - Before committing, check that your submission appears correctly on the site.
+   - **Option 1 - Open in Browser**:
+     - Navigate to your project folder in File Explorer.
+     - Right-click on `index.html` and select "Open with" → your preferred web browser.
+   - **Option 2 - VS Code Live Preview**:
+     - In VS Code, right-click on `index.html` in the Explorer sidebar.
+     - Select "Open with Live Server" (if you have the Live Server extension installed).
+     - Or use the built-in "Open Preview" option.
+   - Your submission should appear in the gallery. Click on it to verify all your information displays correctly in the modal.
+
+9. **Commit and Push**
    - Save your files.
    - Commit the change with a message like: "Add submission for [Name]".
    - Push the changes to your forked repository.
 
-9. **Submit a Pull Request**
-   - Go back to the **original** [Student Gallery repository](https://github.com/plantshley/student-model-gallery.git) page on GitHub.
-   - Click the **Pull Requests** tab.
-   - Click **New Pull Request**.
-   - Select **Compare across forks**.
-   - Set the "Head Repository" to your fork.
-   - Click **Create Pull Request**.
+10. **Submit a Pull Request**
+    - Go back to the **original** [Student Gallery repository](https://github.com/plantshley/student-model-gallery.git) page on GitHub.
+    - Click the **Pull Requests** tab.
+    - Click **New Pull Request**.
+    - Select **Compare across forks**.
+    - Set the "Head Repository" to your fork.
+    - Click **Create Pull Request**.
 
 ### Troubleshooting
 
