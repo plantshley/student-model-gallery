@@ -12,7 +12,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 - You have gone on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/) and chosen a tool for creating your final mental model
 - You have completed your final mental model using your tool of choice.
-- You have an image or video file of your mental model (supported formats: PNG, JPG, GIF, MP4, WebM, MOV, AVI).
+- You have an image or video file of your mental model (screenshots or screenrecordings work fine!) Supported formats: PNG, JPG, GIF, MP4, WebM, MOV, AVI
 - *[Optional]* You have a public URL for your project if it's hosted online (e.g., shareable link or webpage such as one hosted via GitHub pages).
 
 ### Step-by-Step Instructions
