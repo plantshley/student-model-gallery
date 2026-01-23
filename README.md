@@ -94,3 +94,4 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 - **"Merge Conflict" Error:** This shouldn't happen if you created a unique file in the `submissions` folder. If it does, ensure you didn't accidentally modify other files.
 - **JSON Errors:** If your project doesn't appear on the site after merging, check that your JSON file is valid text.
+- Refer back to the [Setting Up GitHub Starmap](https://plantshley.github.io/making-thinking-visual/index.html) for further help.
