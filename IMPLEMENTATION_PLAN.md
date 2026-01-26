@@ -11,7 +11,7 @@ student-model-gallery/
 ├── styles.css              # Cosmic theme styling
 ├── script.js               # Dynamic loading & interactions
 ├── submissions/            # Student contribution folder
-│   ├── images/             # Student project images
+│   ├── projects/             # Student project images
 │   │   └── .gitkeep        # Placeholder to preserve folder
 │   └── example.json        # Example submission template
 └── README.md               # (existing) Instructions
@@ -68,7 +68,7 @@ Each student submission displayed as an interactive card featuring:
 - **Card animations**: Staggered entrance, hover sparkles
 
 ### 4. submissions/ folder structure
-- `images/` subfolder for student screenshots
+- `projects/` subfolder for student screenshots
 - `.gitkeep` files to preserve empty folders in git
 - `example.json` as a template (commented or clearly marked as example)
 
@@ -79,7 +79,7 @@ Each student submission displayed as an interactive card featuring:
   "projectTitle": "Title of Your Mental Model",
   "description": "A one-sentence description of your project.",
   "projectUrl": "https://your-username.github.io/your-project-repo",
-  "imagePath": "images/your-username.png"
+  "projectPath": "projects/your-username.png"
 }
 ```
 
@@ -98,7 +98,7 @@ Each student submission displayed as an interactive card featuring:
 | `index.html` | ~85 | Main page structure |
 | `styles.css` | ~500 | All styling and animations |
 | `script.js` | ~220 | Dynamic loading and interactions |
-| `submissions/images/.gitkeep` | 0 | Preserve folder |
+| `submissions/projects/.gitkeep` | 0 | Preserve folder |
 | `submissions/submissions.json` | 1 | Manifest of submission files |
 | `submissions/_example.json` | 7 | Example template (prefixed with _ to exclude) |
 

@@ -55,8 +55,8 @@ function openModal(index) {
     currentSubmissionIndex = index;
     const submission = allSubmissions[currentSubmissionIndex];
 
-    const imagePath = submission.imagePath
-        ? `submissions/${submission.imagePath}`
+    const imagePath = submission.projectPath
+        ? `submissions/${submission.projectPath}`
         : null;
 
     // Populate modal content
@@ -397,8 +397,8 @@ function createCard(submission, index) {
     card.className = 'gallery-card';
     card.style.animationDelay = `${index * 0.1}s`;
 
-    const imagePath = submission.imagePath
-        ? `submissions/${submission.imagePath}`
+    const imagePath = submission.projectPath
+        ? `submissions/${submission.projectPath}`
         : null;
 
     const mediaContent = imagePath

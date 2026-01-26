@@ -26,7 +26,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 3. **Upload Your Image/Video**
    - Open the repository folder.
-   - Navigate to `submissions/images/`.
+   - Navigate to `submissions/projects/`.
    - Paste your image or video file here.
    - **Rename the file** to match your GitHub username exactly (e.g., `twinkle-fairy.png` or `twinkle-fairy.mp4`). This prevents overwriting other students' files.
 
@@ -42,7 +42,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
    - Copy and paste the code block below into your new JSON file.
    - Replace the values with your actual information. 
    - For the `description` field, you can add multiple paragraphs to fully explain your work, or just a concise sentence or two.
-   - **Note:** The `projectUrl` field is optional. If you don't have an external link to your project, you can remove that entire line.
+   - **Note:** The `projectUrl` field is optional. If you don't have an external link for your project, you can remove that entire line.
 
 ```json
 {
@@ -50,11 +50,11 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
   "projectTitle": "Title of Your Mental Model",
   "description": "A description of your project.",
   "projectUrl": "https://your-username.github.io/your-project-repo",
-  "imagePath": "images/your-username.png"
+  "projectPath": "projects/your-username.png"
 }
 ```
 
-**Note:** The `imagePath` can point to an image (PNG, JPG, GIF) or video file (MP4, WebM, MOV, AVI). For example: `"imagePath": "images/your-username.mp4"`
+**Note:** The `projectPath` can point to an image (PNG, JPG, GIF) or video file (MP4, WebM, MOV, AVI). For example: `"projectPath": "projects/your-username.mp4"`
 
 6. **Register Your Submission**
    - Open the file `submissions/submissions.json`.
