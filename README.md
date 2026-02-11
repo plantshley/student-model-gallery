@@ -2,7 +2,7 @@
 
 Welcome to the Student Mental Model Gallery! This repository hosts the final projects for the semester.
 
-After going on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/), you will have complete freedom to choose your tool and method. All final projects will be collected and displayed on this gallery webpage. Your goal is to contribute your project to this gallery by submitting a **Pull Request (PR)**.
+After going on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/), you will have complete freedom to choose your creation tools and method. All final projects will be collected and displayed on this gallery webpage. Your goal is to contribute your project to this gallery by submitting a **Pull Request (PR)**.
 
 ## How to Contribute
 
@@ -10,10 +10,10 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 ### Prerequisites
 
-- You have gone on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/) and chosen a tool for creating your final mental model
-- You have completed your final mental model using your tool of choice.
+- You have gone on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/)
+- You have completed your final video walk-through using your tool(s) of choice.
 - You have an image or video file of your mental model (screenshots or screenrecordings work fine!) Supported formats: PNG, JPG, GIF, MP4, WebM, MOV, AVI
-- *[Optional]* You have a public URL for your project if it's hosted online (e.g., shareable link or webpage such as one hosted via GitHub pages).
+- *[Optional]* You have a public URL for your project if it's hosted online (e.g., shareable link or webpage such as one hosted via GitHub pages), or an external link related to your project content.
 
 ### Step-by-Step Instructions
 
@@ -50,7 +50,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
   "projectTitle": "Title of Your Mental Model",
   "description": "A description of your project.",
   "projectUrl": "https://your-username.github.io/your-project-repo",
-  "projectPath": "projects/your-username.png"
+  "projectPath": "projects/your-username.mp4"
 }
 ```
 
