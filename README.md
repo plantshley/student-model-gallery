@@ -2,7 +2,7 @@
 
 Welcome to the Student Mental Model Gallery! This repository hosts the final projects for the semester.
 
-After going on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/), you will have complete freedom to choose your creation tools and method. All final projects will be collected and displayed on this gallery webpage. Your goal is to contribute your project to this gallery by submitting a **Pull Request (PR)**.
+After going on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/), you will have complete freedom to choose any tool(s) and method for creating your final video walkthrough. The quest is meant to help you see what web or AI tools might be most helpful for you to create your video (for things like audio, video generation/editing, graphics, etc.) All final projects will be collected and displayed on this gallery webpage. Your goal is to contribute your project to this gallery by submitting a **Pull Request (PR)**.
 
 ## How to Contribute
 
@@ -12,8 +12,9 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 - You have gone on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/)
 - You have completed your final video walk-through using your tool(s) of choice.
-- You have an image or video file of your mental model (screenshots or screenrecordings work fine!) Supported formats: PNG, JPG, GIF, MP4, WebM, MOV, AVI
-- *[Optional]* You have a public URL for your project if it's hosted online (e.g., shareable link or webpage such as one hosted via GitHub pages), or an external link related to your project content.
+- You have an thumbnail image and/or video file of your walk-through (screenshots or screenrecordings work fine!) Supported formats: PNG, JPG, GIF, MP4, WebM, MOV, AVI
+- *[Optional for video files]* You have a public URL for your project if it's hosted online (e.g., shareable link or webpage such as one hosted via GitHub pages), or an external link related to your project content.
+   - **Note:** If you only have a thumbnail image, you *must* also include a link to your video.
 
 ### Step-by-Step Instructions
 
@@ -27,7 +28,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 3. **Upload Your Image/Video**
    - Open the repository folder.
    - Navigate to `submissions/projects/`.
-   - Paste your image or video file here.
+   - Paste your thumbnail image or video file here.
    - **Rename the file** to match your GitHub username exactly (e.g., `twinkle-fairy.png` or `twinkle-fairy.mp4`). This prevents overwriting other students' files.
 
 4. **Create Your Data File**
@@ -42,14 +43,14 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
    - Copy and paste the code block below into your new JSON file.
    - Replace the values with your actual information. 
    - For the `description` field, you can add multiple paragraphs to fully explain your work, or just a concise sentence or two.
-   - **Note:** The `projectUrl` field is optional. If you don't have an external link for your project, you can remove that entire line.
+   - **Note:** The `projectUrl` field is optional unless you only added a thumbnail image rather than the full video file. If you don't have an external link for your project, you can remove that entire line.
 
 ```json
 {
   "name": "Your Real Name",
   "projectTitle": "Title of Your Mental Model",
   "description": "A description of your project.",
-  "projectUrl": "https://your-username.github.io/your-project-repo",
+  "projectUrl": "https://shareable-link-or-webpage.io",
   "projectPath": "projects/your-username.mp4"
 }
 ```
