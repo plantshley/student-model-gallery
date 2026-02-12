@@ -12,7 +12,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 - You have gone on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/)
 - You have completed your final video walk-through using your tool(s) of choice.
-- You have a thumbnail image of your project (screenshots work great!) Supported formats: PNG, JPG, GIF
+- You have a thumbnail image of your project (a screenshot or any related image works!) Supported formats: PNG, JPG, GIF
 - You have a public URL for your project video or hosted project (e.g., YouTube, Loom, Google Drive shareable link, GitHub Pages, etc.)
 
 ### Step-by-Step Instructions
