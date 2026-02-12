@@ -464,6 +464,7 @@ body {
     margin-bottom: var(--space-sm);
     text-transform: uppercase;
     letter-spacing: 1px;
+    line-height: 1.6;
 }
 
 .card-title {
@@ -825,6 +826,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
+    max-height: 70vh;
 }
 
 .modal-name {
@@ -847,7 +849,9 @@ body {
     font-size: 1rem;
     color: var(--text-secondary);
     line-height: 1.8;
-    margin-bottom: var(--space-lg);
+    flex: 1 1 0;
+    overflow-y: auto;
+    min-height: 0;
 }
 
 .modal-description.desc-small {
@@ -858,6 +862,19 @@ body {
 .modal-description.desc-tiny {
     font-size: 0.8rem;
     line-height: 1.6;
+}
+
+.modal-description a {
+    color: var(--accent-purple);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-purple);
+    transition: all var(--transition-fast);
+}
+
+.modal-description a:hover {
+    color: var(--accent-pink);
+    border-bottom-color: var(--accent-pink);
+    text-shadow: 0 0 8px var(--accent-pink);
 }
 
 .modal-link-container {
@@ -1042,6 +1059,19 @@ body {
     .modal-body {
         flex-direction: column;
         padding: var(--space-lg);
+    }
+
+    .modal-info {
+        max-height: none;
+    }
+
+    .modal-description {
+        flex: 0 1 auto;
+        overflow-y: visible;
+    }
+
+    .modal-link-container {
+        text-align: center;
     }
 
     .modal-image-container {

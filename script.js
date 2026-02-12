@@ -75,7 +75,7 @@ function openModal(index) {
     }
     modalName.textContent = submission.name;
     modalTitle.textContent = submission.projectTitle;
-    modalDescription.textContent = submission.description;
+    modalDescription.innerHTML = parseMarkdownLinks(submission.description);
 
     // Adjust description font size based on length
     const descLength = submission.description.length;
@@ -442,6 +442,13 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function parseMarkdownLinks(text) {
+    // First escape HTML to prevent XSS
+    const escaped = escapeHtml(text);
+    // Then convert markdown links [text](url) to HTML links
+    return escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
 }
 
 function showEmptyState() {

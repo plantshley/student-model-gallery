@@ -42,6 +42,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
    - Copy and paste the code block below into your new JSON file.
    - Replace the values with your actual information.
    - For the `description` field, you can add multiple paragraphs to fully explain your work, or just a concise sentence or two.
+   - If you have additional links to include related to your project, you can optionally make text clickable by using `[link text](url)` syntax in your description.
    - The `projectUrl` should be the public link to your video or hosted project.
    - The `projectPath` should be the path to your thumbnail image file.
 
