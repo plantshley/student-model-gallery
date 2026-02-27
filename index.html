@@ -41,7 +41,7 @@
                 Student Gallery
                 <span class="title-decoration">&#10022;</span>
             </h1>
-            <p class="subtitle">Explore the creative mental models crafted by our students!<br><br>✨ Click on a card to view details ✨</p>
+            <p class="subtitle">Explore the creative tools, mental models, & final projects crafted by our students!</p>
             <div class="sparkles">
                 <span>🌈</span>
                 <span>🌟</span>
@@ -49,61 +49,16 @@
             </div>
         </header>
 
-        <!-- Gallery Section -->
-        <section class="gallery-section">
-            <div class="gallery-grid" id="galleryGrid">
-                <!-- Cards will be dynamically inserted here -->
-            </div>
-
-            <!-- Empty State -->
-            <div class="empty-state" id="emptyState">
-                <div class="empty-icon">&#128640;</div>
-                <h2>No Submissions Yet</h2>
-                <p>Be the first to launch your mental model into the gallery!</p>
-                <a href="https://github.com/plantshley/student-model-gallery" class="cta-button" target="_blank">
-                    Learn How to Contribute
-                </a>
-            </div>
-
-            <!-- Loading State -->
-            <div class="loading-state" id="loadingState">
-                <div class="loader"></div>
-                <p>Loading submissions...</p>
-            </div>
-        </section>
+        <!-- Navigation Buttons -->
+        <nav class="page-nav">
+            <a href="student-tools.html" class="nav-button nav-button--tools">
+                <span class="nav-button__label">Student Tools</span>
+            </a>
+            <a href="final-project.html" class="nav-button nav-button--final">
+                <span class="nav-button__label">Final Project</span>
+            </a>
+        </nav>
     </main>
-
-    <!-- Project Detail Modal -->
-    <div class="modal" id="projectModal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content">
-            <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
-            <button class="modal-nav modal-nav-prev" id="modalPrev" aria-label="Previous project">&#8249;</button>
-            <button class="modal-nav modal-nav-next" id="modalNext" aria-label="Next project">&#8250;</button>
-            <div class="modal-body">
-                <div class="modal-image-container">
-                    <img src="" alt="" id="modalImage" class="modal-image">
-                </div>
-                <div class="modal-info">
-                    <p class="modal-name" id="modalName"></p>
-                    <h2 class="modal-title" id="modalTitle"></h2>
-                    <p class="modal-description" id="modalDescription"></p>
-                    <div class="modal-link-container" id="modalLinkContainer">
-                        <a href="#" id="modalLink" class="modal-link" target="_blank" rel="noopener noreferrer">
-                            View Project &#8599;
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Fullscreen Image Viewer -->
-    <div class="fullscreen-viewer" id="fullscreenViewer">
-        <div class="fullscreen-backdrop"></div>
-        <button class="fullscreen-close" id="fullscreenClose" aria-label="Close fullscreen">&times;</button>
-        <!-- Media element will be inserted here dynamically -->
-    </div>
 
     <!-- Footer -->
     <footer class="footer">

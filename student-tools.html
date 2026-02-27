@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Tools | Making Thinking Visual</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="other-files/spark.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+
+    <!-- Shooting Stars -->
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <img src="other-files/moonlight.png" alt="Dark theme" class="theme-icon moon">
+        <img src="other-files/sunshine.png" alt="Light theme" class="theme-icon sun">
+    </button>
+
+    <!-- Back to Home -->
+    <a href="index.html" class="back-link">&#8592; Home</a>
+
+    <!-- Main Content -->
+    <main class="container" data-manifest="tools/tools.json" data-media-prefix="tools/">
+        <!-- Hero Section -->
+        <header class="hero">
+            <h1 class="title">
+                Making Thinking Visual<br>
+                <span class="title-decoration">&#10022;</span>
+                Student Tools
+                <span class="title-decoration">&#10022;</span>
+            </h1>
+            <p class="subtitle">✨ Click on a card to view details ✨</p>
+            <div class="sparkles">
+                <span>🛠️</span>
+                <span>🌟</span>
+                <span>✨</span>
+            </div>
+        </header>
+
+        <!-- Gallery Section -->
+        <section class="gallery-section">
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Cards will be dynamically inserted here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">🛠️</div>
+                <h2>No Tools Yet</h2>
+                <p>Tools will appear here soon!</p>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState">
+                <div class="loader"></div>
+                <p>Loading tools...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Project Detail Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+            <button class="modal-nav modal-nav-prev" id="modalPrev" aria-label="Previous project">&#8249;</button>
+            <button class="modal-nav modal-nav-next" id="modalNext" aria-label="Next project">&#8250;</button>
+            <div class="modal-body">
+                <div class="modal-image-container">
+                    <img src="" alt="" id="modalImage" class="modal-image">
+                </div>
+                <div class="modal-info">
+                    <p class="modal-name" id="modalName"></p>
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                    <p class="modal-description" id="modalDescription"></p>
+                    <div class="modal-link-container" id="modalLinkContainer">
+                        <a href="#" id="modalLink" class="modal-link" target="_blank" rel="noopener noreferrer">
+                            View Project &#8599;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Image Viewer -->
+    <div class="fullscreen-viewer" id="fullscreenViewer">
+        <div class="fullscreen-backdrop"></div>
+        <button class="fullscreen-close" id="fullscreenClose" aria-label="Close fullscreen">&times;</button>
+        <!-- Media element will be inserted here dynamically -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            <a href="https://github.com/plantshley/student-model-gallery" target="_blank">
+                View Repository on GitHub 💫
+            </a>
+        </p>
+        <p class="footer-note">Made with the help of Claude Code 🤖 & Gemini 💎</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
