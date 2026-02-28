@@ -1268,7 +1268,7 @@ button:focus-visible {
     justify-content: center;
     align-items: center;
     gap: var(--space-xl);
-    padding: var(--space-xl) 0 var(--space-xl);
+    padding: var(--space-sm) 0 var(--space-xl);
     flex-wrap: wrap;
 }
 
