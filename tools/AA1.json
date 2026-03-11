@@ -4,5 +4,7 @@
   "projectTitle": "Indoor PM₂.₅ Exposure During Cooking in a Small Apartment",
   "description": "This tool estimates indoor PM₂.₅ concentration and inhaled dose during a cooking event in a small kitchen. The user inputs room volume, emission rate, ventilation rate (ACH), duration, and breathing rate. The tool calculates an approximate steady-state concentration and the total inhaled dose over the cooking period. The output helps the user compare how changing ventilation (for example, opening a window) can significantly reduce exposure. The results should be interpreted as order-of-magnitude estimates, not precise measurements.",
   "projectUrl": "https://gemini.google.com/share/50b9a56a5cd3",
-  "projectPath": "images/AA1.png"
+  "projectPath": "images/AA1.png",
+  "folderName": "aladwani"
+
 }

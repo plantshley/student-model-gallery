@@ -1,0 +1,9 @@
+{
+  "name": "Agate Blossom",
+  "toolTag": "Tool 1", 
+  "projectTitle": "Al Ahsa PM2.5 Exposure & Risk Assessment Tool ",
+  "description": "This tool uses monthly concentration data from Al Ahsa to figure out how much PM2.5 people breathe in. It lets the user see how the length of time they are exposed and their breathing rate affect the total amount of inhaled dose. Monte Carlo simulation is also used by the tool to look at seasonal trends, how often something goes over the limit, and the likelihood of risk.",
+  "projectUrl": "https://colostate-my.sharepoint.com/:x:/g/personal/fairykun_colostate_edu/IQALPFOnJsMGTaMKnloXth65AeA_yP3Ll8wtV28DUgjJ5AE?e=EDWgkI",
+  "projectPath": "images/AB1.png",
+  "folderName": "almubarak"
+}

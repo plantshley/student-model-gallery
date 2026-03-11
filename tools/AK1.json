@@ -1,0 +1,9 @@
+{
+  "name": "Angelic Kitsune",
+  "toolTag": "Tool 1", 
+  "projectTitle": "Classroom CO₂ Exposure Estimator",
+  "description": "This Python tool used single-compartment mass balance model to estimate CO₂ concentration buildup and person's average CO₂ exposure during time spent in classroom or office. The user inputs room volume, number of occupants, ventilation rate (air changes per hour), duration of occupancy and breathing rate. The tool outputs peak CO₂ concentration reached in room, time-averaged CO₂ concentration and compared it to ASHRAE and OSHA health benchmarks. Users should interpret outputs comparatively, for example, running tool twice to see how adding ventilation e.g. opening a window changed their exposure and whether it falls within safe limits.This tool is intended to order-of-magnitude reasoning not precise exposure prediction.",
+  "projectUrl": "https://gemini.google.com/share/c98e16a5d369",
+  "projectPath": "images/AK1.png",
+  "folderName": "albakheet"
+}

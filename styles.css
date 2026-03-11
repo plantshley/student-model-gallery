@@ -973,13 +973,14 @@ body {
 .fullscreen-image,
 .fullscreen-viewer video {
     position: relative;
-    max-width: 95vw;
-    max-height: 95vh;
+    max-width: 90vw;
+    max-height: 90vh;
     width: auto;
     height: auto;
     object-fit: contain;
     z-index: 2001;
     cursor: zoom-out;
+    will-change: transform;
     border-radius: var(--radius-sm);
     box-shadow: 0 0 50px rgba(168, 85, 247, 0.5);
 }

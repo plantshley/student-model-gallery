@@ -40,7 +40,9 @@ function escapeHtml(text) {
 
 function parseMarkdownLinks(text) {
     const escaped = escapeHtml(text);
-    return escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    return escaped
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+        .replace(/\n/g, '<br>');
 }
 
 function showEmptyState() {
@@ -234,6 +236,60 @@ function openFullscreenImage(e) {
     const existingMedia = document.getElementById('fullscreenImage');
     if (existingMedia) existingMedia.remove();
 
+    let scale = 1;
+    let pinchStartDist = null;
+    let pinchStartScale = 1;
+
+    function applyZoom(el, newScale) {
+        scale = Math.min(Math.max(newScale, 1), 8);
+        el.style.transform = `scale(${scale})`;
+        el.style.cursor = scale > 1 ? 'grab' : 'zoom-out';
+    }
+
+    function onWheel(ev) {
+        ev.preventDefault();
+        const delta = ev.deltaY > 0 ? 0.9 : 1.1;
+        applyZoom(ev.currentTarget, scale * delta);
+    }
+
+    function onTouchStart(ev) {
+        if (ev.touches.length === 2) {
+            pinchStartDist = Math.hypot(
+                ev.touches[0].clientX - ev.touches[1].clientX,
+                ev.touches[0].clientY - ev.touches[1].clientY
+            );
+            pinchStartScale = scale;
+        }
+    }
+
+    function onTouchMove(ev) {
+        if (ev.touches.length === 2 && pinchStartDist) {
+            ev.preventDefault();
+            const dist = Math.hypot(
+                ev.touches[0].clientX - ev.touches[1].clientX,
+                ev.touches[0].clientY - ev.touches[1].clientY
+            );
+            applyZoom(ev.currentTarget, pinchStartScale * (dist / pinchStartDist));
+        }
+    }
+
+    function onTouchEnd(ev) {
+        if (ev.touches.length < 2) pinchStartDist = null;
+    }
+
+    function attachZoom(el) {
+        el.style.transformOrigin = 'center center';
+        el.style.transition = 'transform 0.1s ease';
+        el.addEventListener('wheel', onWheel, { passive: false });
+        el.addEventListener('touchstart', onTouchStart, { passive: true });
+        el.addEventListener('touchmove', onTouchMove, { passive: false });
+        el.addEventListener('touchend', onTouchEnd, { passive: true });
+        el.addEventListener('click', (ev) => {
+            if (scale > 1) { applyZoom(el, 1); }
+            else { closeFullscreenImage(); }
+        });
+    }
+
     if (isVideo) {
         const video = document.createElement('video');
         video.id = 'fullscreenImage';
@@ -243,7 +299,7 @@ function openFullscreenImage(e) {
         video.loop = true;
         video.muted = true;
         video.playsInline = true;
-        video.addEventListener('click', closeFullscreenImage);
+        attachZoom(video);
         fullscreenContainer.appendChild(video);
     } else {
         const img = document.createElement('img');
@@ -251,7 +307,7 @@ function openFullscreenImage(e) {
         img.className = 'fullscreen-image';
         img.src = modalMedia.src;
         img.alt = modalMedia.alt || '';
-        img.addEventListener('click', closeFullscreenImage);
+        attachZoom(img);
         fullscreenContainer.appendChild(img);
     }
 
@@ -260,6 +316,8 @@ function openFullscreenImage(e) {
 
 function closeFullscreenImage() {
     fullscreenViewer.classList.remove('visible');
+    const media = document.getElementById('fullscreenImage');
+    if (media) media.style.transform = '';
 }
 
 // ========================================
