@@ -467,6 +467,17 @@ body {
     line-height: 1.6;
 }
 
+.card-tool-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    color: var(--accent-purple);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 2px 8px;
+    margin-bottom: var(--space-sm);
+    letter-spacing: 0.5px;
+}
+
 .card-title {
     font-size: 1rem;
     font-weight: 600;
@@ -829,12 +840,31 @@ body {
     max-height: 70vh;
 }
 
+.modal-name-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    flex-wrap: wrap;
+}
+
 .modal-name {
     font-family: var(--font-display);
     font-size: 0.7rem;
     color: var(--accent-cyan);
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+.modal-tool-tag {
+    display: inline-block;
+    max-width: fit-content;
+    font-size: 0.7rem;
+    color: var(--accent-purple);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 2px 10px;
+    letter-spacing: 0.5px;
 }
 
 .modal-title {
@@ -851,7 +881,7 @@ body {
     line-height: 1.8;
     flex: 1 1 0;
     overflow-y: auto;
-    min-height: 0;
+    min-height: 200px;
 }
 
 .modal-description.desc-small {

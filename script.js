@@ -9,7 +9,7 @@ let galleryMediaPrefix = 'submissions/';
 
 // DOM Elements (assigned in DOMContentLoaded)
 let galleryGrid, emptyState, loadingState, themeToggle;
-let projectModal, modalClose, modalBackdrop, modalName, modalTitle, modalDescription;
+let projectModal, modalClose, modalBackdrop, modalName, modalTitle, modalToolTag, modalDescription;
 let modalLink, modalLinkContainer, modalPrev, modalNext;
 let fullscreenViewer, fullscreenClose, fullscreenBackdrop;
 
@@ -164,6 +164,14 @@ function openModal(index) {
     }
 
     modalName.textContent = submission.name;
+    if (modalToolTag) {
+        if (submission.toolTag) {
+            modalToolTag.textContent = submission.toolTag;
+            modalToolTag.classList.remove('hidden');
+        } else {
+            modalToolTag.classList.add('hidden');
+        }
+    }
     modalTitle.textContent = submission.projectTitle;
     modalDescription.innerHTML = parseMarkdownLinks(submission.description);
 
@@ -412,12 +420,17 @@ function createCard(submission, index) {
         )
         : '<div class="card-image-placeholder">no image :-(</div>';
 
+    const toolTagHtml = submission.toolTag
+        ? `<span class="card-tool-tag">${escapeHtml(submission.toolTag)}</span>`
+        : '';
+
     card.innerHTML = `
         <div class="card-image-container">
             ${mediaContent}
         </div>
         <div class="card-content">
             <p class="card-name">${escapeHtml(submission.name)}</p>
+            ${toolTagHtml}
             <h3 class="card-title">${escapeHtml(submission.projectTitle)}</h3>
         </div>
     `;
@@ -443,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalClose = document.getElementById('modalClose');
     modalBackdrop = document.querySelector('.modal-backdrop');
     modalName = document.getElementById('modalName');
+    modalToolTag = document.getElementById('modalToolTag');
     modalTitle = document.getElementById('modalTitle');
     modalDescription = document.getElementById('modalDescription');
     modalLink = document.getElementById('modalLink');
