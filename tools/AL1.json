@@ -1,5 +1,5 @@
 {
-  "name": "Amethyst Lily",
+  "name": "Aurora Lullaby",
   "toolTag": "Tool 1", 
   "projectTitle": "Single-Compartment Mass Balance Model (NO₂ Exposure Tool)",
   "description": "This Python tool uses a single-compartment mass balance model to estimate a person’s cumulative inhaled dose of $NO_2$ during a cooking event. It requires the user to input the kitchen's volume, the stove's emission rate, the room's air exchange rate (ventilation), cooking duration, and the cook's breathing rate. The tool outputs the peak $NO_2$ concentration reached in the room and the total mass of pollutant inhaled called the dose. Users should interpret these outputs comparatively. For example, by running the tool twice so that the exact percentage by which turning on an exhaust fan reduces their cumulative exposure.",
