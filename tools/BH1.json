@@ -1,0 +1,9 @@
+{
+  "name": "Berry Halo",
+  "toolTag": "♡ Tool 1", 
+  "projectTitle": "Lily Lake Black Carbon Exposure Estimator",
+  "description": "This tool estimates pedestrian exposure to black carbon along the Lily Lake loop trail as a function of distance from Highway 7. It allows users to adjust traffic intensity, distance from the roadway, time spent on the trail, and activity level to explore how exposure changes. The tool uses a simplified model to approximate how black carbon concentrations decrease with increasing distance from the highway and then calculates inhaled mass using a dose relationship.",
+  "projectUrl": "https://brittnihamilton56.github.io/lily-lake-black-carbon-tool/",
+  "projectPath": "images/BH1.png",
+  "folderName": "hamilton"
+}

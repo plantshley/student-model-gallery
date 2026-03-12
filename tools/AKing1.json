@@ -1,0 +1,10 @@
+{
+  "name": "Amaranthine Kumquat",
+  "toolTag": "♡ Tool 1", 
+  "projectTitle": "Silica Inhalation Dose Calculator",
+  "description": "This tool estimates the total mass of silica inhaled by a miner based on their work location and activity intensity. It requires the user to select a work zone, activity level, and shift duration. The tool outputs the total inhaled dose in micrograms and compares it to MSHA safety standards. Users should interpret these results as an order-of-magnitude estimate to help decide if enhanced dust controls or personal breathing zone monitoring are necessary.",
+  "projectUrl": "https://gemini.google.com/share/67791edf273c",
+  "projectPath": "images/AKing1.jpg",
+  "folderName": "king"
+}
+

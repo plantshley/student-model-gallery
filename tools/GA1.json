@@ -2,7 +2,7 @@
   "name": "Glimmer Apple",
   "toolTag": "Tool 1", 
   "projectTitle": "Exposure estimation tool for school traffic in Riyadh",
-  "description": "This tool estimates short-term PM2.5 exposure for a child waiting near traffic outside a school in Riyadh. It calculates total PM2.5 concentration and inhaled dose, and compares two scenarios (A vs B) to evaluate how changes in waiting time or traffic conditions affect exposure.\n[Github Repo](https://github.com/ghadeercom89-hub/riyadh-school-traffic-exposure-tool)",
+  "description": "[Github Repo](https://github.com/ghadeercom89-hub/riyadh-school-traffic-exposure-tool)\nThis tool estimates short-term PM2.5 exposure for a child waiting near traffic outside a school in Riyadh. It calculates total PM2.5 concentration and inhaled dose, and compares two scenarios (A vs B) to evaluate how changes in waiting time or traffic conditions affect exposure.",
   "projectUrl": "https://gemini.google.com/share/d59d3b531cc9",
   "projectPath": "images/GA1.png",
   "folderName": "alamoudi"

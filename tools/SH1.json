@@ -1,0 +1,9 @@
+{
+  "name": "Sapphire Horizon",
+  "toolTag": "Tool 1", 
+  "projectTitle": "Exhaust Gas Exposure Risk Estimator for Idling Cars",
+  "description": "This tool estimates exposure risk to air pollutants from exhaust gases while occupying an idling car.",
+  "projectUrl": "",
+  "projectPath": "images/SH1.png",
+  "folderName": "herring"
+}

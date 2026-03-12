@@ -1,0 +1,9 @@
+{
+  "name": "Kingly Kelpy",
+  "toolTag": "Tool 1", 
+  "projectTitle": "Vehicle Emissions Calculator",
+  "description": "This tool allows the user to set a number of cars passing by on the highway and see the amount of pollutants that result. The four pollutant outputs tracked are CO, VOCs, NOx, and PM, users can see the mass produced of each of these pollutants by the cars passing by per hour.",
+  "projectUrl": "https://kalderk.github.io/Tool-One/",
+  "projectPath": "images/KK1.png",
+  "folderName": "korte"
+}

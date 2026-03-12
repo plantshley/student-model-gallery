@@ -1,0 +1,9 @@
+{
+  "name": "Fuchsia Topaz",
+  "toolTag": "♡ Tool 1", 
+  "projectTitle": "Prospect Plaza Apartments Redevelopment Intake Tracker",
+  "description": "This tool is designed to look at PM2.5 emissions from construction on the Prospect Plaza Apartments. This tool works by taking in multiple inputs, such as building phase, activity parameters (intensity of activity, wind speed), and pedestrian profile (passes per day and walking speed). The inputs are then used to estimate instant local concentration in micrograms per cubic meter, generating a base daily intake. The base daily intake is used to generate a monthly total and semester total, so students can visualize how much PM2.5 they take in over an entire semester due to the construction site. The user should take the outputs as a guesstimate of total inhalation. This is assuming a consistent activity level and passages per day, where these numbers can drastically change depending on the time of the semester.",
+  "projectUrl": "https://gemini.google.com/share/314e479ce69d",
+  "projectPath": "images/FT1.png",
+  "folderName": "fletcher"
+}
