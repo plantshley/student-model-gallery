@@ -1,0 +1,9 @@
+{
+  "name": "Paradise Phantom",
+  "toolTag": "Tool 1", 
+  "projectTitle": "Poudre Trail PM2.5 Exposure Tool",
+  "description": "This tool estimates the cumulative PM2.5 dose (μg) inhaled by a cyclist completing the Mulberry Street corridor segment of the Poudre Trail during morning rush hour, compared to a driver covering the same distance in a car with cabin air filtration.",
+  "projectUrl": "",
+  "projectPath": "images/PP1.jpeg",
+  "folderName": "philips"
+}

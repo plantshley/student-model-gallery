@@ -1,0 +1,9 @@
+{
+  "name": "Misty Twinkle",
+  "toolTag": "★♡ Tool 1", 
+  "projectTitle": "Clark Construction Site: Dust Exposure Estimator",
+  "description": "This tool allows the user to select the wind speed, distance from the building, time spent newr building, and activity level. There are also options for what the atmosphere level is, type of activity going on at the site, and if the water suppression is active. Once these options are selected, the site produces an exposure estimation. It gives an estimated PM10 concentration, PM 2.5 concentration, and dose of inhaled PM10. It then tells how these numbers relate to the EPA’s 24 hour standard and what groups might feel these effects the most. The tool lastly lists key assumptions, including how the estimation was made and where inaccuracies might lie.",
+  "projectUrl": "https://claude.ai/public/artifacts/53e7629c-bf72-49dc-91cc-c53058dab7cd",
+  "projectPath": "images/MT1.png",
+  "folderName": "martinez"
+}

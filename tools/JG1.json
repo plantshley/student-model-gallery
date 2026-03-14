@@ -1,6 +1,6 @@
 {
-  "name": "Juniper Grove",
-  "toolTag": "♡ Tool 1", 
+  "name": "Juniper Glade",
+  "toolTag": "★♡ Tool 1", 
   "projectTitle": "CSU Light Pollution Estimator",
   "description": "[Github Repo](https://jdgorton.github.io/Light-Pollution-Tool-1/)\nThis project is a small exposure-reasoning tool that estimates how outdoor lighting on CSU’s campus contributes to sky brightness and star visibility as you travel away from campus, particularly in the Cache la Poudre Canyon direction. The tool is intended for order-of-magnitude reasoning and scenario comparison (e.g., “what if lighting is reduced by 30%?” or “what if it’s cloudy?”), not precise photometric prediction.",
   "projectUrl": "https://jdgorton.github.io/Light-Pollution-Tool-1/interactive/",

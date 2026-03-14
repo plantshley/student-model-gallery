@@ -1,0 +1,9 @@
+{
+  "name": "Trilling Magnolia",
+  "toolTag": "♡ Tool 1", 
+  "projectTitle": "Indoor Air Quality Estimator",
+  "description": "This tool allows for the user to input specifications from their own home regarding their heating source to determine what their air quality rating is and if it is of any concern.",
+  "projectUrl": "https://claude.ai/public/artifacts/5b4bea80-8efa-41d9-9ffb-febb3fea68db",
+  "projectPath": "images/TM1.png",
+  "folderName": "miller"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Eclipse Manta Ray",
+  "toolTag": "♡ Tool 1", 
+  "projectTitle": "Well-mixed Room Model Tool",
+  "description": "The tool estimates indoor air pollutant exposure using a simplified well-mixed room model and visually animates how pollutant concentration changes over time. It requires user inputs including room volume, ventilation rate, emission strength, exposure duration, background concentration, and activity level through breathing rate assumptions. The tool produces an animated concentration-versus-time plot along with calculated values such as peak concentration, average concentration, inhaled dose, and an exposure risk indicator. Users should interpret the outputs as order-of-magnitude estimates that help compare how changing environmental assumptions influence exposure rather than as precise measurements of real indoor air quality.",
+  "projectUrl": "https://gemini.google.com/share/8c8ff05c663a",
+  "projectPath": "images/EMR1.png",
+  "folderName": "murray"
+}

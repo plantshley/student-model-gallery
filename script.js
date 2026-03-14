@@ -4,14 +4,161 @@
 
 // Gallery State
 let allSubmissions = [];
+let rawSubmissions = [];
 let currentSubmissionIndex = 0;
 let galleryMediaPrefix = 'submissions/';
+let activeToolTagFilter = null;
+let activeTopicFilter = null;
+
+// Topic keyword map (checked against title only)
+const TOPIC_KEYWORDS = {
+    'PM2.5':           ['pm2.5', 'pm₂.₅', 'pm 2.5', 'particulate matter'],
+    'CO₂':             ['co₂', 'co2', 'carbon dioxide'],
+    'NO₂ / NOx':       ['no₂', 'no2', 'nox', 'nitrogen oxide'],
+    'Black Carbon':    ['black carbon'],
+    'Ozone':           ['ozone', 'o₃'],
+    'VOCs':            ['voc', 'volatile organic', 'formaldehyde', 'benzene', 'toluene'],
+    'Lead':            ['lead exposure', 'lead poisoning', 'blood lead'],
+    'Radon':           ['radon'],
+    'Wildfire Smoke':  ['wildfire', 'wildfire smoke', 'smoke exposure'],
+    'Heat Transfer':   ['heat transfer', 'cooling', 'thermal', 'convection', 'temperature'],
+    'Indoor':          ['indoor', 'classroom', 'apartment', 'kitchen', 'office'],
+    'Traffic':         ['traffic', 'roadway', 'highway', 'commute', 'vehicle'],
+    'Cooking':         ['cooking', 'cook', 'stove'],
+    'Soldering':       ['soldering', 'solder'],
+    'Construction':    ['construction', 'redevelopment'],
+};
 
 // DOM Elements (assigned in DOMContentLoaded)
 let galleryGrid, emptyState, loadingState, themeToggle;
 let projectModal, modalClose, modalBackdrop, modalName, modalTitle, modalToolTag, modalDescription;
 let modalLink, modalLinkContainer, modalPrev, modalNext;
 let fullscreenViewer, fullscreenClose, fullscreenBackdrop;
+
+// ========================================
+// Filter & Sort Helpers
+// ========================================
+
+function getPinPriority(toolTag) {
+    if (!toolTag) return 2;
+    if (toolTag.includes('★') && toolTag.includes('♡')) return 0;
+    if (toolTag.includes('♡')) return 1;
+    return 2;
+}
+
+function getBaseToolTag(toolTag) {
+    if (!toolTag) return null;
+    return toolTag.replace(/^[★♡\s]+/, '').trim();
+}
+
+function extractTopics(submission) {
+    const text = (submission.projectTitle || '').toLowerCase();
+    return Object.entries(TOPIC_KEYWORDS)
+        .filter(([, keywords]) => keywords.some(kw => text.includes(kw)))
+        .map(([topic]) => topic);
+}
+
+function applyFiltersAndSort() {
+    let result = rawSubmissions.slice();
+    if (activeToolTagFilter) {
+        result = result.filter(s => getBaseToolTag(s.toolTag) === activeToolTagFilter);
+    }
+    if (activeTopicFilter) {
+        result = result.filter(s => extractTopics(s).includes(activeTopicFilter));
+    }
+    result.sort((a, b) => getPinPriority(a.toolTag) - getPinPriority(b.toolTag));
+    renderGallery(result);
+}
+
+function initFilters(submissions) {
+    const filterBar = document.getElementById('filterBar');
+    if (!filterBar) return;
+
+    const toolTags = [...new Set(submissions.map(s => getBaseToolTag(s.toolTag)).filter(Boolean))].sort();
+    const topics = [...new Set(submissions.flatMap(s => extractTopics(s)))].sort();
+
+    if (toolTags.length === 0 && topics.length === 0) return;
+
+    filterBar.innerHTML = '';
+    filterBar.classList.remove('hidden');
+
+    const row = document.createElement('div');
+    row.className = 'filter-row';
+
+    function makeDropdown(label, values, getActive, setActive) {
+        const wrap = document.createElement('div');
+        wrap.className = 'filter-select-wrap';
+
+        const lbl = document.createElement('span');
+        lbl.className = 'filter-group-label';
+        lbl.textContent = label;
+        wrap.appendChild(lbl);
+
+        const dropdown = document.createElement('div');
+        dropdown.className = 'filter-dropdown';
+
+        const trigger = document.createElement('button');
+        trigger.className = 'filter-select' + (getActive() ? ' active' : '');
+        trigger.textContent = getActive() || 'All';
+
+        const panel = document.createElement('div');
+        panel.className = 'filter-options hidden';
+
+        function selectValue(val) {
+            setActive(val || null);
+            trigger.textContent = val || 'All';
+            trigger.classList.toggle('active', !!val);
+            panel.querySelectorAll('.filter-option').forEach(o =>
+                o.classList.toggle('active', o.dataset.value === (val || ''))
+            );
+            panel.classList.add('hidden');
+            applyFiltersAndSort();
+        }
+
+        ['', ...values].forEach(val => {
+            const opt = document.createElement('button');
+            opt.className = 'filter-option' + (getActive() === (val || null) ? ' active' : '');
+            opt.textContent = val || 'All';
+            opt.dataset.value = val;
+            opt.addEventListener('click', (e) => { e.stopPropagation(); selectValue(val); });
+            panel.appendChild(opt);
+        });
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // close all other open panels first
+            document.querySelectorAll('.filter-options:not(.hidden)').forEach(p => {
+                if (p !== panel) p.classList.add('hidden');
+            });
+            panel.classList.toggle('hidden');
+        });
+
+        dropdown.appendChild(trigger);
+        dropdown.appendChild(panel);
+        wrap.appendChild(dropdown);
+        return wrap;
+    }
+
+    // Close dropdowns on outside click (bubble phase — trigger's stopPropagation prevents self-closing)
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.filter-options').forEach(p => p.classList.add('hidden'));
+    });
+
+    if (toolTags.length > 0) {
+        row.appendChild(makeDropdown('TOOL', toolTags, () => activeToolTagFilter, v => { activeToolTagFilter = v; }));
+    }
+    if (toolTags.length > 0 && topics.length > 0) {
+        const divider = document.createElement('span');
+        divider.className = 'filter-divider';
+        divider.textContent = '|';
+        row.appendChild(divider);
+    }
+    if (topics.length > 0) {
+        row.appendChild(makeDropdown('TOPIC', topics, () => activeTopicFilter, v => { activeTopicFilter = v; }));
+    }
+
+    filterBar.appendChild(row);
+}
 
 // ========================================
 // Helper Functions
@@ -324,6 +471,22 @@ function closeFullscreenImage() {
 // Theme Toggle
 // ========================================
 
+function initScrollToTop() {
+    const btn = document.createElement('button');
+    btn.className = 'scroll-top-btn hidden';
+    btn.setAttribute('aria-label', 'Back to top');
+    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`;
+    document.body.appendChild(btn);
+
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('hidden', window.scrollY < 300);
+    }, { passive: true });
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
 function initTheme() {
     const savedTheme = localStorage.getItem('gallery-theme');
     if (savedTheme) {
@@ -436,7 +599,9 @@ async function loadSubmissions(manifestPath, mediaPrefix) {
             return;
         }
 
-        renderGallery(validSubmissions);
+        rawSubmissions = validSubmissions;
+        initFilters(rawSubmissions);
+        applyFiltersAndSort();
     } catch (error) {
         console.warn('Could not load submissions:', error);
         showEmptyState();
@@ -527,6 +692,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initTheme();
     initParticles();
+    initScrollToTop();
 
     // Theme toggle button
     if (themeToggle) {
