@@ -1,0 +1,9 @@
+{
+  "name": "Rarity Viola",
+  "toolTag": "♡ Tool 1", 
+  "projectTitle": "Exposure Estimation & Reasoning Tool: Communities Near Steel Facilities",
+  "description": "[GitHub Repo](https://github.com/romive23/steel-exposure-tool)\n This tool estimates daily exposure to NO₂ or PM2.5 for someone living near a steel facility. Users enter outdoor concentration, time outdoors, indoor infiltration, and activity level. The tool estimates indoor concentration, 24-hour exposure, inhaled dose, and compares results to EPA benchmarks. Results support exposure reasoning, not medical or regulatory decisions.",
+  "projectUrl": "https://steel-exposure-tool-sxxmmyhfcoh7swrmno9rbc.streamlit.app/",
+  "projectPath": "images/RV1.png",
+  "folderName": "villanueva"
+}

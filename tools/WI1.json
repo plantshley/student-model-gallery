@@ -1,0 +1,9 @@
+{
+  "name": "Watermelon Ice",
+  "toolTag": "Tool 1", 
+  "projectTitle": "Recess PM2.5 Dose Estimator",
+  "description": "This GPT estimates a child’s inhaled PM2.5 dose during outdoor recess near a roadway using user inputs for PM2.5 concentration, time outdoors, and breathing rate.",
+  "projectUrl": "https://chatgpt.com/g/g-6997a4b5c22081918c8d9b72c929be74-recess-pm2-5-dose-estimator",
+  "projectPath": "images/WI1.png",
+  "folderName": "williams"
+}

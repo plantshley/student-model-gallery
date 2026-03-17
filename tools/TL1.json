@@ -1,0 +1,9 @@
+{
+  "name": "Twinklestar Lilith",
+  "toolTag": "♡ Tool 1", 
+  "projectTitle": "Weekly Lawnmower Pollution Exposure Tool",
+  "description": "This tool analyses the air pollutant exposure of weekly lawnmower use based on environmental factors and time-frames. It is highly user-interactive and provides visuals of the changing pollutant concentrations while also adhering to OSHA and WHO air quality standards and highlighting different circumstance's health impacts and importance. The tool requires the user to pick a seasonal time-frame and the number of minutes spent mowing to accurately calculate and estimate relative concentration levels and health impacts. The user should interpret the subsequent concentration levels and health risks by applying it to their weekly lives and determining how accurate it represents them, then act accordingly to take any precautions necessary.",
+  "projectUrl": "https://gemini.google.com/share/f58482b1dcfd",
+  "projectPath": "images/TL1.png",
+  "folderName": "tegels"
+}

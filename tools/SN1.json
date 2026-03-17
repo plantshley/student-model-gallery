@@ -1,0 +1,10 @@
+{
+  "name": "Starswirl Night",
+  "toolTag": "♡ Tool 1", 
+  "projectTitle": "PM10 Exposure Tool for CSU Transit Center",
+  "description": "The tool tracks PM10 exposure for a commuter waiting for a bus at the CSU transit center. The inputs of the tool include selecting the bus route the commuter is waiting for, baseline PM10 reading from the CSU air quality monitor, how the commuter is waiting, and any added time the commuter was waiting for. Using these inputs, the tool is able to output a total concentration of PM10 inhaled and compare it to the daily breakdown of PM10 levels as well as providing ways to reduce exposure while waiting. The user can use this information to determine the risk of exposure while they are waiting for their bus and use the information to possibly reduce the exposure.",
+  "projectUrl": "https://claude.ai/public/artifacts/c119dc14-ee6b-4889-bce1-29e8d3ee4336",
+  "projectPath": "images/SN1.png",
+  "folderName": "shon"
+}
+
