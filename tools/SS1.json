@@ -1,9 +1,0 @@
-{
-  "name": "Sparkling Stardust",
-  "toolTag": "Tool 1", 
-  "projectTitle": "Annual Radon Inhalation Tool",
-  "description": "[GitHub Repo](https://github.com/stack-sam501/CIVE-442-Tool1)\n This tool provides an estimation for how much radon a person inhales annually in a subterranean basement based upon last known radon reading, weekly hours spent in the basement, and average activity level while in the basement. The user is required to know their last radon test reading with appropriate units, their average activity level whilst in the basement, and the average weekly time they spend in the basement. The user will be given an output of how much radon they inhale annually in the same unit that they originally provided, and a small note on if the radon level is low, medium, or high. A user should understand that this is the sum of radon that theoretically has entered into their lungs, but does not represent any of its decay products or amount of radon actually absorbed by the lungs. This tool is not meant to provide health advice.",
-  "projectUrl": "https://gemini.google.com/share/c52d1e745961",
-  "projectPath": "images/SS1.png",
-  "folderName": "stratton"
-}

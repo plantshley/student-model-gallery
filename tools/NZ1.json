@@ -1,9 +1,0 @@
-{
-  "name": "Nocturnal Zebra",
-  "toolTag": "♡ Tool 1", 
-  "projectTitle": "VOC Exposure Estimation from Indoor 3D Printing",
-  "description": "[GitHub Repo](https://github.com/nmzucker/voc-exposure-estimator)\nThis tool estimates steady-state total VOC concentration in an indoor space with 3D printers using C = (E × N) / (V × ACH). Where E, the emission rate is set to 835 µg/hr according to literature reviewed by https://heatforge3d.com/en/pages/3d-printer-voc-calculator",
-  "projectUrl": "https://vocexposure.lovable.app/",
-  "projectPath": "images/NZ1.png",
-  "folderName": "zucker"
-}

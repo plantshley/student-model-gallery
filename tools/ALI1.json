@@ -1,8 +1,0 @@
-{
-  "name": "Amethyst Lily",
-  "toolTag": "Tool 1", 
-  "projectTitle": "Exposure Estimation & Reasoning Tool",
-  "description": "This tool estimates indoor PM2.5 concentration and inhaled dose during cooking.",
-  "projectPath": "images/ALI1.mp4",
-  "folderName": "alali"
-}

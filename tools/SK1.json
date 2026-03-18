@@ -1,9 +1,0 @@
-{
-  "name": "Snowdrop Kitten",
-  "toolTag": "♡ Tool 1", 
-  "projectTitle": "Indoor PM2.5 Exposure Estimator: Candles & Cooking",
-  "description": "This tool estimates indoor PM2.5 concentration and inhaled dose for two common household emission sources — candle combustion and gas stovetop cooking — across multiple ventilation scenarios. It requires user inputs including room dimensions, number of sources, emission rate, time spent in the room, breathing rate, and background PM2.5 concentration; ventilation scenarios (such as window closed, window open, or range hood on) are toggled interactively. The tool applies a steady-state mass balance model to compute concentration, then multiplies by breathing rate and time to estimate inhaled dose in micrograms. Outputs should be interpreted as order-of-magnitude estimates useful for comparing scenarios and identifying which ventilation conditions meaningfully reduce exposure and are displayed alongside the EPA 24-hour PM2.5 standard of 35 μg/m³ as a reference benchmark.",
-  "projectUrl": "https://gemini.google.com/share/95d0908174d6",
-  "projectPath": "images/SK1.png",
-  "folderName": "keyser"
-}

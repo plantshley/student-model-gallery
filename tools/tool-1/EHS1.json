@@ -1,0 +1,9 @@
+{
+  "name": "Echoes of Hibiscus Sunset",
+  "toolTag": "♡ Tool 1",
+  "projectTitle": "Kitchen NO2 Estimation Tool",
+  "description": "This tool estimates indoor nitrogen dioxide concentration in a kitchen with a gas stove using a mass balance model. The user can input burner emission rate (E), kitchen volume (V), cook time (t), range hood capture efficiency (η), and the indoor air exchange rate (𝜆). Many parameters have suggested values to help the user get started. The tool allows for comparison of up to three ventilation and hood performance scenarios to determine how NO2 concentration is affected by changes under different conditions. The tool outputs predicted NO2 concentration after the specified cooking time and compares it to the US EPA 1-hour NO2 guidelines for unsafe exposure.",
+  "projectUrl": "https://gemini.google.com/share/e5bb7b1fc75d",
+  "projectPath": "../images/EHS1.png",
+  "folderName": "sorenson"
+}

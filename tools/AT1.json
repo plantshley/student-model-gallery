@@ -1,9 +1,0 @@
-{
-  "name": "Azalea Twilight",
-  "toolTag": "Tool 1", 
-  "projectTitle": "Busy Road Walking Exposure Comparison",
-  "description": "This tool estimates the short-term inhaled PM2.5 dose for an individual walking in two  distinct urban environments: a busy arterial road and a residential side street.  It assumes a constant concentration (C) and breathing rate (BR) over the duration  of the trip, calculating the total mass of particulate matter inhaled.  The results provide an order-of-magnitude comparison of exposure pathways rather  than a precise health risk assessment or complex atmospheric dispersion model.",
-  "projectUrl": "https://gemini.google.com/share/d8ba993d57ce",
-  "projectPath": "images/AT1.png",
-  "folderName": "alotaibi"
-}

@@ -1,0 +1,9 @@
+{
+  "name": "Violet Nightshade",
+  "toolTag": "★♡ Tool 1",
+  "projectTitle": "CSU Candle Air Quality Simulator",
+  "description": "The tool accepts four user inputs: number of candles burning, candle burn time, ventilation rate, and room volume. Users can adjust these values either by dragging a slider or by directly entering numerical values. As inputs are modified, the outputs update automatically without requiring additional action. The outputs include graphs of PM2.5 concentration and AQI over time, with clearly marked health category regions. The tool also displays peak PM2.5 concentration, peak AQI, total exposure over the burn period, steady state pollutant concentration, and an indication of whether conditions meet EPA and WHO standards. Users should pay particular attention to peak concentration values and whether exposure exceeds EPA or WHO guidelines. These metrics provide the clearest indication of potential health risk under the selected conditions.",
+  "projectUrl": "https://gemini.google.com/share/e0bbb9672f9f",
+  "projectPath": "../images/VN1.png",
+  "folderName": "vanens"
+}

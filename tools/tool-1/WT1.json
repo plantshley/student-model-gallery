@@ -1,0 +1,9 @@
+{
+  "name": "Wisteria Twist",
+  "toolTag": "Tool 1",
+  "projectTitle": "Indoor Candle CO Exposure",
+  "description": "[GitHub Repo](https://github.com/WilliamTurf/tool1-civ442-Turf)\n This tool estimates carbon monoxide (CO) accumulation from candles in an indoor space using a well-mixed air (CSTR) model with ventilation. Users can change number of wicks, room size, and ventilation to estimate exposure levels per time. The model outputs CO in mg/m³ and ppm and compares it with EPA, OSHA, and WHO limits to help evaluate safety.",
+  "projectUrl": "https://gemini.google.com/share/e08b3470af48",
+  "projectPath": "../images/WT1.jpg",
+  "folderName": "turf"
+}

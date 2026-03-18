@@ -1,9 +1,0 @@
-{
-  "name": "Numinous Sugarberry",
-  "toolTag": "Tool 1", 
-  "projectTitle": "Kitchen Airflow Model",
-  "description": "This tool is a working representation of a kitchen model while cooking food. Oftentimes, food is cooked indoors and with poor ventilation in mind, where this can further lead to respiratory and health problems. The tool designed will model a kitchen and the pollutants produced from cooking this food. By using interactive sliders to compare the air ventilation rate to the accumulated pollutants while cooking, users can effectively see the impact cooking food has on pollutant emission and amount breathed in.",
-  "projectUrl": "https://gemini.google.com/share/67bd454f5f5f",
-  "projectPath": "images/NS1.png",
-  "folderName": "nelson"
-}

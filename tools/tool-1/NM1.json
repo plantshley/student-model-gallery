@@ -1,0 +1,9 @@
+{
+  "name": "Nymphic Moonlight",
+  "toolTag": "★♡ Tool 1",
+  "projectTitle": "Fuel Refueling Exposure Estimator",
+  "description": "The tool allows for the user to input their fuel kind, tank size, fuel amount, fill duration, breathing type, and nozzle distance to calculate their exposure amount to benzene, toluene, xylenes, and ethylbenzene when filling up gas. Outputs of the tool include benzene concentration, air inhaled, dose of benzene, and cancer risk based on EPA dosing. This tool is useful for high risk individuals who are conscious of or who want to know their benzene exposures when filling up their gas. The specific emissions include specific health hazards that are useful in identifying which emissions could be causing harm during gas fillup. To generalize the outputs of the tool, the tool will generate a “very low”, “low”, “moderate”. “high”, or “very high” to summarize exposure findings along with a description of what is causing this risk level.",
+  "projectUrl": "https://claude.ai/public/artifacts/fc1b743c-4d62-426e-a6f2-f8ae11b4ba6b",
+  "projectPath": "../images/NM1.png",
+  "folderName": "mahlon"
+}

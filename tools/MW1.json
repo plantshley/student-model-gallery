@@ -1,9 +1,0 @@
-{
-  "name": "Moonlit Wave",
-  "toolTag": "♡ Tool 1", 
-  "projectTitle": "CSU vs Wyoming: Tailgate Emission Tool",
-  "description": "[GitHub Repo](https://github.com/romive23/steel-exposure-tool)\n This tool estimates daily exposure to NO₂ or PM2.5 for someone living near a steel facility. Users enter outdoor concentration, time outdoors, indoor infiltration, and activity level. The tool estimates indoor concentration, 24-hour exposure, inhaled dose, and compares results to EPA benchmarks. Results support exposure reasoning, not medical or regulatory decisions.",
-  "projectUrl": "https://tailgatingtool.tiiny.site/?mode=suggestions",
-  "projectPath": "images/MW1.png",
-  "folderName": "wardlaw"
-}

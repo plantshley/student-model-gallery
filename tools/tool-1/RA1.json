@@ -1,0 +1,9 @@
+{
+  "name": "Rose Angelbeam",
+  "toolTag": "♡ Tool 1",
+  "projectTitle": "Comparing PM 2.5 in Urban CO to Amazon Rainforest",
+  "description": "This tool provides a comparison of air quality in local populated urban environments (cities in Colorado) to natural vegetated environments (the Amazon Rainforest) through displaying PM2.5 levels and the air quality index of the respective locations. The tool allows the user to input a specific city in Colorado through selecting a city from a drop-down menu and produces an output of metrics from the city (including PM2.5 levels, AQI Index, temperature, and humidity) compared on the same interface to the Amazon Rainforest. The user can interpret these outputs through visually comparing PM2.5 levels in cities to a rainforest to understand how populated areas with large amounts of vehicle emissions impact the concentration of pollutants including PM2.5.",
+  "projectUrl": "https://spiffy-eco-sense-now.base44.app/",
+  "projectPath": "../images/RA1.png",
+  "folderName": "ayres"
+}

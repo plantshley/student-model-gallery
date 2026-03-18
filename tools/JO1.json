@@ -1,9 +1,0 @@
-{
-  "name": "Jeweled Orchid",
-  "toolTag": "Tool 1", 
-  "projectTitle": "PM2.5 Construction Exposure Calculator",
-  "description": "This tool can be used to find out if the user is exposed to more PM 2.5 from biking past a construction site or living near it based on different inputs. The tool requires the user to input the number of hours spent at home, the number of minutes spent biking past the construction site per day, the estimated outdoor dust concentration by construction type occurring, and how much outdoor pollution enters the home based on the windows of the home being opened or closed. It produces estimates of indoor exposure, biking exposure, total daily exposure, and indicates which activity contributes more to overall exposure. The user should interpret these outputs as approximate; order-of-magnitude estimates that help compare relative exposure between being at home and biking, rather than exact measurements. The user should use the outputs to understand which factors most influence their daily exposure under different conditions.",
-  "projectUrl": "https://gemini.google.com/share/17244a6e5838",
-  "projectPath": "images/JO1.png",
-  "folderName": "jones"
-}

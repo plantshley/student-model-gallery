@@ -1,0 +1,9 @@
+{
+  "name": "Breezy Yarrow",
+  "toolTag": "♡ Tool 1",
+  "projectTitle": "Wood Stove PM2.5 Simulator",
+  "description": "The tool calculates the amount of PM2.5 released into the outdoor air via chimney, peak indoor PM2.5 per m3 resulting from adding more fuel to the stove, and the baseline indoor aPM2.5 per m3 resulting from the stove itself. It calculates the burn time, and the number of logs burned based on the burn time, and therefore how much PM2.5 is produced.",
+  "projectUrl": "https://woodstove-air-quality.my.canva.site/",
+  "projectPath": "../images/BY1.jpeg",
+  "folderName": "bailey"
+}

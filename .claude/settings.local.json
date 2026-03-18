@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:codepen.io)"
+      "WebFetch(domain:codepen.io)",
+      "Bash(python -c \"import openpyxl; print\\(''''openpyxl available''''\\)\")",
+      "Bash(pip install:*)"
     ]
   }
 }

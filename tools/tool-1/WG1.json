@@ -1,0 +1,9 @@
+{
+  "name": "Wandering Glimmer",
+  "toolTag": "Tool 1",
+  "projectTitle": "Radon Exposure Estimation in a Basement in Fort Collins, Colorado",
+  "description": "This tool estimates seasonal and annual radon exposure for basements in Fort Collins under two scenarios: typical (4 pCi/L) and higher observed (7.8 pCi/L). It requires user inputs for occupancy (hours per day spent in the basement) and mitigation measures (active fan, windows open). The outputs include seasonal and annual exposure estimates (pCi·h/L), a bar chart comparing exposures, and a health risk message for each scenario. Users should interpret the outputs as an order-of-magnitude guide: higher bars or “elevated risk” messages indicate homes where radon mitigation is strongly recommended, while lower exposures suggest lower relative risk.",
+  "projectUrl": "https://colab.research.google.com/drive/1WZ2Yzxmm7cLsEEyy-F_ArTT2HYB6oq3z?usp=sharing#scrollTo=H44tiXlPpPHF",
+  "projectPath": "../images/WG1.png",
+  "folderName": "wegner"
+}

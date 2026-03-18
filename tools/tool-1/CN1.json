@@ -1,0 +1,9 @@
+{
+  "name": "Crystal Nymph",
+  "toolTag": "★♡ Tool 1",
+  "projectTitle": "Transit Center NO₂ Exposure Estimator",
+  "description": "The tool I created in collaboration with Claude is a web application that estimates the amount of NO2 that an individual inhales annually. It uses a mass-balance model for the calculations, and there are many adjustable input options to make the tool as widely usable as possible and not limited to one type of transit center. These inputs include source parameters (number of buses, fleet type, idle duration), venue type, wind speed, background NO2, and exposed person (time at terminal, days per year, distance from bays). The outputs produced are the zone concentration, daily inhaled dose, annual dose, and a WHO exceedance limit. This tool is meant to be used as a comparative scenario analysis, with the color-coded risk bar and spatial map allowing the user to see a visual representation of the danger to the individual based on the scenario applied.",
+  "projectUrl": "https://gemini.google.com/share/b2a6b7802ed4",
+  "projectPath": "../images/CN1.png",
+  "folderName": "nemeth"
+}

@@ -1,9 +1,0 @@
-{
-  "name": "Jasmine Moonbeam",
-  "toolTag": "Tool 1", 
-  "projectTitle": "CO Exposure Estimator for Ski Parking Lots",
-  "description": "This tool estimates the steady-state carbon monoxide (CO) concentration a skier is exposed to while standing in a cold parking lot with idling vehicles, using a simplified box model mass-balance approach. It requires five inputs from the user: the number of idling vehicles, the parking lot length and width in meters, a wind speed category (Low, Moderate, or High), and the time spent in the parking lot in minutes. The tool outputs the estimated CO concentration in parts per million (ppm), the ventilation rate and emission rate used in the calculation, the estimated mass of CO inhaled in milligrams, and a comparison to the EPA 1-hour CO standard of 35 ppm. Users should interpret the concentration result relative to the EPA guideline. Values below 35 ppm indicate acceptable exposure under those conditions, while values approaching or exceeding 35 ppm suggest a potentially hazardous scenario were reducing idling time, increasing ventilation, or limiting time in the lot would be advisable.",
-  "projectUrl": "https://gemini.google.com/share/159280fc4b3d",
-  "projectPath": "images/JM1.png",
-  "folderName": "jaramillo"
-}

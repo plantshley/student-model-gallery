@@ -1,0 +1,9 @@
+{
+  "name": "Minotaurus Opaline",
+  "toolTag": "♡ Tool 1",
+  "projectTitle": "Benzene Exposure Estimator",
+  "description": "This tool references data from Windsor/ Weld county to estimate benzene exposure using a Gaussian dispersion approach. Users can enter their desired inputs; adult/child, time of day, weather conditions, and exposure at the 7-Eleven. On the right hand side, you can see which guidelines and regulations the users inputs are compliant and which regulations are exceeded. On the second tab, you can reference background information on the data obtained and the effects on different weather conditions. The third tab are the specific regulations and guidelines from various agencies.",
+  "projectUrl": "https://claude.ai/public/artifacts/319aa37a-f650-4a21-b782-83cd96b96c98",
+  "projectPath": "../images/MO1.png",
+  "folderName": "munoz"
+}

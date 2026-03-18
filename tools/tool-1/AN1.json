@@ -1,0 +1,9 @@
+{
+  "name": "Astral Nebula",
+  "toolTag": "Tool 1",
+  "projectTitle": "Localized Soldering Exposure Estimator",
+  "description": "This Python tool can be used as exposure calculator which estimates inhaled dose of particulate matter during a soldering session. It requires the user to input the pollutant emission rate, duration of activity, physical distance between source and breathing zone and a ventilation factor. The tool outputs the estimated total inhaled mass and contextualizes this figure by comparing it to the particulate equivalent of a cigaret. Users should interpret the output as a comparative baseline to understand how heavily proximity and localized ventilation influence acute exposure over a short period and not as a precise medical metric.",
+  "projectUrl": "https://gemini.google.com/share/0549d13645dc",
+  "projectPath": "../images/AN1.png",
+  "folderName": "ashkanani"
+}
