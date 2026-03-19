@@ -603,6 +603,9 @@ async function loadSubmissions(manifestPath, mediaPrefix) {
                     const response = await fetch(`${mediaPrefix}${username}.json`);
                     if (!response.ok) return null;
                     const data = await response.json();
+                    if (username.startsWith('example') && !data.toolTag) {
+                        data.toolTag = 'example';
+                    }
                     return { ...data, username };
                 } catch {
                     console.warn(`Failed to load submission for: ${username}`);
