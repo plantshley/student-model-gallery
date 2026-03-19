@@ -50,8 +50,8 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 ```json
 {
-  "name": "Your Real Name",
-  "projectTitle": "Title of Your Mental Model",
+  "name": "Your Username or Screen Name",
+  "projectTitle": "Title of Your Tool or Project",
   "description": "A description of your project.",
   "projectUrl": "https://your-video-or-project-link.com",
   "toolUrl": "https://your-tool-link.com",
