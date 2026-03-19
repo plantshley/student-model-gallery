@@ -3,6 +3,9 @@
    Cosmic/Space Theme
    ======================================== */
 
+/* Utility */
+.hidden { display: none !important; }
+
 /* CSS Custom Properties (Theme Variables) */
 :root {
     /* Dark Theme (Moonlight) - Default */
@@ -909,31 +912,41 @@ body {
 
 .modal-link-container {
     margin-top: auto;
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
 }
 
 .modal-link {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-sm);
     padding: var(--space-md) var(--space-lg);
-    background: var(--gradient-sunset);
+    background: linear-gradient(135deg, rgba(234, 198, 78, 0.7) 0%, rgba(232, 60, 189, 0.7) 100%);
     color: white;
     text-decoration: none;
     border-radius: var(--radius-md);
     font-size: 1rem;
     font-weight: 600;
     transition: all var(--transition-normal);
-    opacity: 0.7;
+    white-space: nowrap;
+    flex: 1;
 }
 
 .modal-link:hover {
     transform: translateY(-3px);
     box-shadow: 0 0 30px var(--glow-pink);
-    opacity: 1;
+    background: var(--gradient-sunset);
 }
 
-.modal-link-container.hidden {
-    display: none;
+#modalToolLink {
+    background: linear-gradient(135deg, rgba(247, 85, 225, 0.8) 0%, rgba(99, 102, 241, 0.8) 100%);
+}
+
+#modalToolLink:hover {
+    box-shadow: 0 0 30px var(--glow-purple);
+    background: linear-gradient(135deg, rgba(247, 85, 225, 1) 0%, rgba(99, 102, 241, 1) 100%);
 }
 
 /* ========================================

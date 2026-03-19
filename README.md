@@ -10,9 +10,10 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 
 ### Prerequisites
 
+- You have created you final class tool assignment and have a public, shareable URL for it.
 - You have gone on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/)
-- You have completed your final video walk-through using your tool(s) of choice.
-- You have a thumbnail image of your project (a screenshot or any related image works!) Supported formats: PNG, JPG, GIF
+- You have completed your video walk-through explaining the tool you created & reworked.
+- You have a thumbnail image of (or representative of) your project (a screenshot or any related image works!) Supported formats: PNG, JPG, GIF
 - You have a public URL for your project video or hosted project (e.g., YouTube, Loom, Google Drive shareable link, GitHub Pages, etc.)
 
 ### Step-by-Step Instructions
@@ -44,6 +45,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
    - For the `description` field, you can add multiple paragraphs to fully explain your work, or just a concise sentence or two.
    - If you have additional links to include related to your project, you can optionally make text clickable by using `[link text](url)` syntax in your description.
    - The `projectUrl` should be the public link to your video or hosted project.
+   - The `toolUrl` should be the public link to your final tool (e.g. your artifact link, deployed app, GitHub page, etc.).
    - The `projectPath` should be the path to your thumbnail image file.
 
 ```json
@@ -52,11 +54,12 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
   "projectTitle": "Title of Your Mental Model",
   "description": "A description of your project.",
   "projectUrl": "https://your-video-or-project-link.com",
+  "toolUrl": "https://your-tool-link.com",
   "projectPath": "projects/your-username.png"
 }
 ```
 
-**Note:** The `projectPath` should point to your thumbnail image file (PNG, JPG, or GIF). The `projectUrl` is where visitors will go when they click "View Project" - this should be your video link (YouTube, Loom, etc.) or your hosted project page.
+**Note:** The `projectPath` should point to your thumbnail image file (PNG, JPG, or GIF). The `projectUrl` is where visitors will go when they click "View Project" - this should be your video link (YouTube, Loom, etc.) or your hosted project page. The `toolUrl` is where visitors will go when they click "View Tool" - this should be a link to your final tool that's being reviewed in the video.
 
 6. **Register Your Submission**
    - Open the file `submissions/submissions.json`.

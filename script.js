@@ -332,8 +332,26 @@ function openModal(index) {
         modalDescription.classList.add('desc-small');
     }
 
+    const modalToolLink = document.getElementById('modalToolLink');
+
     if (submission.projectUrl) {
         modalLink.href = submission.projectUrl;
+        modalLink.classList.remove('hidden');
+    } else {
+        modalLink.classList.add('hidden');
+    }
+
+    if (modalToolLink) {
+        if (submission.toolUrl) {
+            modalToolLink.href = submission.toolUrl;
+            modalToolLink.classList.remove('hidden');
+        } else {
+            modalToolLink.classList.add('hidden');
+        }
+    }
+
+    // Show container if either link is present
+    if (submission.projectUrl || submission.toolUrl) {
         modalLinkContainer.classList.remove('hidden');
     } else {
         modalLinkContainer.classList.add('hidden');
