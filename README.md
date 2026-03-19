@@ -13,7 +13,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 - You have created you final class tool assignment and have a public, shareable URL for it.
 - You have gone on the [**Universe of Tools Persona Quest**](https://plantshley.github.io/web-tools-persona-quest/)
 - You have completed your video walk-through explaining the tool you created & reworked.
-- You have a thumbnail image of (or representative of) your project (a screenshot or any related image works!) Supported formats: PNG, JPG, GIF
+- You have a thumbnail image for your project (your mental model diagram, a screenshot of the tool, or a related image works!) Supported formats: PNG, JPG, GIF
 - You have a public URL for your project video or hosted project (e.g., YouTube, Loom, Google Drive shareable link, GitHub Pages, etc.)
 
 ### Step-by-Step Instructions
@@ -28,7 +28,7 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 3. **Upload Your Thumbnail Image**
    - Open the repository folder.
    - Navigate to `submissions/projects/`.
-   - Paste your thumbnail image file here.
+   - Paste your thumbnail image file here. 
    - **Rename the file** to match your GitHub username exactly (e.g., `twinkle-fairy.png` or `twinkle-fairy.jpg`). This prevents overwriting other students' files.
 
 4. **Create Your Data File**
