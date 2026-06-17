@@ -1,9 +1,9 @@
 {
   "name": "Azalea Twilight",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Pedestrian Exposure & Emissions Reduction Design Tool",
+  "description": "This tool estimates pedestrian PM₂.₅ exposure along a traffic corridor and compares emissions reduction strategies using a simplified dispersion model. It calculates concentration as a function of emission rate, wind speed, and distance from the roadway, and uses a segmented exposure approach to account for variation along a walking route, including intersections. The tool evaluates two engineering alternatives: roadside vegetation barriers, which reduce local concentrations, and partial fleet electrification, which reduces emissions at the source. Users input parameters such as emission rate, wind speed, time spent in different segments, and control efficiencies. The tool outputs total inhaled dose, percent reduction for each strategy, and segment-level concentration insights. It also includes a simple multi-criteria decision analysis (MCDA) to compare alternatives across technical, cost, health, and environmental dimensions. Results should be interpreted as order-of-magnitude estimates that highlight how design choices influence exposure under different conditions.",
+  "projectUrl": "https://gemini.google.com/share/97043e52df9f",
   "projectPath": "../images/AT2.png",
   "folderName": "alotaibi"
 }

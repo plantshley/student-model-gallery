@@ -1,9 +1,9 @@
 {
   "name": "Angelic Kitsune",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Classroom CO₂ Emissions Reduction Design Tool",
+  "description": "This tool models indoor CO₂ concentration in classroom by using single-zone mass balance approach and compared multiple ventilation design alternatives. The user provided inputs like room volume, number of occupants, air change rate (ACH) and duration of occupancy. The model simulated CO₂ concentration over time and produced outputs that included time-series plots, peak and average concentrations, sensitivity analysis, stress test and comparative visualizations across alternatives. The single-zone approach is appropriate because classroom is reasonably approximated as well-mixed indoor environment. The tool supports decision-making by quantifying how different ventilation strategies affect air quality and by structuring comparisons by using multi-criteria decision analysis (MCDA) framework. Users should interpret outputs by examining both compliance with acceptable CO₂ thresholds and trade-offs across cost, practicality, health and environmental impact.",
+  "projectUrl": "https://gemini.google.com/share/d9fb80c6b480",
   "projectPath": "../images/AK2.png",
   "folderName": "albakheet"
 }

@@ -1,9 +1,9 @@
 {
   "name": "Twinklestar Lilith",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "Fab 18 Air Quality Design Tool",
+  "description": "The Fab 18 Air Quality Design Tool is an  interactive engineering platform designed to evaluate and compare the effectiveness of centralized Regenerative Thermal Oxidizers (RTO) versus Point-of-Use (POU) Methane-Redox systems in semiconductor manufacturing. It requires user-adjustable inputs for wind speed, community distance, and atmospheric stability classes to simulate real-world environmental conditions. The tool utilizes a Gaussian Dispersion model, which is the industry standard for predicting ground-level pollutant concentrations from industrial point sources, making it ideal for assessing the impact on the 263,188 residents surrounding Fab 18. The output is structured through dynamic concentration plots and a Multi-Criteria Decision Analysis (MCDA) dashboard that ranks alternatives across technical, cost, public health, and environmental dimensions. Users can interpret these results in the visual summary dashboard that highlights the best fit alternative method based on quantitative NOx reduction and greenhouse gas mitigation trade-offs. The tool also includes an interactive 'Scrubber Ops' game simulation to help users conceptually and visually understand the precision required for chemical abatement at the tool level. ",
+  "projectUrl": "https://gemini.google.com/share/85465fc4ee0a",
   "projectPath": "../images/TL2.png",
   "folderName": "tegels"
 }

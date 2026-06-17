@@ -1,9 +1,9 @@
 {
   "name": "Fuchsia Topaz",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Fiberglass Concentration Comparison Tool",
+  "description": "My tool works by comparing fiberglass, sheep’s wool, and cellulose as insulation during installation and residency. The main areas being compared are insulation ability (R-value) and PM10 released into the air. The required inputs are target insulation (picking an R-value for how insulated you’d like the room to be), daily average residence time, room size (can use either volume slider or inputting your own room dimensions), and finally weights associated with each of the MCDA parameters. Single-zone indoor model is the best option for modeling since this is literally a single zone that’s indoors. Also, it assumes that the pollution is evenly distributed throughout the whole room, which is true for this scenario since the insulation would be on all sides of you. Using these inputs, the tool outputs an overall suitability score that chooses the best option off of your MCDA weights as well as other average costs and concentrations. It also predicts total 6-month dose in mg from average time spent indoors among all 3 choices and PM10 in air during installation. I think the best use of these results is the total score, where that uses which options you think are most important. The PM10 in air and 6-month total dose are rough estimates, and should only be taken with a grain of salt. The tool also creates a “health-parameter” applied to all 3 PM10 values. Since fiberglass is inherently more harmful than cellulose, fiberglass has a worse health score than cellulose at the same PM10 concentration.",
+  "projectUrl": "https://gemini.google.com/share/26f7ee3f8d8e",
   "projectPath": "../images/FT2.png",
   "folderName": "fletcher"
 }

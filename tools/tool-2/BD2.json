@@ -1,9 +1,9 @@
 {
   "name": "Butterfly Dewdrop",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "Wildfire Smoke Indoor Exposure Reduction Tool",
+  "description": "This tool models indoor PM2.5 exposure during a wildfire smoke event and compares two engineering alternatives, HVAC filtration upgrades and portable HEPA air cleaners. The user inputs outdoor PM2.5 concentration, air exchange rate (ACH), room volume, filtration efficiency, and clean air delivery rate (CADR), which are used to simulate indoor air conditions. A single-zone indoor air quality model is used because it assumes a well-mixed indoor environment and is appropriate for estimating exposure in residential spaces without requiring specific details. The tool outputs indoor PM2.5 concentrations for each alternative, percent reduction relative to baseline conditions, and visual comparisons through charts and tables. It also includes a multi-criteria decision analysis (MCDA) framework that evaluates technical effectiveness, cost and practicality, public health and safety, and environmental considerations. These outputs allow for direct comparison between alternatives under the same conditions. Users should interpret the results to aid in engineering alternative selection, where lower indoor concentrations and higher MCDA scores indicate more effective strategies for reducing exposure. This model assumes a well-mixed indoor environment and steady-state conditions, which may not capture spatial variability or changing outdoor concentrations.",
+  "projectUrl": "https://smokebuddy-air.lovable.app/",
   "projectPath": "../images/BD2.png",
   "folderName": "beauregard"
 }

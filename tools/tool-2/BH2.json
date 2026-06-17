@@ -1,9 +1,9 @@
 {
   "name": "Berry Halo",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Cabin Kitchen PM2.5 Design Tool",
+  "description": "This tool compares two engineering strategies for reducing indoor PM2.5 from cooking in a small cabin kitchen on a gas stove: improving kitchen ventilation and replacing the gas stove with an induction stove. The user enters room dimensions, cooking intensity, cooking duration, time spent in the kitchen after cooking, and existing ventilation quality. The tool calculates the room volume from the entered dimensions and applies a simplified single-zone indoor air model, which assumes that pollutants mix evenly within the room. This modeling approach works for this scenario because the goal is to estimate short-term human exposure in a small, enclosed space. A single-zone model gives a reasonable output of indoor concentrations without requiring detailed airflow or data, connecting everyday exposure scenarios to simplified quantitative results.The model estimates the peak PM2.5 concentration in the room, end-of-cooking PM2.5 concentration, and estimated inhaled PM2.5 mass for three scenarios: baseline gas stove conditions, a ventilation upgrade, and induction stove conversion. In addition to these, the tool applies a multi-criteria decision analysis (MCDA) that evaluates each alternative based on technical effectiveness, cost and practicality, public health and safety, and environmental considerations. The results are shown in a comparison table that displays the most effective design option under the selected conditions and gives results based on a 5 point scale.",
+  "projectUrl": "https://brittnihamilton56.github.io/Tool-2-gas-stove-emission/",
   "projectPath": "../images/BH2.png",
   "folderName": "hamilton"
 }

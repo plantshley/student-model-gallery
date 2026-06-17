@@ -1,9 +1,9 @@
 {
   "name": "Honeysuckle Zircon",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "Mobile Carbon Capture for CO2 emitting transportation in Fort Collins, CO: OEC vs DAC",
+  "description": "This tool is an interactive, browser-based decision-support instrument implementing a steady-state fixed-box (well-mixed box) air quality model parameterized for a 1 km segment of College Avenue, Fort Collins (L = 1,000 m, W = 150 m, H = 10 m). It accepts nine user-adjustable inputs via sliders: traffic volume, CO₂ emission factor, fleet deployment fraction, OEC capture efficiency, OEC fuel penalty, DAC capture efficiency, DAC airflow rate, wind speed, and mixing height — all of which update outputs in real time. The fixed-box model was chosen because College Avenue presents a uniform line-source distribution at low wind speeds typical of Fort Collins summer afternoons, conditions under which near-field turbulence violates Gaussian plume assumptions and a single-zone indoor model does not apply. The tool produces five interpretable outputs: (1) near-road CO₂ concentration (ppm) for baseline, OEC, and DAC scenarios; (2) a fleet-deployment sensitivity chart showing concentration vs. percent fleet equipped; (3) a wind-speed sensitivity chart exposing DAC's vulnerability to calm conditions; (4) an annual CO₂ mass capture comparison per vehicle and total fleet; and (5) a live MCDA scoring matrix with weighted totals across five evaluation criteria. Outputs are structured to support comparative decision-making: the sensitivity charts reveal the break-even deployment fraction (≥45% OEC to meet the −5 ppm target), while the MCDA matrix makes tradeoffs explicit — OEC wins on technical effectiveness, DAC wins on cost, environmental profile, and EV compatibility. All outputs should be interpreted as order-of-magnitude estimates under idealized steady-state assumptions; they are decision-support artifacts, not precise predictions. AI collaboration: this tool was co-developed with Claude (Anthropic) — the model logic, sensitivity sweep calculations, live MCDA scoring, and Chart.js visualization structure were co-generated and iteratively refined through AI-assisted debugging and unit verification.",
+  "projectUrl": "tools/tool-2/projects/HZ2.html",
   "projectPath": "../images/HZ2.png",
   "folderName": "hatz"
 }

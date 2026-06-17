@@ -1,8 +1,9 @@
 {
   "name": "Amethyst Lily",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectPath": "../images/ALI2.mp4",
+  "projectTitle": "Coal Plant Emissions — Air Quality Comparison Tool ",
+  "description": "The tool is an interactive web dashboard that compares two engineering interventions, which are an FGD scrubber retrofit (Alt. A) and a natural gas switch to fuel (Alt.). B) — in opposition to a coal plant baseline of SO 2 exposure reduction. It involves specifying source parameters (emission rate Q, stack height H, wind speed, atmospheric stability class, receptor distance) and control parameters of each alternative (SO 2 / PM 2.5 removal efficiency, increase or decrease of stack height, CAPEX) as well as MCDA criterion weights. It uses a simplified steady-state Gaussian plume model (Pasquill-Gifford dispersion coefficients), which is suitable in the present case, as the situation is characterized by a single elevated point source in relatively constant meteorological conditions with a fixed downwind receptor. The tool creates four visual products, which include a downwind centerline concentration profile, crosswind concentration profile at the receptor, a receptor concentration bar chart benchmarked to the WHO 40 μg/m 3 SO 2 guideline and a radar + composite bar chart of the MCDA scoring. MCDA framework evaluates each alternative based on four criteria (quantitatively calculated based on the model) such as technical effectiveness, public health, environmental considerations, and cost/practicality and integrates them with weights set by the user into a composite score. The dispersion plots should be interpreted by users to determine which alternative outperforms the WHO guideline spatially, the MCDA radar should be read to determine trade-offs across criteria, and used weight sliders to test which alternative is favored with various decision priorities.",
+  "projectUrl":"https://gemini.google.com/share/e0d4cd0f1fb9",
+  "projectPath": "../images/ALI2.png",
   "folderName": "alali"
 }

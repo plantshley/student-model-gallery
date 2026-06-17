@@ -1,9 +1,9 @@
 {
   "name": "Aurora Lullaby",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
-  "projectPath": "../images/AL2.png",
+  "toolTag": "Tool 2",
+  "projectTitle": "Gaussian Plume Atmospheric Dispersion Engine",
+  "description": "This computational tool simulates downwind pollutant exposure from a multi-source coal plant to evaluate two engineering interventions against a baseline model.",
+  "projectUrl": "https://gemini.google.com/share/4d6fb07ce8df",
+  "projectPath": "../images/AL2.jpeg",
   "folderName": "alajmi"
 }

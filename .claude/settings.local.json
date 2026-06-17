@@ -3,7 +3,15 @@
     "allow": [
       "WebFetch(domain:codepen.io)",
       "Bash(python -c \"import openpyxl; print\\(''''openpyxl available''''\\)\")",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(python -)",
+      "Read(//c/Users/ashle/Downloads/**)",
+      "Bash(awk '{ print NR\": \"substr\\($0,1,30\\)\"...  length=\"length }')",
+      "Bash(cd /c/Users/ashle/Documents/GitHub/student-model-gallery *)",
+      "Bash(python -c \"import json; d=json.load\\(open\\('tools/tool-2/HZ2.json',encoding='utf-8'\\)\\); print\\('OK - projectUrl:', d['projectUrl']\\)\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\ashle\\Downloads"
     ]
   }
 }

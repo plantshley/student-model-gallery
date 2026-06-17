@@ -1,9 +1,9 @@
 {
   "name": "Aquamarine Zephyr",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "In-Vehicle PM₂.₅ Exposure in Urban Traffic ",
+  "description": "The tool developed in this study is a Python-based exposure estimation model that calculates in-cabin PM₂.₅ concentration and inhaled dose during a commute. It uses a single-zone (wellmixed box) air quality model, which is appropriate because the car cabin can be treated as a confined space with approximately uniform pollutant mixing. The tool accepts user-defined inputs including roadway PM₂.₅ concentration, exposure duration, breathing rate, air exchange rate (ACH), and penetration factor (P). It simulates the time-dependent concentration inside the cabin and computes inhaled dose. The tool compares multiple engineering alternatives—recirculation mode, fresh air mode, and filtration—under the same conditions. It produces quantitative outputs such as average concentration and dose, along with structured comparison tables. These outputs are interpreted using a multi-criteria decision framework that includes technical effectiveness, cost, public health, and environmental considerations. The tool is intended as a decision-support system to evaluate exposure reduction strategies rather than provide exact predictions.",
+  "projectUrl": "https://gemini.google.com/share/25928ddacaf2",
   "projectPath": "../images/AZ2.png",
   "folderName": "alzoubi"
 }

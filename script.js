@@ -295,7 +295,7 @@ function openModal(index) {
     const submission = allSubmissions[currentSubmissionIndex];
 
     const imagePath = submission.projectPath
-        ? `${galleryMediaPrefix}${submission.projectPath}`
+        ? `${submission._mediaPrefix ?? galleryMediaPrefix}${submission.projectPath}`
         : null;
 
     const modalImageContainer = document.querySelector('.modal-image-container');
@@ -585,36 +585,41 @@ async function initParticles() {
 // Load Submissions
 // ========================================
 
-async function loadSubmissions(manifestPath, mediaPrefix) {
-    galleryMediaPrefix = mediaPrefix;
+async function loadSubmissions(sources) {
+    // Accept a single {manifest, prefix} or an array of them.
+    const sourceList = Array.isArray(sources) ? sources : [sources];
+    galleryMediaPrefix = sourceList[0]?.prefix || '';
     try {
-        const manifestResponse = await fetch(manifestPath);
-        if (!manifestResponse.ok) throw new Error('Manifest not found');
+        const perSource = await Promise.all(
+            sourceList.map(async ({ manifest, prefix }) => {
+                const manifestResponse = await fetch(manifest);
+                if (!manifestResponse.ok) throw new Error(`Manifest not found: ${manifest}`);
 
-        const usernames = await manifestResponse.json();
-        if (!Array.isArray(usernames) || usernames.length === 0) {
-            showEmptyState();
-            return;
-        }
+                const usernames = await manifestResponse.json();
+                if (!Array.isArray(usernames)) return [];
 
-        const submissions = await Promise.all(
-            usernames.map(async (username) => {
-                try {
-                    const response = await fetch(`${mediaPrefix}${username}.json`);
-                    if (!response.ok) return null;
-                    const data = await response.json();
-                    if (username.startsWith('example') && !data.toolTag) {
-                        data.toolTag = 'example';
-                    }
-                    return { ...data, username };
-                } catch {
-                    console.warn(`Failed to load submission for: ${username}`);
-                    return null;
-                }
+                return Promise.all(
+                    usernames.map(async (username) => {
+                        try {
+                            const response = await fetch(`${prefix}${username}.json`);
+                            if (!response.ok) return null;
+                            const data = await response.json();
+                            if (username.startsWith('example') && !data.toolTag) {
+                                data.toolTag = 'example';
+                            }
+                            return { ...data, username, _mediaPrefix: prefix };
+                        } catch {
+                            console.warn(`Failed to load submission for: ${username}`);
+                            return null;
+                        }
+                    })
+                );
             })
         );
 
-        const validSubmissions = submissions.filter(s => s !== null);
+        const submissions = perSource.flat();
+        // Skip placeholders (entries whose title hasn't been filled in yet).
+        const validSubmissions = submissions.filter(s => s !== null && (s.projectTitle || '').trim());
         if (validSubmissions.length === 0) {
             showEmptyState();
             return;
@@ -652,7 +657,7 @@ function createCard(submission, index) {
     card.style.animationDelay = `${index * 0.1}s`;
 
     const imagePath = submission.projectPath
-        ? `${galleryMediaPrefix}${submission.projectPath}`
+        ? `${submission._mediaPrefix ?? galleryMediaPrefix}${submission.projectPath}`
         : null;
 
     const mediaContent = imagePath
@@ -737,7 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const container = document.querySelector('[data-manifest]');
+    const container = document.querySelector('[data-manifest], [data-manifests]');
 
     if (container) {
         // Gallery page — wire up modal, fullscreen, and load submissions
@@ -748,7 +753,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (fullscreenClose) fullscreenClose.addEventListener('click', closeFullscreenImage);
         if (fullscreenBackdrop) fullscreenBackdrop.addEventListener('click', closeFullscreenImage);
 
-        loadSubmissions(container.dataset.manifest, container.dataset.mediaPrefix || '');
+        // data-manifests holds a JSON array of {manifest, prefix} for multi-tool galleries;
+        // data-manifest/data-media-prefix is the single-source fallback.
+        let sources;
+        if (container.dataset.manifests) {
+            sources = JSON.parse(container.dataset.manifests);
+        } else {
+            sources = [{ manifest: container.dataset.manifest, prefix: container.dataset.mediaPrefix || '' }];
+        }
+        loadSubmissions(sources);
     } else {
         // Homepage — init sparkle overlay on nav buttons
         document.querySelectorAll('.nav-button').forEach((btn, i) => createSparkleOverlay(btn, i));

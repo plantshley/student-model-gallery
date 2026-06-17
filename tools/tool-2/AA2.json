@@ -1,8 +1,8 @@
 {
   "name": "Azure Angelcake",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Last Mile Deliver Hub Tool",
+  "description": "This Excel-based tool evaluates emissions reduction strategies for a last-mile delivery hub using a simplified Gaussian dispersion model. Users can adjust key inputs such as emission rate, wind speed, and receptor distance to explore how environmental and operational conditions affect pollutant concentrations. The tool computes results for baseline conditions and two engineering alternatives and presents outputs through concentration-distance graphs, sensitivity analysis, and structured comparison tables. A multi-criteria decision analysis (MCDA) framework is integrated to support decision-making across technical, economic, and environmental dimensions. The tool is intended as a decision-support system that highlights tradeoffs rather than providing exact predictions. Users should interpret the outputs by comparing concentration reductions across scenarios while considering sensitivity to wind conditions, which indicates robustness of each alternative. ",
   "projectUrl": "",
   "projectPath": "../images/AA2.png",
   "folderName": "aladwani"

@@ -1,9 +1,9 @@
 {
   "name": "Astral Nebula",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
-  "projectPath": "../images/AN2.png",
+  "toolTag": "Tool 2",
+  "projectTitle": "VOC Emissions Reduction Design Tool: Petroleum Storage Tank Farm Dispersion Model",
+  "description": "this instrument simulates the ground-level VOC concentrations of a petroleum storage tank farm with the steady-state Gaussian (Pasquill-Gifford) dispersion equipment, proper in this case as it is the accepted EPA-equipment standard method to estimate the outdoor air concentrations at a fixed position source under homogeneous wind conditions. the user may modify inputs such as emission rate (g/s), wind velocity (m/s), source height (m), receptor distance (m), the atmospheric stability category (A-F), and control efficiency of each alternative. the tool represents three scenarios - an uncontrolled baseline, a Vapor Recovery Unit (VRU), and Internal Floating Roof (IFR) conversion - and generates a concentration-vs-distance profile to 5 km, a wind-speed sensitivity curve, and percent cards on receptor and point decrease compared to the baseline and EPA IRIS benzene chronic inhalation reference concentration (RfC = 30 ug/m3). the comparison of alternatives is structured using a four-criterion MCDA table (technical effectiveness, public health and safety, environment, cost and practicality) of comparable uncertainties, a rough-order-of-magnitude cost reference list and a feasibility check including schedule, infrastructure, approval, and critical barriers of implementation. users ought to interpret concentrations of or less the EPA RfC as satisfying the health benchmark, use sensitivity chart to determine worst-case low-wind, the MCDA weighted scores and cost ranges as a approach to decision-support instead of an accurate engineering estimate.",
+  "projectUrl": "https://gemini.google.com/share/1f6824f28e36",
+  "projectPath": "../images/AN2.jpg",
   "folderName": "ashkanani"
 }

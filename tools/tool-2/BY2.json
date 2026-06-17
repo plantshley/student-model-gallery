@@ -1,9 +1,9 @@
 {
   "name": "Breezy Yarrow",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
-  "projectPath": "../images/BY2.jpeg",
+  "toolTag": "Tool 2",
+  "projectTitle": "Wildfire PM2.5 Dispersion Model: Cameron Peak Fire Reference · Colorado Front Range",
+  "description": "See full PM2.5 Mitigation Framework diagram [here](https://woodstove-air-quality.my.canva.site/stage-b-wildfire). The tool assesses PM2.5 output from a wildfire along the Front Range of Colorado. It depends on inputs such as fuel load (tons/acre), vegetation dryness (%), oxygen availability (%), fire area (acres), wind speed (m/s), wind direction (degrees), atmospheric stability (A-F Pasquill scale), mixing height (m), burn area reduction (%) and combustion efficiency reduction (%) for fire retardant, and WUI structures converted (%) and structural fuel as % of total for non-combustible building materials. It uses a dispersion modeling approach which is appropriate for this scenario because it considers pollution traveling in the atmosphere over long distances and impact on communities’ different distances from the source. It produces baseline, with fire retardant, and non-combustible materials peak for PM2.5, dispersion map, concentration profile, emission rate comparison, front range city concentrations, and sensitivity analysis for each parameter. For the MCDA the user can input the weight they want each criterion to have, then the model will give scores to each alternative based on the criterion. It also produces an interpretation guide for these results. The user can use these outputs to understand how different wildfire scenarios may impact the effectiveness of different engineered solutions, especially when considering criteria such as environmental impact and cost.",
+  "projectUrl": "https://woodstove-air-quality.my.canva.site/wildfire-dispersion-model",
+  "projectPath": "../images/BY2.png",
   "folderName": "bailey"
 }

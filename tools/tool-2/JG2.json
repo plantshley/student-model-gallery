@@ -1,9 +1,9 @@
 {
   "name": "Juniper Glade",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
-  "projectPath": "../images/JG2.jpg",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Comanche Generating Station Air Pollution Control Design Comparison Tool",
+  "description": "The purpose of this tool is to compare three emissions-control design strategies for the Comanche Generating Station using a consistent modeling framework. The goal is not to predict exact field conditions, but to evaluate how different combinations of control technologies influence PM, SO₂, and NOₓ emissions and resulting exposure at a nearby receptor. A simplified Gaussian plume model was selected because it provides a reasonable balance between physical realism and computational simplicity for screening-level comparisons. The selected input parameters reflect the variables that most directly influence near-field pollutant dispersion and exposure. Wind speed, downwind distance, and atmospheric stability were included because they control dilution and plume spread, which strongly affect concentration at a receptor. The chosen ranges (e.g., low to moderate wind speeds and distances on the order of hundreds to thousands of meters) were intended to represent conditions relevant to communities located near the Comanche facility. Baseline emission rates were treated as adjustable inputs to allow comparison across a range of possible operating conditions without assuming a single fixed value. ",
+  "projectUrl": "https://joshuaddgorton97-cell.github.io/Comanche-Air-Quality-Tool/",
+  "projectPath": "../images/JG2.png",
   "folderName": "gorton"
 }

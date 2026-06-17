@@ -1,9 +1,9 @@
 {
   "name": "Rose Angelbeam",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "Wildfire Smoke Mitigation Decision-Support Tool — Mountain Valley Community, Colorado",
+  "description": "This tool compares three engineering alternatives for reducing PM₂.₅ exposure in a mountain valley community (e.g., Glenwood Springs / Roaring Fork Valley corridor, CO) during wildfire or prescribed burn events. Users adjust emission rate (Q), wind speed, effective plume height (H), and receptor distance; the tool then computes dispersion outcomes and runs a full MCDA evaluation.",
+  "projectUrl": "https://clear-valley-shield.base44.app ",
   "projectPath": "../images/RA2.png",
   "folderName": "ayres"
 }

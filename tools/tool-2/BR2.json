@@ -1,9 +1,9 @@
 {
   "name": "Blossom River",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "School Pickup Zone Air Quality Tool: PM2.5 Exposure from Vehicle Idling Near Schools",
+  "description": "This tool models PM2.5 exposure from vehicles idling near a school pickup and drop-oA zone using a simplified Gaussian dispersion model. The user can adjust the number of vehicles, emission rate, wind speed, and student distance from the source. Two engineering alternatives are evaluated: relocating the pickup queue farther from students and implementing an anti-idling enforcement program. The model calculates pollutant concentrations for each alternative and displays results through summary metrics, a concentration-versus-distance graph, and a multi-criteria decision analysis table. Technical eAectiveness is quantified using modeled PM2.5 concentrations, while cost, practicality, public health, and environmental considerations are assessed qualitatively. Users should interpret lower concentrations and higher MCDA scores as indicators of more favorable design choices. ",
+  "projectUrl": "https://gemini.google.com/share/1554e88cd30f",
   "projectPath": "../images/BR2.png",
   "folderName": "barr"
 }
