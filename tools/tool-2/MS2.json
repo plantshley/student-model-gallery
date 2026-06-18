@@ -1,9 +1,9 @@
 {
   "name": "Melon SugarDrop",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "Engineering Solution Analysis for Traffic Emissions in Fort Collins, CO",
+  "description": "See full visual diagram [here](https://yippee2.my.canva.site/making-thinking-visible).\n\nThis tool is used to compare different engineering strategies used to reduce emissions from cars in Fort Collins, Colorado. Those solutions are road redesign and hybrid vehicles. It accomplishes this through calculating and comparing different pollutant concentrations depending on the strategy, and giving it an overall score based on cost, practicality, health and safety, technicality, and environmental impact.",
+  "projectUrl": "https://yippee2.my.canva.site/tool-2",
   "projectPath": "../images/MS2.png",
   "folderName": "schei"
 }

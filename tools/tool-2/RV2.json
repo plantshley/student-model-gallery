@@ -1,9 +1,9 @@
 {
   "name": "Rarity Viola",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "I-25 Corridor NOx Emissions Reduction Tool",
+  "description": "This tool uses a simplified Gaussian dispersion model to estimate pollutant concentrations at receptor locations downwind of the I-25 highway. The Gaussian plume model is widely used in environmental engineering because it provides reasonable estimates for ground-level line-source emissions under steady-state meteorological conditions. It accounts for wind speed, atmospheric stability, and distance to predict how pollutants disperse from the highway.",
+  "projectUrl": "https://i-25-design-tool.vercel.app/",
   "projectPath": "../images/RV2.png",
   "folderName": "villanueva"
 }

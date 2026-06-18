@@ -1,0 +1,472 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CIVE 442 — Tool 2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;color:#000000}
+body{font-family:'Segoe UI',sans-serif;background:#f0f2f5}
+header{background:#1b2a3b;padding:1rem 1.5rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+header h1{color:#f0a500;font-size:.95rem;font-weight:700}
+header p{color:rgba(255,255,255,.7);font-size:.75rem}
+.jump-links{display:flex;gap:.6rem;flex-wrap:wrap}
+.jump-links a{color:rgba(255,255,255,.8);font-size:.73rem;text-decoration:none;padding:.28rem .65rem;border-radius:4px;border:1px solid rgba(255,255,255,.2)}
+.jump-links a:hover{background:rgba(255,255,255,.1)}
+main{max-width:1100px;margin:0 auto;padding:1.75rem 1.25rem}
+.part{margin-bottom:2.75rem}
+.part-header{display:flex;align-items:center;gap:.7rem;margin-bottom:1.25rem;padding-bottom:.65rem;border-bottom:3px solid #e2e8f0}
+.part-header h2{font-size:1.2rem;font-weight:700;color:#000000}
+.card{background:#fff;border-radius:10px;padding:1.3rem;margin-bottom:1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.shead{font-size:.7rem;font-weight:700;color:#000000;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.85rem}
+.p1grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:660px){.p1grid{grid-template-columns:1fr}}
+.photo-box{border:2px dashed #cbd5e1;border-radius:8px;min-height:270px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;background:#f8fafc}
+.photo-box img{width:100%;height:100%;object-fit:cover}
+.ann-list{list-style:none}
+.ann-item{display:flex;gap:.7rem;padding:.6rem 0;border-bottom:1px solid #f1f5f9;align-items:flex-start}
+.ann-item:last-child{border-bottom:none}
+.ann-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem}
+.ann-label{font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.12rem}
+.ann-text{font-size:.86rem;line-height:1.55}
+.stage-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:1.1rem;min-height:95px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.875rem;cursor:pointer}
+.stage-box img{max-width:100%;border-radius:6px}
+.caption-box{background:#f0f7ff;border-left:4px solid #6366f1;padding:.9rem 1.1rem;border-radius:0 8px 8px 0;font-size:.845rem;line-height:1.65;margin-top:1rem}
+.desc-banner{background:#1b2a3b;color:#ffffff;border-radius:10px;padding:1rem 1.3rem;margin-bottom:1.2rem;font-size:.845rem;line-height:1.65}
+.desc-banner strong{color:#ffffff}
+.inputs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.9rem}
+.ig label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:.28rem}
+.ig input[type=range]{width:100%;accent-color:#1b2a3b}
+.ig select{width:100%;padding:.42rem .65rem;border:1px solid #e2e8f0;border-radius:6px;font-size:.85rem;background:#fff}
+.val-label{font-size:.8rem;font-weight:700;margin-top:.22rem;display:block}
+.hint{font-size:.68rem}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:700px){.charts-grid{grid-template-columns:1fr}}
+.badges{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.7rem}
+.badge{padding:.22rem .75rem;border-radius:20px;font-size:.71rem;font-weight:700}
+.b0{background:#e0e7ff;color:#3730a3}.b1{background:#fef3c7;color:#92400e}.b2{background:#d1fae5;color:#065f46}
+.peak-sum{margin-top:.7rem;font-size:.78rem;line-height:1.6;background:#f8fafc;padding:.65rem;border-radius:6px}
+.mcda-wrap{overflow-x:auto}
+.mcda-t{width:100%;border-collapse:collapse;font-size:.8rem}
+.mcda-t th{background:#1b2a3b;color:#fff;padding:.55rem .9rem;text-align:left;font-size:.71rem;font-weight:600}
+.mcda-t td{padding:.55rem .9rem;border-bottom:1px solid #f1f5f9;vertical-align:top}
+.mcda-t tr:nth-child(even) td{background:#f8fafc}
+.rec-box{background:#ecfdf5;border-left:4px solid #10b981;padding:.85rem 1.05rem;border-radius:0 8px 8px 0;font-size:.845rem;margin-top:.9rem;line-height:1.6}
+.warn-box{background:#fff7ed;border-left:4px solid #f59e0b;padding:.85rem 1.05rem;border-radius:0 8px 8px 0;font-size:.845rem;margin-top:.5rem;line-height:1.6;display:none}
+button{display:inline-flex;align-items:center;gap:.38rem;padding:.52rem 1rem;border:none;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600}
+.btn-ai{background:#6366f1;color:#fff}
+textarea.ref-edit{width:100%;min-height:110px;padding:.7rem;border:1px solid #e2e8f0;border-radius:6px;font-size:.86rem;line-height:1.65;font-family:inherit;resize:vertical}
+.ref-section{margin-bottom:1.2rem}
+.ref-section h3{font-size:.88rem;font-weight:700;margin-bottom:.5rem}
+.costtbl{width:100%;border-collapse:collapse;font-size:.82rem;border:1px solid #e2e8f0}
+.costtbl th{background:#1b2a3b;color:#fff;padding:.45rem .7rem;text-align:left;font-size:.75rem}
+.costtbl td{padding:.45rem .7rem;border-bottom:1px solid #e2e8f0}
+.costtbl tr:nth-child(even) td{background:#f8fafc}
+.costtbl tfoot td{background:#1b2a3b;color:#f0a500;font-weight:700;padding:.5rem .7rem}
+.practbl{width:100%;border-collapse:collapse;font-size:.82rem;border:1px solid #e2e8f0}
+.practbl th{background:#1b2a3b;color:#fff;padding:.5rem .7rem;text-align:left;font-size:.75rem}
+.practbl td{padding:.5rem .7rem;border-bottom:1px solid #e2e8f0;vertical-align:top}
+.practbl tr:nth-child(even) td{background:#f8fafc}
+</style></head>
+<body>
+<header>
+  <div><h1>CIVE 442 — Tool 2: Emissions Reduction Design</h1>
+  <p>NOx from Diesel Excavators · Gaussian Dispersion · Stack Retrofit vs. Electrification · Fort Collins CO</p></div>
+  <nav class="jump-links">
+    <a href="#p1">📸 Part 1</a><a href="#p2">🗂 Part 2</a><a href="#p3">⚙️ Part 3</a><a href="#p4">✍️ Part 4</a>
+  </nav>
+</header>
+<main>
+
+<!-- PART 1 -->
+<section class="part" id="p1">
+  <div class="part-header"><h2>📸 Part 1: Embodied Noticing</h2></div>
+  <div class="p1grid" style="display:flex;justify-content:center;align-items:flex-start;gap:1.2rem">
+    <div class="card" style="max-width:550px;margin:0 auto">
+      <div class="shead">Site Photograph</div>
+      <img src="excavator.jpg" style="width:100%;border-radius:8px;display:block;margin:0 auto;max-width:500px"/>
+<p style="font-size:.7rem;margin-top:.45rem;text-align:center">Diesel excavator demolition site adjacent to academic buildings, Winter 2025</p>
+        <img id="siteImg" style="display:none"/>
+      </div>
+      <input type="file" id="photoIn" accept="image/*" style="display:none" onchange="loadImg(event)">
+    </div>
+    <div class="card">
+      <div class="shead">Field Annotations</div>
+      <ul class="ann-list">
+        <li class="ann-item"><span class="ann-icon">👁</span><div><div class="ann-label">Observation 1</div><div class="ann-text">Heavy equipment operates Monday–Friday, approximately 7:00 AM–3:30 PM, with diesel engines running continuously throughout the workday.</div></div></li>
+        <li class="ann-item"><span class="ann-icon">👁</span><div><div class="ann-label">Observation 2</div><div class="ann-text">The demolition site is directly adjacent to occupied academic buildings where classes are actively held, placing the receptor population in close proximity to the emission source.</div></div></li>
+        <li class="ann-item"><span class="ann-icon">💭</span><div><div class="ann-label">Inference 1</div><div class="ann-text">Cold engine starts during winter mornings likely produce elevated NOx spikes during the first hours of operation, when combustion is least efficient.</div></div></li>
+        <li class="ann-item"><span class="ann-icon">💭</span><div><div class="ann-label">Inference 2</div><div class="ann-text">Students and staff walking past the site during class transitions are likely receiving elevated NOx exposure directly in the breathing zone (~1.5 m).</div></div></li>
+        <li class="ann-item"><span class="ann-icon">💭</span><div><div class="ann-label">Inference 3</div><div class="ann-text">The excavators appear to be older models, likely Tier 2 or Tier 3 certified, emitting significantly more NOx per hour than current Tier 4 standards permit.</div></div></li>
+        <li class="ann-item"><span class="ann-icon">❓</span><div><div class="ann-label">Unknowns</div><div class="ann-text">Actual NOx concentrations at the site; wind speed and direction throughout the operating day; engine tier certification of the on-site equipment.</div></div></li>
+        <li class="ann-item"><span class="ann-icon">🔧</span><div><div class="ann-label">Engineering Question</div><div class="ann-text">Which alternative would more greatly reduce NOx emissions near occupied academic buildings — retrofitting a vertical exhaust stack to 3 m, or fully electrifying the excavator fleet?</div></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PART 2 -->
+<section class="part" id="p2">
+  <div class="part-header"><h2>🗂 Part 2: Making Thinking Visible</h2></div>
+  <div class="card">
+    <div class="shead">Stage A — Initial Hand-Drawn Sketch</div>
+    <div class="stage-box" id="sketchBox" onclick="document.getElementById('sketchIn').click()">
+     <img src="sketch.png" style="width:100%;border-radius:6px"/>
+      <img id="sketchImg" style="display:none;max-width:100%;border-radius:6px"/>
+    </div>
+  </div>
+  <div class="card">
+    <div class="shead">Stage B — AI-Assisted Enhanced System Diagram</div>
+    <div style="overflow-x:auto;display:flex;justify-content:center">
+<svg viewBox="0 0 800 1400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;font-family:'Segoe UI',sans-serif">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#64748b"/></marker>
+  <marker id="aro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#d97706"/></marker>
+  <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#10b981"/></marker>
+  <marker id="arb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#3b82f6"/></marker>
+  <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#f43f5e"/></marker>
+</defs>
+<rect width="800" height="1400" fill="#f8fafc" rx="14"/>
+<text x="400" y="32" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1b2a3b">NOx Emissions Reduction Design — Glover Construction Site</text>
+<text x="400" y="50" text-anchor="middle" font-size="10" fill="#000000">Fort Collins, CO · Diesel Excavators · Gaussian Dispersion · MCDA Comparison</text>
+<!-- BOX 1: SOURCE -->
+<rect x="235" y="65" width="330" height="92" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.2"/>
+<text x="400" y="89" text-anchor="middle" font-size="12" font-weight="700" fill="#92400e">① EMISSION SOURCE</text>
+<text x="400" y="107" text-anchor="middle" font-size="10" fill="#000000">Visible exhaust from diesel excavators</text>
+<text x="400" y="123" text-anchor="middle" font-size="10" fill="#000000">Glover Construction Site, Fort Collins CO</text>
+<text x="400" y="139" text-anchor="middle" font-size="9" fill="#000000">Q ≈ 0.25 g/s/machine · H₀ = 1.75 m · Tier 2/3 (est.)</text>
+<rect x="254" y="74" width="26" height="15" rx="3" fill="#f59e0b" stroke="#d97706"/><text x="267" y="85" text-anchor="middle" font-size="7" fill="#000000" font-weight="700">EXC</text><line x1="267" y1="74" x2="267" y2="66" stroke="#d97706" stroke-width="2"/>
+<rect x="286" y="74" width="26" height="15" rx="3" fill="#f59e0b" stroke="#d97706"/><text x="299" y="85" text-anchor="middle" font-size="7" fill="#000000" font-weight="700">EXC</text><line x1="299" y1="74" x2="299" y2="66" stroke="#d97706" stroke-width="2"/>
+<!-- Inputs sidebar -->
+<rect x="28" y="65" width="178" height="92" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+<text x="117" y="85" text-anchor="middle" font-size="10" font-weight="700" fill="#1d4ed8">Model Inputs</text>
+<text x="40" y="102" font-size="9" fill="#000000">• Q — emission rate (g/s)</text>
+<text x="40" y="116" font-size="9" fill="#000000">• u — wind speed (m/s)</text>
+<text x="40" y="130" font-size="9" fill="#000000">• H — stack height (m)</text>
+<text x="40" y="144" font-size="9" fill="#000000">• Stability class (A–F)</text>
+<line x1="206" y1="111" x2="233" y2="111" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#arb)"/>
+<!-- Unknowns sidebar -->
+<rect x="594" y="65" width="178" height="92" rx="8" fill="#fff1f2" stroke="#f43f5e" stroke-width="1.5"/>
+<text x="683" y="85" text-anchor="middle" font-size="10" font-weight="700" fill="#9f1239">Unknowns</text>
+<text x="606" y="102" font-size="9" fill="#000000">• Actual NOx conc. on site</text>
+<text x="606" y="116" font-size="9" fill="#000000">• Wind speed/direction daily</text>
+<text x="606" y="130" font-size="9" fill="#000000">• Engine tier on site</text>
+<line x1="565" y1="111" x2="592" y2="111" stroke="#f43f5e" stroke-width="1.6" marker-end="url(#arp)"/>
+<line x1="400" y1="157" x2="400" y2="185" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+<!-- BOX 2: RECEPTOR -->
+<rect x="235" y="187" width="330" height="90" rx="10" fill="#fff1f2" stroke="#f43f5e" stroke-width="2.2"/>
+<text x="400" y="211" text-anchor="middle" font-size="12" font-weight="700" fill="#9f1239">② RECEPTOR EXPOSURE</text>
+<text x="400" y="229" text-anchor="middle" font-size="10" fill="#000000">NOx exposure to workers and people passing by</text>
+<text x="400" y="246" text-anchor="middle" font-size="9.5" fill="#000000">Students (class transitions) · Faculty · Pedestrians</text>
+<text x="400" y="262" text-anchor="middle" font-size="9" fill="#000000">Breathing zone ≈ 1.5 m · Adjacent academic buildings</text>
+<line x1="400" y1="277" x2="400" y2="305" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+<!-- BOX 3: PROBLEM -->
+<rect x="205" y="307" width="390" height="74" rx="10" fill="#f0f9ff" stroke="#0284c7" stroke-width="2.2"/>
+<text x="400" y="331" text-anchor="middle" font-size="12" font-weight="700" fill="#0c4a6e">③ ENGINEERING PROBLEM</text>
+<text x="400" y="350" text-anchor="middle" font-size="10" fill="#000000">Which alternative most reduces NOx near occupied academic</text>
+<text x="400" y="367" text-anchor="middle" font-size="10" fill="#000000">buildings — stack retrofit or electrification?</text>
+<!-- Split -->
+<line x1="400" y1="381" x2="400" y2="402" stroke="#64748b" stroke-width="2"/>
+<line x1="400" y1="402" x2="192" y2="402" stroke="#d97706" stroke-width="2"/>
+<line x1="400" y1="402" x2="608" y2="402" stroke="#10b981" stroke-width="2"/>
+<line x1="192" y1="402" x2="192" y2="422" stroke="#d97706" stroke-width="2" marker-end="url(#aro)"/>
+<line x1="608" y1="402" x2="608" y2="422" stroke="#10b981" stroke-width="2" marker-end="url(#arg)"/>
+<!-- ALT 1 -->
+<rect x="58" y="424" width="268" height="132" rx="10" fill="#fffbeb" stroke="#eab308" stroke-width="2.2"/>
+<text x="192" y="448" text-anchor="middle" font-size="11" font-weight="700" fill="#78350f">④a ALT 1: Stack Retrofit</text>
+<line x1="72" y1="455" x2="314" y2="455" stroke="#fde68a" stroke-width="1"/>
+<text x="192" y="471" text-anchor="middle" font-size="9.5" fill="#000000">Extend exhaust to H₁ = 3.0 m</text>
+<text x="192" y="487" text-anchor="middle" font-size="9.5" fill="#000000">Lofts plume above breathing zone</text>
+<text x="192" y="503" text-anchor="middle" font-size="9" fill="#000000">Gaussian model: same Q, H = 3.0 m</text>
+<text x="192" y="519" text-anchor="middle" font-size="9" fill="#000000">Expected: modest ground-level NOx reduction</text>
+<text x="192" y="536" text-anchor="middle" font-size="8.5" fill="#000000">Cost: low (~$1–3k) · No infra change</text>
+<!-- ALT 2 -->
+<rect x="474" y="424" width="268" height="132" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2.2"/>
+<text x="608" y="448" text-anchor="middle" font-size="11" font-weight="700" fill="#065f46">④b ALT 2: Electrification</text>
+<line x1="488" y1="455" x2="730" y2="455" stroke="#a7f3d0" stroke-width="1"/>
+<text x="608" y="471" text-anchor="middle" font-size="9.5" fill="#000000">Fully electric excavator fleet</text>
+<text x="608" y="487" text-anchor="middle" font-size="9.5" fill="#000000">Eliminates tailpipe NOx at source</text>
+<text x="608" y="503" text-anchor="middle" font-size="9" fill="#000000">Model: Q ≈ 0 → C(x) ≈ background</text>
+<text x="608" y="519" text-anchor="middle" font-size="9" fill="#000000">Expected: ~100% ground-level NOx reduction</text>
+<text x="608" y="536" text-anchor="middle" font-size="8.5" fill="#000000">Cost: high (~$350–500k/machine)</text>
+<!-- Alts → Gaussian -->
+<line x1="192" y1="556" x2="192" y2="585" stroke="#d97706" stroke-width="2"/>
+<line x1="608" y1="556" x2="608" y2="585" stroke="#10b981" stroke-width="2"/>
+<line x1="192" y1="585" x2="400" y2="585" stroke="#64748b" stroke-width="2"/>
+<line x1="608" y1="585" x2="400" y2="585" stroke="#64748b" stroke-width="2"/>
+<line x1="400" y1="585" x2="400" y2="603" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+<!-- BOX 5: GAUSSIAN -->
+<rect x="28" y="605" width="744" height="115" rx="10" fill="#f0f7ff" stroke="#6366f1" stroke-width="2"/>
+<text x="400" y="628" text-anchor="middle" font-size="11.5" font-weight="700" fill="#4338ca">⑤ Gaussian Dispersion Model</text>
+<line x1="42" y1="635" x2="760" y2="635" stroke="#c7d2fe" stroke-width="1"/>
+<text x="400" y="653" text-anchor="middle" font-size="10" fill="#4338ca" font-style="italic">C(x) = Q / (π · u · σy · σz) · exp(−H² / 2σz²)</text>
+<text x="400" y="670" text-anchor="middle" font-size="9.5" fill="#000000">σy, σz — Pasquill-Gifford curves (stability class A–F)</text>
+<text x="400" y="686" text-anchor="middle" font-size="9" fill="#000000">x = 2–200 m downwind · centerline (y=0) · ground level (z=0)</text>
+<text x="400" y="701" text-anchor="middle" font-size="8.5" fill="#000000">Assumptions: flat terrain · steady-state · single point source · constant wind direction</text>
+<text x="400" y="716" text-anchor="middle" font-size="8.5" fill="#000000">Alt 1 uses H = 3.0 m in equation · Alt 2 sets Q ≈ 0 (near-zero emissions)</text>
+<!-- Gaussian → Outputs -->
+<line x1="400" y1="720" x2="400" y2="745" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+<!-- BOX 6: OUTPUTS -->
+<rect x="96" y="747" width="608" height="115" rx="10" fill="#faf5ff" stroke="#8b5cf6" stroke-width="2"/>
+<text x="400" y="770" text-anchor="middle" font-size="11.5" font-weight="700" fill="#4c1d95">⑥ Model Outputs</text>
+<line x1="110" y1="777" x2="690" y2="777" stroke="#ddd6fe" stroke-width="1"/>
+<text x="400" y="794" text-anchor="middle" font-size="9" fill="#000000">Centerline ground-level NOx concentration vs. downwind distance (µg/m³, x = 2–200 m)</text>
+<text x="400" y="810" text-anchor="middle" font-size="9" fill="#000000">Peak NOx at receptor distances: 5 m, 10 m, 25 m, 50 m, 100 m from source</text>
+<text x="400" y="826" text-anchor="middle" font-size="9" fill="#000000">% concentration reduction per alternative relative to No Action</text>
+<text x="400" y="842" text-anchor="middle" font-size="9" fill="#000000">Quantitative Technical Effectiveness score — feeds directly into MCDA matrix below</text>
+<!-- Outputs → MCDA -->
+<line x1="400" y1="862" x2="400" y2="904" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+<!-- BOX 7: MCDA -->
+<rect x="96" y="906" width="608" height="120" rx="10" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2.2"/>
+<text x="400" y="930" text-anchor="middle" font-size="12" font-weight="700" fill="#4c1d95">⑦ COMPARE USING MCDA (4 Criteria)</text>
+<line x1="110" y1="937" x2="692" y2="937" stroke="#ddd6fe" stroke-width="1"/>
+<rect x="114" y="945" width="132" height="68" rx="5" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1"/>
+<text x="180" y="963" text-anchor="middle" font-size="9.5" font-weight="700" fill="#4c1d95">⚗ Technical</text>
+<text x="180" y="977" text-anchor="middle" font-size="9" fill="#000000">Effectiveness</text>
+<text x="180" y="992" text-anchor="middle" font-size="8" fill="#000000">Quantitative</text>
+<text x="180" y="1004" text-anchor="middle" font-size="8" fill="#000000">from model output</text>
+<rect x="258" y="945" width="132" height="68" rx="5" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1"/>
+<text x="324" y="963" text-anchor="middle" font-size="9.5" font-weight="700" fill="#4c1d95">💰 Cost &amp;</text>
+<text x="324" y="977" text-anchor="middle" font-size="9" fill="#000000">Practicality</text>
+<text x="324" y="992" text-anchor="middle" font-size="8" fill="#000000">MCDA scoring</text>
+<text x="324" y="1004" text-anchor="middle" font-size="8" fill="#000000">weighted 1–5</text>
+<rect x="402" y="945" width="132" height="68" rx="5" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1"/>
+<text x="468" y="963" text-anchor="middle" font-size="9.5" font-weight="700" fill="#4c1d95">🏥 Public Health</text>
+<text x="468" y="977" text-anchor="middle" font-size="9" fill="#000000">&amp; Safety</text>
+<text x="468" y="992" text-anchor="middle" font-size="8" fill="#000000">MCDA scoring</text>
+<text x="468" y="1004" text-anchor="middle" font-size="8" fill="#000000">weighted 1–5</text>
+<rect x="546" y="945" width="144" height="68" rx="5" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1"/>
+<text x="618" y="963" text-anchor="middle" font-size="9.5" font-weight="700" fill="#4c1d95">🌱 Environmental</text>
+<text x="618" y="977" text-anchor="middle" font-size="9" fill="#000000">Considerations</text>
+<text x="618" y="992" text-anchor="middle" font-size="8" fill="#000000">MCDA scoring</text>
+<text x="618" y="1004" text-anchor="middle" font-size="8" fill="#000000">weighted 1–5</text>
+<!-- MCDA → Selection -->
+<line x1="400" y1="1026" x2="400" y2="1054" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+<!-- BOX 8: SELECTION -->
+<rect x="188" y="1056" width="424" height="82" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2.5"/>
+<text x="400" y="1079" text-anchor="middle" font-size="12" font-weight="700" fill="#065f46">⑧ SELECTION &amp; RECOMMENDATION</text>
+<text x="400" y="1098" text-anchor="middle" font-size="10" fill="#000000">Highest MCDA weighted score → preferred alternative</text>
+<text x="400" y="1117" text-anchor="middle" font-size="9" fill="#000000">Supported by: model output · criteria scores · AI interpretation · explicit tradeoffs</text>
+<!-- UNCERTAINTY BOX -->
+<rect x="28" y="1165" width="744" height="150" rx="10" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="6,3"/>
+<text x="400" y="1188" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">⚠ Uncertainty &amp; Model Limits</text>
+<line x1="42" y1="1196" x2="760" y2="1196" stroke="#fde68a" stroke-width="1"/>
+<text x="55" y="1213" font-size="8.5" fill="#000000" font-weight="700">Model Limits:</text>
+<text x="55" y="1228" font-size="8.5" fill="#000000">• Fails at u &lt; 1 m/s — plume does not disperse effectively under calm conditions</text>
+<text x="55" y="1242" font-size="8.5" fill="#000000">• Assumes flat, open terrain — building wake turbulence near academic buildings not captured</text>
+<text x="55" y="1256" font-size="8.5" fill="#000000">• Steady-state only — does not model transient cold starts, idling cycles, or intermittent operation</text>
+<text x="55" y="1270" font-size="8.5" fill="#000000">• Single point source — does not account for equipment moving across the site</text>
+<text x="420" y="1213" font-size="8.5" fill="#000000" font-weight="700">Input Uncertainties:</text>
+<text x="420" y="1228" font-size="8.5" fill="#000000">• Q unknown — actual engine tier and load factor unverified on site</text>
+<text x="420" y="1242" font-size="8.5" fill="#000000">• Wind speed and direction vary throughout the 7 AM–3:30 PM operating window</text>
+<text x="420" y="1256" font-size="8.5" fill="#000000">• Stability class is estimated; actual class requires meteorological station data</text>
+<text x="420" y="1275" font-size="8" fill="#92400e" font-style="italic">→ Outputs are order-of-magnitude estimates, not precise predictions.</text>
+<text x="420" y="1289" font-size="8" fill="#92400e" font-style="italic">   Uncertainty grows with distance and under stable (Class E–F) conditions.</text>
+<!-- Legend -->
+<rect x="28" y="1330" width="138" height="52" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+<text x="97" y="1347" text-anchor="middle" font-size="9" font-weight="700" fill="#000000">LEGEND</text>
+<line x1="40" y1="1360" x2="68" y2="1360" stroke="#d97706" stroke-width="2"/>
+<text x="74" y="1364" font-size="8.5" fill="#000000">Alt 1 pathway</text>
+<line x1="40" y1="1375" x2="68" y2="1375" stroke="#10b981" stroke-width="2"/>
+<text x="74" y="1379" font-size="8.5" fill="#000000">Alt 2 pathway</text>
+</svg>
+    </div>
+    <div class="caption-box">
+      <strong>Stage B Caption:</strong> Claude AI (Anthropic) was used to enhance my hand-drawn system thinking diagram by adding structured detail including model inputs, unknowns, receptor populations, and a dedicated uncertainty and model limits section. I made changes to the diagram including revising the alternative stack height from the originally suggested 5 m down to 3 m after determining that a taller stack would not be practical to build on mobile excavator equipment, and I directed the AI to clearly show the breakdown of the four MCDA evaluation criteria as distinct components in the flow. The enhanced diagram improves on the original by going into significantly more depth and making the analytical process, its limitations, and the evaluation framework more transparent and easier to follow.
+    </div>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="part" id="p3">
+  <div class="part-header"><h2>⚙️ Part 3: The Tool</h2></div>
+  <div class="desc-banner">
+    <strong>Tool Description:</strong> This tool models and compares ground-level NOx concentrations from diesel excavator operations at the Glover Building remodel site at Colorado State University under three scenarios: No Action, Alternative 1 (stack retrofit to 3 m), and Alternative 2 (full fleet electrification). It requires user inputs including emission rate per machine, wind speed, number of machines, atmospheric stability class, and stack heights for each applicable scenario. A simplified Gaussian dispersion model is used because the site represents an outdoor point source with a defined population at a known downwind distance, making this approach appropriate for estimating near ground-level concentrations under varying atmospheric conditions. The tool produces a concentration-versus-distance plot, a bar chart of peak NOx at key receptor distances, a weighted MCDA scoring matrix across four criteria, and a cost estimate comparison with practicality assessment. Users should interpret the concentration outputs as a model to show the risks they are posed to from the diesel excavators when nearby rather than precise predictions, and use the MCDA matrix to understand how technical performance, cost, public health, and environmental considerations together inform which alternative is most defensible given real-world constraints.
+  </div>
+
+  <div class="card">
+    <div class="shead">Model Inputs — Adjust to Explore Scenarios</div>
+    <div class="inputs-grid">
+      <div class="ig"><label>Emission Rate Q (g/s per machine)</label><input type="range" id="iQ" min="0.05" max="0.5" step="0.01" value="0.25" oninput="lbl('vQ',+this.value,' g/s');run()"><span class="val-label" id="vQ">0.25 g/s</span><span class="hint">Tier 2 ≈ 0.25 | Tier 4 ≈ 0.03</span></div>
+      <div class="ig"><label>Wind Speed u (m/s)</label><input type="range" id="iU" min="0.5" max="8" step="0.1" value="2.5" oninput="lbl('vU',+this.value,' m/s');run()"><span class="val-label" id="vU">2.5 m/s</span><span class="hint">Fort Collins avg ≈ 3–4 m/s</span></div>
+      <div class="ig"><label>Number of Machines</label><input type="range" id="iN" min="1" max="4" step="1" value="2" oninput="lbl('vN',+this.value,' machines');run()"><span class="val-label" id="vN">2 machines</span></div>
+      <div class="ig"><label>Atmospheric Stability Class</label><select id="iS" onchange="run()"><option value="A">A — Very Unstable</option><option value="B">B — Unstable</option><option value="C">C — Slightly Unstable</option><option value="D" selected>D — Neutral (overcast)</option><option value="E">E — Slightly Stable</option><option value="F">F — Stable (low wind)</option></select><span class="hint">Winter overcast → D typical</span></div>
+      <div class="ig"><label>No Action Stack Height H₀ (m)</label><input type="range" id="iH0" min="0.5" max="3" step="0.25" value="1.75" oninput="lbl('vH0',+this.value,' m');run()"><span class="val-label" id="vH0">1.75 m</span></div>
+      <div class="ig"><label>Alt 1 Stack Height H₁ (m)</label><input type="range" id="iH1" min="2" max="9" step="0.5" value="3" oninput="lbl('vH1',+this.value,' m');run()"><span class="val-label" id="vH1">3.0 m</span></div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="card"><div class="shead">Centerline Ground-Level NOx vs. Distance</div><div class="badges"><span class="badge b0">No Action</span><span class="badge b1">Alt 1: Stack Retrofit</span><span class="badge b2">Alt 2: Electrification</span></div><canvas id="cDisp" style="max-height:255px"></canvas></div>
+    <div class="card"><div class="shead">Peak NOx at Key Receptor Distances</div><canvas id="cBar" style="max-height:255px"></canvas><div class="peak-sum" id="peakSum"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="shead">Multi-Criteria Decision Analysis (MCDA)</div>
+    <div style="font-size:.82rem;margin-bottom:.9rem">Scores 1–5 (5=best). Weights should sum to 100.</div>
+    <div class="mcda-wrap"><table class="mcda-t"><thead><tr><th style="min-width:150px">Criterion</th><th style="min-width:55px">Weight</th><th>No Action</th><th>Alt 1: Stack</th><th>Alt 2: Electric</th><th style="min-width:195px">Rationale</th></tr></thead><tbody id="mBody"></tbody>
+    <tfoot><tr style="background:#1b2a3b"><td colspan="2" style="padding:.6rem .9rem;font-weight:700;font-size:.81rem;color:#fff">Weighted Total</td><td id="t0" style="padding:.6rem .9rem;font-weight:700;color:#f0a500"></td><td id="t1" style="padding:.6rem .9rem;font-weight:700;color:#f0a500"></td><td id="t2" style="padding:.6rem .9rem;font-weight:700;color:#f0a500"></td><td></td></tr></tfoot></table></div>
+    <div id="mRec" class="rec-box"></div>
+    <div id="mWarn" class="warn-box"></div>
+  </div>
+
+  <div class="card">
+    <div class="shead">Cost Estimate Comparison</div>
+    <p style="font-size:.82rem;margin-bottom:1rem">Costs shown per machine unless otherwise noted. Two Volvo EC230 excavators are on site.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem">
+      <div>
+        <div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem">Alt 1: Stack Retrofit (per machine)</div>
+        <table class="costtbl">
+          <thead><tr><th>Cost Category</th><th style="text-align:right">Estimated Range</th></tr></thead>
+          <tbody>
+            <tr><td>Stack Fabrication &amp; Materials<br><span style="font-size:.75rem">304 SS, 4" pipe, ~10 ft</span></td><td style="text-align:right;font-weight:700">$1,000–$2,000</td></tr>
+            <tr><td>Installation<br><span style="font-size:.75rem">Labor, brackets, mounting hardware</span></td><td style="text-align:right;font-weight:700">$500–$1,000</td></tr>
+            <tr><td>Maintenance &amp; Service (annual)<br><span style="font-size:.75rem">Inspection, seals, repairs as needed</span></td><td style="text-align:right;font-weight:700">$100–$500/yr</td></tr>
+          </tbody>
+          <tfoot><tr><td>Total Upfront (per machine)</td><td style="text-align:right">$1,500–$3,000</td></tr></tfoot>
+        </table>
+        <div style="margin-top:.6rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:.6rem .75rem;font-size:.78rem;line-height:1.65">
+          <strong>Basis of Estimate:</strong> Material costs based on vendor pricing from Grainger for 304 stainless steel 4" pipe. Installation and maintenance costs are engineering assumptions based on estimated labor time and average construction labor rates.
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem">Alt 2: Volvo EC230 Electric (per machine)</div>
+        <table class="costtbl">
+          <thead><tr><th>Cost Category</th><th style="text-align:right">Estimated Range</th></tr></thead>
+          <tbody>
+            <tr><td>Volvo EC230 Electric Purchase<br><span style="font-size:.75rem">New unit, Volvo supplier</span></td><td style="text-align:right;font-weight:700">$350,000–$500,000</td></tr>
+            <tr><td>Charging Infrastructure (shared, fleet)<br><span style="font-size:.75rem">Stations, wiring, electrical panels</span></td><td style="text-align:right;font-weight:700">$50,000–$100,000</td></tr>
+            <tr><td>Equipment Maintenance &amp; Service (annual)<br><span style="font-size:.75rem">Battery, drivetrain, servicing</span></td><td style="text-align:right;font-weight:700">$30,000–$60,000/yr</td></tr>
+            <tr><td>Operator Training<br><span style="font-size:.75rem">Electric equipment operation</span></td><td style="text-align:right;font-weight:700">$2,000–$5,000</td></tr>
+          </tbody>
+          <tfoot><tr><td>Total Upfront (per machine)</td><td style="text-align:right">$352,000–$505,000</td></tr></tfoot>
+        </table>
+        <div style="margin-top:.6rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:.6rem .75rem;font-size:.78rem;line-height:1.65">
+          <strong>Basis of Estimate:</strong> Excavator purchase range is an industry estimate based on comparable electric excavator models in the 20-ton class; exact pricing is not publicly listed by Volvo. Charging infrastructure, equipment maintenance, and operator training costs are engineering assumptions based on typical commercial electrical installation costs and industry norms for heavy equipment fleet electrification.
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:.9rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:.75rem;font-size:.8rem;line-height:1.6">
+      <strong>Fleet Total (2 machines on site):</strong> Alt 1 total fleet upfront cost: <strong>$3,000–$6,000</strong>. Alt 2 total fleet upfront cost: <strong>$754,000–$1,110,000</strong> (includes 2 excavators at $352,000–$505,000 each plus shared charging infrastructure of $50,000–$100,000).
+    </div>
+    <div style="margin-top:1.2rem">
+      <div class="shead">Practicality Assessment</div>
+      <table class="practbl">
+        <thead><tr><th style="width:18%">Constraint</th><th style="width:41%">Alt 1: Stack Retrofit</th><th style="width:41%">Alt 2: Electrification</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">Timeline</td><td>Short. Fabrication and installation can be completed in 1 to 2 days per machine with minimal operational downtime.</td><td>Long. Procurement of the Volvo EC230 Electric could take several months. Charging infrastructure installation adds further delays before the fleet is operational.</td></tr>
+          <tr><td style="font-weight:700">Infrastructure</td><td>None required beyond the machine itself. No site modifications needed.</td><td>Requires electrical panel upgrades, charging stations, and grid connection at the construction site.</td></tr>
+          <tr><td style="font-weight:700">Permitting</td><td>May require equipment modification approval. Regulatory review is expected to be minimal.</td><td>Electrical work requires permits and potential utility coordination for grid upgrades, adding time and cost.</td></tr>
+          <tr><td style="font-weight:700">Operational Changes</td><td>None. Machine operates identically to current conditions with the extended exhaust stack attached.</td><td>Operators require training. Battery life of approximately 5 hours is shorter than the 8.5-hour workday (7:00 AM to 3:30 PM), requiring a mid-shift battery swap or recharge that interrupts productivity.</td></tr>
+          <tr><td style="font-weight:700">Most Likely Constraint</td><td>Structural feasibility of mounting a rigid 3 m stack on mobile equipment that vibrates and moves across the site.</td><td>Capital cost, limited supplier availability (Volvo is the primary supplier), and mid-shift downtime required for battery swapping during the workday.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PART 4 -->
+<section class="part" id="p4">
+  <div class="part-header"><h2>✍️ Part 4: Reflection</h2></div>
+  <div class="card">
+    <div class="ref-section"><h3>🏆 Which design choice would you defend, and why?</h3>
+    <p style="font-size:.86rem;line-height:1.75">Based on the tool results, I would choose Alternative 2 to implement within this project. Although full electrification is expensive, it is an investment that provides lasting health benefits for the surrounding public, workers, and the environment. The Gaussian dispersion model showed that the stack retrofit at 3 m produces only modest reductions in ground-level NOx, weakening the case for Alt 1 as an effective solution. Electrification eliminates NOx at the source entirely, making its effectiveness independent of wind speed, atmospheric conditions, or stability class, unlike the stack retrofit, which performs worse under stable low-wind conditions. Additionally, local and federal government incentives for zero-emission equipment may help offset the large upfront investment. While Alternative 2 scored lowest on cost in the MCDA, it scored highest overall when technical effectiveness, public health, and environmental considerations were factored in, making it the most defensible choice given the site's proximity to an occupied academic campus.</p></div>
+    <div class="ref-section"><h3>⚠️ Where does the comparison break down? What would increase confidence?</h3>
+    <p style="font-size:.86rem;line-height:1.75">The comparison breaks down where model assumptions diverge from real-world conditions. The Gaussian dispersion model requires flat terrain, steady-state wind, constant emission rates, and open rural conditions. None of these accurately describe the Glover Building site, which is surrounded by buildings that create turbulence the Pasquill-Gifford curves are not valid for near structures. The model also treats NOx as an inert tracer, overlooking its contribution to ground-level ozone formation in the Fort Collins area. Wind speed at stack height can differ from ground-level measurements, and emission rates vary with temperature, engine tier, and load factor, all of which were estimated rather than measured. Stability class is also assumed, directly affecting the σy and σz coefficients. To increase confidence, on-site meteorological monitoring, verified engine specifications, and real-time air quality measurements would substantially improve model accuracy.</p></div>
+    <div class="ref-section"><h3>🤖 How did AI help, and where did you intervene, revise, or override it?</h3>
+    <p style="font-size:.86rem;line-height:1.75">AI served as a collaborator throughout this project rather than simply a service provider. AI initially suggested a 5 m exhaust stack retrofit, but after considering how that system would physically work on a mobile excavator, I determined it would not be practical to stabilize at that height and revised it to 3 m. Seeing how little the 3 m height changed the ground-level NOx concentration compared to No Action was surprising and reinforced why electrification is the stronger alternative. A modest increase in stack height produces only a small change in the Gaussian equation's exponential term, so meaningful reductions require impractically tall stacks. AI also suggested initial MCDA weights, but I set them based on what I thought would matter most to the university and construction company, weighting cost highest at 40% since no alternative can be implemented if it is not financially feasible. The tool could mislead someone into using the concentration outputs to make direct health recommendations, which would be inappropriate given that it is not designed to produce precise predictions. Rather, it is intended to support better engineering decision-making by showing how different design choices affect exposure for the surrounding public and environment under comparable modeled conditions.</p></div>
+  </div>
+</section>
+</main>
+
+<script>
+function loadImg(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const i=document.getElementById('siteImg');i.src=ev.target.result;i.style.display='block';document.getElementById('photoBox').style.minHeight='auto';document.getElementById('photoPH').style.display='none';};r.readAsDataURL(f);}
+function loadSketch(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const i=document.getElementById('sketchImg');i.src=ev.target.result;i.style.display='block';document.getElementById('sketchPH').style.display='none';};r.readAsDataURL(f);}
+function lbl(id,v,u){document.getElementById(id).textContent=v.toFixed(v<10?2:1)+u;}
+function sigmas(x,c){
+  if(x<=0)return{sy:.001,sz:.001};
+  let sy,sz;
+  switch(c){
+    case'A':sy=.22*x*Math.pow(1+1e-4*x,-.5);sz=Math.min(.20*x,5e3);break;
+    case'B':sy=.16*x*Math.pow(1+1e-4*x,-.5);sz=Math.min(.12*x,5e3);break;
+    case'C':sy=.11*x*Math.pow(1+1e-4*x,-.5);sz=Math.min(.08*x*Math.pow(1+2e-4*x,-.5),5e3);break;
+    case'D':sy=.08*x*Math.pow(1+1e-4*x,-.5);sz=.06*x*Math.pow(1+.0015*x,-.5);break;
+    case'E':sy=.06*x*Math.pow(1+1e-4*x,-.5);sz=.03*x*Math.pow(1+3e-4*x,-1);break;
+    case'F':sy=.04*x*Math.pow(1+1e-4*x,-.5);sz=.016*x*Math.pow(1+3e-4*x,-1);break;
+    default:sy=.08*x*Math.pow(1+1e-4*x,-.5);sz=.06*x*Math.pow(1+.0015*x,-.5);
+  }
+  return{sy:Math.max(sy,.001),sz:Math.max(sz,.001)};
+}
+function gC(x,Q,u,H,cls){
+  if(Q<1e-9)return.02;
+  const{sy,sz}=sigmas(x,cls);
+  return(Q/(Math.PI*u*sy*sz))*Math.exp(-H*H/(2*sz*sz))*1e6;
+}
+let cD,cB;
+function run(){
+  const Q=+document.getElementById('iQ').value,u=+document.getElementById('iU').value;
+  const n=+document.getElementById('iN').value,cl=document.getElementById('iS').value;
+  const H0=+document.getElementById('iH0').value,H1=+document.getElementById('iH1').value;
+  const Qt=Q*n;
+  const xs=[];for(let x=2;x<=200;x+=2)xs.push(x);
+  const base=xs.map(x=>gC(x,Qt,u,H0,cl));
+  const a1=xs.map(x=>gC(x,Qt,u,H1,cl));
+  const a2=xs.map(()=>.02);
+  if(cD)cD.destroy();
+  cD=new Chart(document.getElementById('cDisp').getContext('2d'),{type:'line',data:{labels:xs,datasets:[
+    {label:`No Action (H=${H0}m)`,data:base,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.07)',tension:.35,borderWidth:2,pointRadius:0},
+    {label:`Alt 1 (H=${H1}m)`,data:a1,borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.07)',tension:.35,borderWidth:2,pointRadius:0},
+    {label:'Alt 2: Electric',data:a2,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.07)',tension:.35,borderWidth:2.5,pointRadius:0}
+  ]},options:{responsive:true,plugins:{legend:{position:'top',labels:{color:'#000000',font:{size:10},boxWidth:13}}},scales:{
+    x:{title:{display:true,text:'Downwind Distance (m)',font:{size:10},color:'#000000'},ticks:{color:'#000000',maxTicksLimit:11}},
+    y:{title:{display:true,text:'NOx (µg/m³)',font:{size:10},color:'#000000'},ticks:{color:'#000000'},beginAtZero:true}
+  }}});
+  const kd=[5,10,25,50,100,150];
+  if(cB)cB.destroy();
+  cB=new Chart(document.getElementById('cBar').getContext('2d'),{type:'bar',data:{labels:kd.map(d=>d+'m'),datasets:[
+    {label:'No Action',data:kd.map(d=>gC(d,Qt,u,H0,cl)),backgroundColor:'rgba(59,130,246,.75)',borderRadius:4},
+    {label:'Alt 1',data:kd.map(d=>gC(d,Qt,u,H1,cl)),backgroundColor:'rgba(245,158,11,.75)',borderRadius:4},
+    {label:'Alt 2',data:kd.map(()=>.02),backgroundColor:'rgba(16,185,129,.75)',borderRadius:4}
+  ]},options:{responsive:true,plugins:{legend:{position:'top',labels:{color:'#000000',font:{size:10},boxWidth:13}}},scales:{
+    x:{title:{display:true,text:'Distance from Source',font:{size:10},color:'#000000'},ticks:{color:'#000000'}},
+    y:{title:{display:true,text:'NOx (µg/m³)',font:{size:10},color:'#000000'},ticks:{color:'#000000'},beginAtZero:true}
+  }}});
+  const pk0=Math.max(...base),pk1=Math.max(...a1);
+  const rd=((pk0-pk1)/pk0*100).toFixed(0);
+  document.getElementById('peakSum').innerHTML=`<strong>No Action peak:</strong> ${pk0.toFixed(1)} µg/m³ &nbsp;|&nbsp; <strong>Alt 1 peak:</strong> ${pk1.toFixed(1)} µg/m³ <em>(${rd}% reduction)</em> &nbsp;|&nbsp; <strong>Alt 2:</strong> ~0.02 µg/m³ <em>(≈100%)</em><br><span style="font-size:.7rem">WHO guideline: annual mean NO₂ = 10 µg/m³. Near-source instantaneous values can significantly exceed this.</span>`;
+  updateMCDA(pk0,pk1);
+}
+const md=[
+  {crit:'Technical Effectiveness',w:25,s:[1,3,5],auto:[false,false,true],rat:'Weight was chosen to reflect the importance of reducing NOx emissions at this site. Alternative 2 completely eliminates NOx from the equipment at the source. Alternative 1 at a realistic stack height of 3 m shows modest reductions in ground-level NOx concentration. You would need to significantly raise the exhaust pipe to around 5.5 m to see greater improvements in NOx dispersion, but this may not be practical or feasible to retrofit on mobile excavator equipment.'},
+  {crit:'Cost & Practicality',w:40,s:[5,4,1],auto:[false,false,false],rat:'Cost and practicality to implement a solution carries the highest weight as it influences whether alternatives could even be implemented. No action means no added cost. Stack retrofit can be very cost effective compared to electrifying the heavy equipment fleet, which would need significant investment for the machinery itself but also for the charging infrastructure required to keep the equipment operational. Additionally, Volvo is currently one of the only manufacturers offering electric excavators in the 20+ ton class, meaning limited supplier competition results in less price negotiation leverage, higher parts and service costs, and supply availability risk.'},
+  {crit:'Public Health & Safety',w:25,s:[1,3,5],auto:[false,false,false],rat:'Weight is similar to Technical Effectiveness and higher than the Environmental category because the focus is to reduce the concentration of NOx that the public may face when walking near the site. Alternative 2 fully eliminates NOx from the equipment, meaning essentially no NOx exposure to people from the equipment. Alternative 1 reduces the amount of NOx by dispersing it at a higher elevation but can become less effective under stable low-wind conditions.'},
+  {crit:'Environmental',w:10,s:[1,1,4],auto:[false,false,false],rat:'Weighted lower due to the focus being more on human health, cost, and technical effectiveness. No action still carries ongoing environmental impacts from diesel combustion. Retrofitting the stack only affects the dispersion of NOx but does not reduce the actual environmental impact of the emissions. Alternative 2 of full electrification would essentially eliminate NOx from the equipment, however it would require significant energy for battery charging which can have its own environmental footprint depending on the grid energy source.'}
+];
+function buildMCDA(){
+  const tb=document.getElementById('mBody');tb.innerHTML='';
+  md.forEach((row)=>{
+    const tr=document.createElement('tr');
+    const mkSc=(j)=>`<span style="font-weight:700">${row.s[j]}/5</span>`;
+    tr.innerHTML=`<td><strong>${row.crit}</strong></td><td style="font-weight:700">${row.w}%</td><td>${mkSc(0)}</td><td>${mkSc(1)}</td><td>${mkSc(2)}</td><td style="font-size:.76rem;line-height:1.5">${row.rat}</td>`;
+    tb.appendChild(tr);
+  });
+  calcTotals();
+}
+function updateMCDA(pk0,pk1){
+  md[0].s[2]=5;
+  buildMCDA();
+}
+function calcTotals(){
+  const wt=md.reduce((s,r)=>s+r.w,0);
+  const tots=[0,0,0];
+  md.forEach(r=>r.s.forEach((v,j)=>tots[j]+=(r.w/wt)*v));
+  ['t0','t1','t2'].forEach((id,j)=>document.getElementById(id).textContent=tots[j].toFixed(2)+'/5.00');
+  const best=tots.indexOf(Math.max(...tots));
+  const names=['No Action','Alt 1 (Stack Retrofit)','Alt 2 (Electrification)'];
+  const colors=['#3b82f6','#f59e0b','#10b981'];
+  document.getElementById('mRec').innerHTML=`<strong>MCDA Result:</strong> <span style="color:${colors[best]};font-weight:700">${names[best]}</span> scores highest with <strong>${tots[best].toFixed(2)}/5.00</strong>. Adjust weights to explore how different priorities shift the recommendation.`;
+  const warn=document.getElementById('mWarn');
+  if(Math.abs(wt-100)>1){warn.style.display='block';warn.innerHTML=`Weights sum to <strong>${wt}</strong>. Adjust to sum to 100 for a normalized score.`;}
+  else warn.style.display='none';
+}
+buildMCDA();run();
+</script>
+</body></html>

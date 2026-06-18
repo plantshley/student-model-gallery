@@ -1,9 +1,9 @@
 {
   "name": "Eclipse Manta Ray",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Dust Control Comparison Tool",
+  "description": "This tool evaluates strategies to reduce PM10 exposure from a construction site located within a college campus by comparing baseline conditions with two engineering alternatives: water spraying and temporary wind barriers. The user inputs key parameters such as emission rate, wind speed, source height, distance to nearby walkways, and control efficiencies for each intervention, along with adjustable MCDA weights. The tool uses a simplified Gaussian dispersion model, which is appropriate because it represents how airborne particulates disperse downwind from an outdoor source under steady conditions. It produces concentration-versus-distance plots, a comparison of PM10 levels at a campus walkway, percent reduction values, and a multi-criteria decision analysis (MCDA) table. The comparison is structured by combining quantitative technical effectiveness from the model with qualitative evaluations of cost, public health, and environmental considerations. Users should interpret the outputs as relative, decision-support estimates that show how different assumptions and design choices influence exposure, rather than exact predictions of real-world concentrations.",
+  "projectUrl": "https://gemini.google.com/share/1b77398b2238",
   "projectPath": "../images/EMR2.png",
   "folderName": "murray"
 }

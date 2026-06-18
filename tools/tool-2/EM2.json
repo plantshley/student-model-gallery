@@ -1,9 +1,9 @@
 {
   "name": "Enchanted Mango",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Indoor Air Pollution Tool: Gas Stove Kitchen",
+  "description": "[GitHub Repo](https://github.com/elsieemorris-ai/Gas-Stove-Pollutant-Reduction.git)\n\nThis tool compares two engineering alternatives for reducing indoor air pollution from residential gas stoves: Alternative A, replacing the gas stove with an electric induction stove, and Alternative B, installing a high-efficiency range hood with increased ventilation. It requires user inputs such as kitchen volume and cooking time, with an assumed baseline air exchange rate, stove power, methane leakage fraction, NOx emission factor, hood capture efficiency, hood flow rate, and electrification fraction. The tool uses a single-zone indoor mass balance model, which is appropriate because it treats the kitchen as a well-mixed space and provides a simple, recognized way to estimate how pollutants build up and are removed during and after cooking. It produces time-series concentration plots, summary tables for CH4, NO, NO₂, and total NOx, pollutant reduction percentages, exposure estimates, and an MCDA comparison matrix covering technical effectiveness, cost and practicality, public health and safety, and environmental considerations. The comparison is structured so that both alternatives are evaluated under the same baseline kitchen conditions, making it easy to see how each intervention changes emissions and indoor exposure. Users should interpret the outputs by looking first at which option produces the greatest reduction in pollutant concentration and exposure, and then using the MCDA results to weigh those technical benefits against implementation cost, feasibility, health impacts, and broader environmental tradeoffs.",
+  "projectUrl": "https://gemini.google.com/share/08d1ff880087",
   "projectPath": "../images/EM2.png",
   "folderName": "morris"
 }

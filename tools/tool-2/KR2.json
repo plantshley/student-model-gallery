@@ -1,9 +1,9 @@
 {
   "name": "Kandy Rainbow",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "Wood Dust Exposure Calculator",
+  "description": "Estimate PM10 levels in your shop, track student exposure by station, and plan your ventilation budget.",
+  "projectUrl": "https://dustexposureandventilation.netlify.app/",
   "projectPath": "../images/KR2.png",
   "folderName": "roof"
 }

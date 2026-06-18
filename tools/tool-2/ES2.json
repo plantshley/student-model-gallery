@@ -1,9 +1,9 @@
 {
   "name": "Evermore Swirl",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Stack Height vs. Emission Controls Tool",
+  "description": "This tool uses a Gaussian dispersion model to estimate ground-level pollutant concentrations from a point source.  It compares two possible approaches to reducing impacts such as increasing stack height and adding emission control technologies like scrubbers or baghouses.  The user inputs values for emission rate, wind speed, stack height, and control efficiency, which are used to calculate concentrations downwind of the source.  The Gaussian model is appropriate here because it provides a simple way to represent how pollutants spread from an elevated source under steady wind conditions.  The output is a graph of concentration versus distance, allowing the user to visually compare how each alternative affects pollutant levels.  In general, increasing stack height lowers concentrations near the source by improving dispersion, while emission controls reduce the overall amount of pollution released.  These results should be interpreted as approximate comparisons that highlight tradeoffs between the two approaches rather than exact predictions.",
+  "projectUrl": "https://colab.research.google.com/drive/1PYvd2ysrCTMIh-6aNdVzrKcFp5EV5UdS?usp=sharing",
   "projectPath": "../images/ES2.png",
   "folderName": "sepe"
 }

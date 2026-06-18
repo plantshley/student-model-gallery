@@ -1,9 +1,9 @@
 {
   "name": "Wandering Glimmer",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Radon Mitigation Design & Decision Tool",
+  "description": "This tool models radon exposure in residential basements and compares multiple mitigation strategies using a single-zone indoor air quality model. Users input radon concentration, time spent in the basement, and building characteristics, and adjust these values interactively using sliders. The model calculates seasonal and annual exposure for both baseline (no mitigation) and selected engineering alternatives. The tool visualizes exposure reductions and includes a multi-criteria decision analysis (MCDA) framework to evaluate tradeoffs between effectiveness, cost, environmental impact, and user-defined priorities. It also incorporates rough order-of-magnitude cost estimates and generates a recommended mitigation strategy based on dynamic conditions. Outputs include comparative bar charts, cost breakdowns, and decision summaries. Users should interpret results as order-of-magnitude estimates that support decision-making under uncertainty.",
+  "projectUrl": "https://colab.research.google.com/drive/1q3RB3__xykI_kkG5hZEYWmGQ7FeRAbun?usp=sharing",
   "projectPath": "../images/WG2.png",
   "folderName": "wegner"
 }

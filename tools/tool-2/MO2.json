@@ -1,9 +1,9 @@
 {
   "name": "Minotaurus Opaline",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Benzene Emissions Reduction Design: Windsor Gas Station",
+  "description": "This tool is a decision-support instrument comparing two benzene emissions reduction strategies at a gasoline retail station in Windsor, CO. It uses a Gaussian plume dispersion framework with Pasquill–Gifford stability classes to model outdoor benzene concentrations across a 300 m buffer zone, and a single-zone well-mixed indoor model for the air purification alternative. A Multi-Criteria Decision Analysis (MCDA) compares both alternatives across four dimensions: technical effectiveness, cost and practicality, public health and safety, and environmental considerations. Adjust the input parameters in the Coaxial → Dual Point and HealthMate Plus tabs to explore how atmospheric conditions, emission rates, and receptor distances affect model outputs. The MCDA scores for technical effectiveness update dynamically based on the selected receptor distance. The header chip reflects the currently recommended alternative based on the weighted MCDA total. This tool was developed with AI collaboration (Claude, Anthropic) for code generation, model structuring, and visualization design. Human judgment was applied to all parameter selection, scenario design, evaluation criteria weighting, and interpretation of results.",
+  "projectUrl": "tools/tool-2/projects/MO2.html",
   "projectPath": "../images/MO2.png",
   "folderName": "munoz"
 }

@@ -1,9 +1,9 @@
 {
   "name": "Violet Nightshade",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "H₂S Dispersion Tool — Municipal WWTP Grit Chamber",
+  "description": "The tool calculates the concentration of H₂S gas downwind of a wastewater treatment plant grit chamber. The inputs required are gas flowrate from the chamber (g/s), wind speed (m/s), distance from the receptor to the chamber (m), and the atmospheric stability class. It uses an input efficiency value to determine the amount of H₂S removed from the gaseous effluent of the grit chamber, due to the complexity involved in calculating removal using liquid-gas exchange principles and Henry's Law. The dispersion of H₂S is modeled using a simplified Gaussian dispersion model, where concentrations are calculated only along the centerline of the plume. This is appropriate because the highest concentrations occur along the centerline, which are the most critical values for determining whether the receptor is receiving acceptably clean air. The model produces a graph displaying H₂S concentration (µg/m³) over a distance range of 100 m to 2000 m from the source, for both the baseline scenario and the two engineering alternatives. The comparison between alternatives is visible on the graph, but is more explicitly presented in the MCDA table at the bottom of the tool. Users should compare H₂S concentrations between the two alternatives to assess which is more effective at reducing exposure, and refer to the MCDA table for a broader comparison of distinguishing characteristics.",
+  "projectUrl": "tools/tool-2/projects/VN2.html",
   "projectPath": "../images/VN2.png",
   "folderName": "vanens"
 }

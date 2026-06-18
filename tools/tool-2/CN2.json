@@ -1,9 +1,9 @@
 {
   "name": "Crystal Nymph",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "Concrete Batching Plant PM Emissions Reduction Tool",
+  "description": "This tool models particulate matter (PM2.5/PM10) dispersion from an urban concrete batching plant and compares two engineering control alternatives: enclosed aggregate storage with a fabric filter baghouse (Alt 1) and road/surface stabilization with wet suppression (Alt 2). It helps a user evaluate which intervention better reduces ambient PM concentrations reaching a neighboring residential receptor, and supports a structured multi-criteria decision.",
+  "projectUrl": "tools/tool-2/projects/CN2.html",
   "projectPath": "../images/CN2.png",
   "folderName": "nemeth"
 }

@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIVE 442 — Tool 2: Concrete Batching Plant PM Emissions</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --concrete: #c8c4b8;
+    --concrete-dark: #8a8680;
+    --concrete-light: #e8e4dc;
+    --rebar: #b5651d;
+    --rebar-light: #d4894a;
+    --steel: #2c3e50;
+    --steel-light: #3d5166;
+    --chalk: #f5f2ec;
+    --warning: #e8a020;
+    --danger: #c0392b;
+    --safe: #2e7d52;
+    --alt1: #1a5f8a;
+    --alt2: #2e7d52;
+    --bg: #1a1814;
+    --bg2: #232019;
+    --bg3: #2d2a24;
+    --text: #f0ece4;
+    --text-muted: #9a9690;
+    --border: rgba(200,196,184,0.15);
+    --border-strong: rgba(200,196,184,0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(200,196,184,0.02) 2px, rgba(200,196,184,0.02) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(200,196,184,0.01) 8px, rgba(200,196,184,0.01) 10px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HAZARD STRIPE HEADER */
+  .hazard-bar {
+    height: 8px;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--warning) 0px,
+      var(--warning) 12px,
+      var(--bg) 12px,
+      var(--bg) 24px
+    );
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 1;
+    padding: 2.5rem 3rem 2rem;
+    border-bottom: 1px solid var(--border-strong);
+    background: var(--bg2);
+  }
+
+  .header-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--rebar-light);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    letter-spacing: 0.04em;
+    color: var(--chalk);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 span { color: var(--rebar-light); }
+
+  .header-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .header-sub span::before { content: '// '; color: var(--rebar); }
+
+  /* LAYOUT */
+  .app {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    min-height: calc(100vh - 120px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+  .sidebar-section {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-section:last-child { border-bottom: none; margin-bottom: 0; }
+
+  .section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rebar-light);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .input-group {
+    margin-bottom: 1.1rem;
+  }
+
+  .input-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .input-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--concrete);
+    font-weight: 500;
+  }
+
+  input[type=range] {
+    width: 100%;
+    height: 3px;
+    -webkit-appearance: none;
+    background: var(--border-strong);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--rebar-light);
+    cursor: pointer;
+    border: 2px solid var(--bg);
+  }
+
+  input[type=range]:hover { background: var(--border-strong); }
+
+  select {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    padding: 7px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    outline: none;
+    cursor: pointer;
+  }
+
+  select:focus { border-color: var(--rebar-light); }
+
+  .eff-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+
+  .eff-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    padding: 1.5rem 2rem;
+    overflow-y: auto;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-tab {
+    padding: 10px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .nav-tab:hover { color: var(--concrete); }
+  .nav-tab.active { color: var(--rebar-light); border-bottom-color: var(--rebar-light); }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* METRIC CARDS */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .metric {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metric::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .metric.baseline::before { background: var(--concrete-dark); }
+  .metric.alt1::before { background: var(--alt1); }
+  .metric.alt2::before { background: var(--alt2); }
+  .metric.standard::before { background: var(--warning); }
+
+  .metric-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  .metric-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .metric-unit { font-size: 14px; opacity: 0.6; margin-left: 2px; }
+  .metric-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-family: 'DM Mono', monospace; }
+
+  /* CHART AREA */
+  .chart-container {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .chart-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 1rem;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ALT CARDS */
+  .alt-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 2rem;
+  }
+
+  .alt-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    position: relative;
+  }
+
+  .alt-card.recommended { border-color: var(--rebar-light); }
+
+  .alt-card-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .tag-alt1 { background: rgba(26,95,138,0.25); color: #5ba3d0; }
+  .tag-alt2 { background: rgba(46,125,82,0.25); color: #5dba7e; }
+  .tag-rec { background: rgba(181,101,29,0.25); color: var(--rebar-light); }
+
+  .alt-card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+    color: var(--chalk);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .alt-stat {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .alt-stat:last-child { border-bottom: none; }
+  .alt-stat strong { color: var(--text); font-weight: 500; font-family: 'DM Mono', monospace; font-size: 12px; }
+
+  /* MCDA TABLE */
+  .mcda-wrap { overflow-x: auto; margin-bottom: 2rem; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-strong);
+    background: var(--bg2);
+    font-weight: 400;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text-muted);
+    line-height: 1.5;
+    font-size: 12px;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(200,196,184,0.03); }
+
+  td.criterion { color: var(--text); font-size: 13px; font-weight: 500; }
+  td.weight { font-family: 'DM Mono', monospace; color: var(--concrete-dark); font-size: 12px; }
+
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    margin-right: 6px;
+  }
+
+  .score-5 { background: rgba(46,125,82,0.25); color: #5dba7e; }
+  .score-4 { background: rgba(46,125,82,0.15); color: #5dba7e; }
+  .score-3 { background: rgba(232,160,32,0.2); color: var(--warning); }
+  .score-2 { background: rgba(192,57,43,0.2); color: #e07060; }
+  .score-1 { background: rgba(192,57,43,0.3); color: #e07060; }
+
+  /* COST TABLE */
+  .cost-wrap { overflow-x: auto; margin-bottom: 2rem; }
+
+  tr.total-row td {
+    background: var(--bg3);
+    color: var(--text);
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    border-top: 1px solid var(--border-strong);
+  }
+
+  /* PRACTICALITY */
+  .prac-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 2rem;
+  }
+
+  .prac-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  .prac-card.rec { border-color: var(--rebar-light); }
+  .prac-card-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.05em; color: var(--chalk); margin-bottom: 10px; }
+
+  .prac-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .prac-row:last-child { border-bottom: none; }
+  .prac-row strong { color: var(--concrete); font-weight: 400; font-family: 'DM Mono', monospace; font-size: 11px; text-align: right; max-width: 60%; }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--bg3);
+    border-left: 3px solid var(--rebar);
+    border-radius: 0 4px 4px 0;
+    padding: 12px 16px;
+    margin-bottom: 1.5rem;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .info-box strong { color: var(--concrete); display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* DESCRIPTION */
+  .desc-section { margin-bottom: 2rem; }
+  .desc-section h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.05em; color: var(--rebar-light); margin-bottom: 8px; }
+  .desc-section p { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+
+  /* MCDA TOTALS */
+  .mcda-totals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+  }
+
+  .total-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .total-card.winner { border-color: var(--rebar-light); }
+  .total-label { font-family: 'DM Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+  .total-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.05em; color: var(--chalk); margin-bottom: 8px; }
+  .total-score { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.02em; line-height: 1; }
+  .total-score span { font-size: 1rem; color: var(--text-muted); }
+  .winner-tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--rebar-light); text-transform: uppercase; margin-top: 6px; }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    padding: 1.5rem 3rem;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+    .alt-cards, .prac-grid, .mcda-totals { grid-template-columns: 1fr; }
+    header { padding: 1.5rem; }
+    .main { padding: 1rem; }
+  }
+
+  /* ANIMATION */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel.active { animation: fadeIn 0.25s ease; }
+
+  /* WEIGHTED BAR */
+  .weight-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .weight-bar { height: 3px; border-radius: 2px; background: var(--border); flex: 1; overflow: hidden; }
+  .weight-fill { height: 100%; background: var(--rebar); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="hazard-bar"></div>
+
+<header>
+  <p class="header-tag">CIVE 442 — Air Quality Modeling &amp; Design // Tool 2</p>
+  <h1>Concrete Batching Plant<br><span>PM Emissions</span> Reduction Tool</h1>
+  <div class="header-sub">
+    <span>Gaussian dispersion model</span>
+    <span>2 engineering alternatives</span>
+    <span>MCDA framework</span>
+    <span>ROM cost analysis</span>
+  </div>
+</header>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="section-title">Source parameters</div>
+      <div class="input-group">
+        <div class="input-label">Emission rate Q <span class="input-val" id="Q-out">8.0 g/s</span></div>
+        <input type="range" id="Q" min="0.5" max="20" step="0.5" value="8" oninput="upd()">
+      </div>
+      <div class="input-group">
+        <div class="input-label">Wind speed u <span class="input-val" id="U-out">3.0 m/s</span></div>
+        <input type="range" id="U" min="0.5" max="10" step="0.5" value="3" oninput="upd()">
+      </div>
+      <div class="input-group">
+        <div class="input-label">Stack height H <span class="input-val" id="H-out">8 m</span></div>
+        <input type="range" id="H" min="1" max="30" step="1" value="8" oninput="upd()">
+      </div>
+      <div class="input-group">
+        <div class="input-label">Receptor height z <span class="input-val" id="Z-out">1.5 m</span></div>
+        <input type="range" id="Z" min="0" max="5" step="0.5" value="1.5" oninput="upd()">
+      </div>
+      <div class="input-group">
+        <div class="input-label">Lateral offset y <span class="input-val" id="Y-out">0 m</span></div>
+        <input type="range" id="Y" min="0" max="100" step="5" value="0" oninput="upd()">
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-title">Atmospheric stability</div>
+      <select id="stab" onchange="upd()">
+        <option value="A">A — very unstable</option>
+        <option value="B">B — unstable</option>
+        <option value="C" selected>C — slightly unstable</option>
+        <option value="D">D — neutral</option>
+        <option value="E">E — slightly stable</option>
+        <option value="F">F — stable</option>
+      </select>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-title">Alt 1 — Enclosure + baghouse</div>
+      <div class="input-group">
+        <div class="input-label">Control efficiency <span class="input-val" id="eff1-out">92%</span></div>
+        <input type="range" id="eff1" min="50" max="99" step="1" value="92" oninput="upd()">
+        <div class="eff-bar"><div class="eff-fill" id="eff1-bar" style="width:92%;background:var(--alt1);"></div></div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-title">Alt 2 — Road/surface controls</div>
+      <div class="input-group">
+        <div class="input-label">Control efficiency <span class="input-val" id="eff2-out">55%</span></div>
+        <input type="range" id="eff2" min="20" max="80" step="1" value="55" oninput="upd()">
+        <div class="eff-bar"><div class="eff-fill" id="eff2-bar" style="width:55%;background:var(--alt2);"></div></div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" onclick="showTab('results')">Dispersion results</button>
+      <button class="nav-tab" onclick="showTab('mcda')">MCDA comparison</button>
+      <button class="nav-tab" onclick="showTab('cost')">Cost estimate</button>
+      <button class="nav-tab" onclick="showTab('about')">Tool description</button>
+    </nav>
+
+    <!-- RESULTS PANEL -->
+    <div id="panel-results" class="panel active">
+      <div class="metrics" id="metric-cards"></div>
+
+      <div class="chart-container">
+        <div class="chart-title">Centerline PM concentration vs. downwind distance (µg/m³)</div>
+        <div style="position:relative;width:100%;height:300px;">
+          <canvas id="plumeChart" role="img" aria-label="Line chart of PM concentration vs downwind distance for baseline and two alternatives.">Centerline PM concentration at distances 50–2000m for baseline, Alt 1, and Alt 2.</canvas>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#8a8680;"></div>Baseline (no controls)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--alt1);"></div>Alt 1: Enclosure + baghouse</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--alt2);"></div>Alt 2: Road/surface controls</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--warning);border-radius:0;height:2px;width:16px;margin-top:4px;"></div>EPA NAAQS 35 µg/m³</div>
+        </div>
+      </div>
+
+      <div class="alt-cards" id="alt-cards"></div>
+    </div>
+
+    <!-- MCDA PANEL -->
+    <div id="panel-mcda" class="panel">
+      <div class="info-box">
+        <strong>Scoring methodology</strong>
+        Scores are 1–5 (5 = best performance). Technical effectiveness is derived directly from Gaussian model outputs and updates with slider inputs. Public health, environmental, and cost dimensions use structured qualitative scoring per MCDA framework.
+      </div>
+      <div class="mcda-wrap">
+        <table id="mcda-table">
+          <thead>
+            <tr>
+              <th style="width:22%">Criterion</th>
+              <th style="width:10%">Weight</th>
+              <th style="width:10%">Alt 1 score</th>
+              <th style="width:29%">Alt 1 rationale</th>
+              <th style="width:10%">Alt 2 score</th>
+              <th style="width:29%">Alt 2 rationale</th>
+            </tr>
+          </thead>
+          <tbody id="mcda-body"></tbody>
+        </table>
+      </div>
+      <div class="mcda-totals" id="mcda-totals"></div>
+    </div>
+
+    <!-- COST PANEL -->
+    <div id="panel-cost" class="panel">
+      <div class="cost-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:28%">Cost category</th>
+              <th style="width:36%">Alt 1: Enclosure + baghouse</th>
+              <th style="width:36%">Alt 2: Road/surface controls</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="criterion">Capital equipment</td>
+              <td>$80K–$150K<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted)">Baghouse unit, ductwork, controls, enclosure structure</span></td>
+              <td>$15K–$30K<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted)">Paving, drainage, wet suppression system</span></td>
+            </tr>
+            <tr>
+              <td class="criterion">Installation / construction</td>
+              <td>$40K–$80K<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted)">Structural enclosure, permit-ready installation</span></td>
+              <td>$10K–$20K<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted)">Paving contractor, haul road grading, labor</span></td>
+            </tr>
+            <tr>
+              <td class="criterion">Annual O&amp;M</td>
+              <td>$8K–$15K/yr<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted)">Filter media replacement, fan energy (~20 kW), inspections</span></td>
+              <td>$5K–$10K/yr<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted)">Water for suppression (500–2,000 gal/day), maintenance</span></td>
+            </tr>
+            <tr>
+              <td class="criterion">Permitting / regulatory</td>
+              <td>$5K–$15K<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted)">Likely triggers NSR permit modification (CDPHE)</span></td>
+              <td>$1K–$3K<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted)">Dust control plan update only</span></td>
+            </tr>
+            <tr>
+              <td class="criterion">Training / operational</td>
+              <td>$2K–$5K<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted)">Equipment operator certification and training</span></td>
+              <td>$1K–$2K<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted)">Driver route and suppression protocol briefings</span></td>
+            </tr>
+            <tr class="total-row">
+              <td>10-year total estimate</td>
+              <td>$207K – $450K</td>
+              <td>$87K – $155K</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box" style="margin-bottom:1.5rem;">
+        <strong>Basis of estimates</strong>
+        Alt 1 capital costs derived from the EPA Air Pollution Control Cost Manual (6th ed.), Section 6, Chapter 1 — Fabric Filters/Baghouses. Installation multiplier of 0.4–0.6× equipment cost per EPA guidance. Alt 2 costs based on EPA AP-42 Section 13.2.2 emission factors for unpaved road fugitive dust. O&amp;M ranges assume 250 operating days/year.
+      </div>
+
+      <div class="section-title" style="margin-bottom:1rem;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--rebar-light);">Practicality assessment</div>
+      <div class="prac-grid">
+        <div class="prac-card">
+          <div class="prac-card-name">Alt 1: Enclosure + Baghouse</div>
+          <div class="prac-row"><span>Implementation timeline</span><strong>12–18 months</strong></div>
+          <div class="prac-row"><span>Permitting pathway</span><strong>NSR modification likely</strong></div>
+          <div class="prac-row"><span>Infrastructure requirements</span><strong>Structural mods to storage bays</strong></div>
+          <div class="prac-row"><span>Operational change</span><strong>Operator training required</strong></div>
+          <div class="prac-row"><span>Primary constraint</span><strong>Permit lead time &amp; capital cost</strong></div>
+        </div>
+        <div class="prac-card rec">
+          <div style="margin-bottom:6px;"><span class="alt-card-tag tag-rec">Recommended</span></div>
+          <div class="prac-card-name">Alt 2: Road/Surface Controls</div>
+          <div class="prac-row"><span>Implementation timeline</span><strong>2–4 months</strong></div>
+          <div class="prac-row"><span>Permitting pathway</span><strong>Dust control plan update only</strong></div>
+          <div class="prac-row"><span>Infrastructure requirements</span><strong>Minimal — paving + water supply</strong></div>
+          <div class="prac-row"><span>Operational change</span><strong>Driver protocol update</strong></div>
+          <div class="prac-row"><span>Primary constraint</span><strong>Ongoing water availability</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT PANEL -->
+    <div id="panel-about" class="panel">
+      <div class="desc-section">
+        <h3>What does this tool do?</h3>
+        <p>This tool models particulate matter (PM2.5/PM10) dispersion from an urban concrete batching plant and compares two engineering control alternatives: enclosed aggregate storage with a fabric filter baghouse (Alt 1) and road/surface stabilization with wet suppression (Alt 2). It helps a user evaluate which intervention better reduces ambient PM concentrations reaching a neighboring residential receptor, and supports a structured multi-criteria decision.</p>
+      </div>
+      <div class="desc-section">
+        <h3>Required inputs</h3>
+        <p>Emission rate (g/s), wind speed (m/s), stack or release height (m), receptor height (m), lateral offset from centerline (m), Pasquill–Gifford atmospheric stability class (A–F), and control efficiency (%) for each alternative. All parameters are adjustable via the sidebar sliders.</p>
+      </div>
+      <div class="desc-section">
+        <h3>Modeling approach</h3>
+        <p>The tool implements a simplified Gaussian plume dispersion model following the Pasquill–Gifford framework (Seinfeld &amp; Pandis, 2006). This approach is appropriate for a continuous, near-ground point source under steady-state meteorological conditions — representative of routine batching plant operations. Horizontal (σy) and vertical (σz) dispersion coefficients are computed from stability-class parameterizations and update in real time as inputs change.</p>
+      </div>
+      <div class="desc-section">
+        <h3>Outputs and comparison structure</h3>
+        <p>The tool produces: (1) centerline concentration profiles (µg/m³) vs. downwind distance (50–2000 m) plotted against the EPA 24-hr NAAQS for PM2.5 (35 µg/m³); (2) peak concentration summary cards for baseline and both alternatives; (3) a multi-criteria decision analysis (MCDA) scoring matrix across four dimensions; and (4) a rough order-of-magnitude cost comparison with implementation practicality notes.</p>
+      </div>
+      <div class="desc-section">
+        <h3>How to interpret outputs</h3>
+        <p>Lower concentration curves indicate greater PM reduction effectiveness. Exceedances of the 35 µg/m³ NAAQS line at receptor distances signal meaningful health risk. The MCDA weighted total reflects overall alternative performance — higher scores favor better alternatives under the stated criteria weights. Cost estimates are order-of-magnitude only; a higher total cost does not preclude selection if technical or health performance is substantially superior.</p>
+      </div>
+      <div class="info-box">
+        <strong>AI collaboration statement</strong>
+        This tool was developed with substantial AI collaboration (Claude Sonnet, Anthropic, 2025) as part of CIVE 442 Tool 2. The Gaussian dispersion model, MCDA framework, cost estimates, interface design, and written content were co-generated and iteratively refined through AI-assisted development. Human judgment was applied throughout to validate modeling assumptions, select the scenario, interpret outputs, and make final design recommendations.
+      </div>
+
+      <!-- REFERENCES SECTION -->
+      <div class="desc-section">
+        <h3>References</h3>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:20px 22px;margin-bottom:1.5rem;">
+
+        <p style="font-size:11px;color:var(--concrete-dark);letter-spacing:0.12em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:14px;">Air Quality Standards</p>
+
+        <p style="font-size:12px;color:var(--text-muted);line-height:2;font-family:'DM Mono',monospace;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          U.S. Environmental Protection Agency. (2013). <em style="color:var(--concrete);">National Ambient Air Quality Standards (NAAQS) for particulate matter</em> (78 Fed. Reg. 3086). Office of Air Quality Planning and Standards. <a href="https://www.epa.gov/criteria-air-pollutants/naaqs-table" target="_blank" style="color:var(--rebar-light);text-decoration:none;border-bottom:1px solid var(--rebar);">https://www.epa.gov/criteria-air-pollutants/naaqs-table</a>
+        </p>
+
+        <p style="font-size:11px;color:var(--concrete-dark);letter-spacing:0.12em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:14px;">Dispersion Modeling</p>
+
+        <p style="font-size:12px;color:var(--text-muted);line-height:2;font-family:'DM Mono',monospace;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          Seinfeld, J. H., &amp; Pandis, S. N. (2006). <em style="color:var(--concrete);">Atmospheric chemistry and physics: From air pollution to climate change</em> (2nd ed.). Wiley-Interscience.
+        </p>
+
+        <p style="font-size:12px;color:var(--text-muted);line-height:2;font-family:'DM Mono',monospace;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          Turner, D. B. (1994). <em style="color:var(--concrete);">Workbook of atmospheric dispersion estimates: An introduction to dispersion modeling</em> (2nd ed.). CRC Press / Lewis Publishers.
+        </p>
+
+        <p style="font-size:12px;color:var(--text-muted);line-height:2;font-family:'DM Mono',monospace;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          U.S. Environmental Protection Agency. (2017). <em style="color:var(--concrete);">AERMOD modeling system: User's guide</em> (EPA-454/B-17-001). Office of Air Quality Planning and Standards. <a href="https://www.epa.gov/scram/air-quality-dispersion-modeling-preferred-and-recommended-models" target="_blank" style="color:var(--rebar-light);text-decoration:none;border-bottom:1px solid var(--rebar);">https://www.epa.gov/scram/air-quality-dispersion-modeling-preferred-and-recommended-models</a>
+        </p>
+
+        <p style="font-size:11px;color:var(--concrete-dark);letter-spacing:0.12em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:14px;">Emission Factors</p>
+
+        <p style="font-size:12px;color:var(--text-muted);line-height:2;font-family:'DM Mono',monospace;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          U.S. Environmental Protection Agency. (2006). <em style="color:var(--concrete);">AP-42: Compilation of air emissions factors, Section 11.12: Concrete batching</em> (5th ed., Vol. I). Office of Air Quality Planning and Standards. <a href="https://www.epa.gov/sites/default/files/2020-10/documents/11.12_concrete_batching.pdf" target="_blank" style="color:var(--rebar-light);text-decoration:none;border-bottom:1px solid var(--rebar);">https://www.epa.gov/sites/default/files/2020-10/documents/11.12_concrete_batching.pdf</a>
+        </p>
+
+        <p style="font-size:12px;color:var(--text-muted);line-height:2;font-family:'DM Mono',monospace;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          U.S. Environmental Protection Agency. (2006). <em style="color:var(--concrete);">AP-42: Compilation of air emissions factors, Section 13.2.2: Unpaved roads</em> (5th ed., Vol. I). Office of Air Quality Planning and Standards. <a href="https://www.epa.gov/sites/default/files/2020-10/documents/13.2.2_unpaved_roads.pdf" target="_blank" style="color:var(--rebar-light);text-decoration:none;border-bottom:1px solid var(--rebar);">https://www.epa.gov/sites/default/files/2020-10/documents/13.2.2_unpaved_roads.pdf</a>
+        </p>
+
+        <p style="font-size:11px;color:var(--concrete-dark);letter-spacing:0.12em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:14px;">Control Technology &amp; Cost</p>
+
+        <p style="font-size:12px;color:var(--text-muted);line-height:2;font-family:'DM Mono',monospace;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          U.S. Environmental Protection Agency. (2002). <em style="color:var(--concrete);">EPA air pollution control cost manual</em> (6th ed., Section 6, Chapter 1: Fabric filters). Office of Air Quality Planning and Standards. <a href="https://www.epa.gov/sites/default/files/2020-07/documents/c_allchs.pdf" target="_blank" style="color:var(--rebar-light);text-decoration:none;border-bottom:1px solid var(--rebar);">https://www.epa.gov/sites/default/files/2020-07/documents/c_allchs.pdf</a>
+        </p>
+
+        <p style="font-size:12px;color:var(--text-muted);line-height:2;font-family:'DM Mono',monospace;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          U.S. Environmental Protection Agency. (2012). <em style="color:var(--concrete);">Fugitive dust control techniques for construction and industrial sites</em>. Office of Air Quality Planning and Standards.
+        </p>
+
+        <p style="font-size:11px;color:var(--concrete-dark);letter-spacing:0.12em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:14px;">Regulatory &amp; Permitting Framework</p>
+
+        <p style="font-size:12px;color:var(--text-muted);line-height:2;font-family:'DM Mono',monospace;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          Colorado Department of Public Health and Environment. (2022). <em style="color:var(--concrete);">Air quality control program: Regulation No. 1 — Emission control for particulate matter</em>. CDPHE Air Pollution Control Division. <a href="https://cdphe.colorado.gov/air-quality/regulation-1" target="_blank" style="color:var(--rebar-light);text-decoration:none;border-bottom:1px solid var(--rebar);">https://cdphe.colorado.gov/air-quality/regulation-1</a>
+        </p>
+
+        <p style="font-size:12px;color:var(--text-muted);line-height:2;font-family:'DM Mono',monospace;">
+          U.S. Environmental Protection Agency. (2010). <em style="color:var(--concrete);">New source review (NSR) permitting: Basic information</em>. Office of Air Quality Planning and Standards. <a href="https://www.epa.gov/nsr" target="_blank" style="color:var(--rebar-light);text-decoration:none;border-bottom:1px solid var(--rebar);">https://www.epa.gov/nsr</a>
+        </p>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <span>CIVE 442 — Air Quality Modeling &amp; Comparative Engineering Design</span>
+  <span>Tool 2: Emissions Reduction Design // Concrete Batching Plant Scenario</span>
+</footer>
+
+<script>
+let plumeChart = null;
+
+const stabParams = {
+  A:{a:0.22,b:0.0001,c:0.20,d:0.0000},
+  B:{a:0.16,b:0.0001,c:0.12,d:0.0000},
+  C:{a:0.11,b:0.0001,c:0.08,d:0.0002},
+  D:{a:0.08,b:0.0001,c:0.06,d:0.0015},
+  E:{a:0.06,b:0.0001,c:0.03,d:0.0003},
+  F:{a:0.04,b:0.0001,c:0.016,d:0.0003}
+};
+
+function sigma(x, stab) {
+  const p = stabParams[stab];
+  return {
+    sy: Math.max(p.a * x * Math.pow(1 + p.b * x, -0.5), 0.01),
+    sz: Math.max(p.c * x * Math.exp(-p.d * x), 0.01)
+  };
+}
+
+function gauss(x, y, z, Q, u, H, stab) {
+  if (x <= 0 || Q <= 0) return 0;
+  const {sy, sz} = sigma(x, stab);
+  const C = (Q / (2 * Math.PI * sy * sz * u))
+    * Math.exp(-0.5 * (y/sy)**2)
+    * (Math.exp(-0.5 * ((z-H)/sz)**2) + Math.exp(-0.5 * ((z+H)/sz)**2));
+  return Math.max(C * 1e6, 0);
+}
+
+function getP() {
+  return {
+    Q:  parseFloat(document.getElementById('Q').value),
+    u:  parseFloat(document.getElementById('U').value),
+    H:  parseFloat(document.getElementById('H').value),
+    z:  parseFloat(document.getElementById('Z').value),
+    y:  parseFloat(document.getElementById('Y').value),
+    st: document.getElementById('stab').value,
+    e1: parseFloat(document.getElementById('eff1').value)/100,
+    e2: parseFloat(document.getElementById('eff2').value)/100
+  };
+}
+
+function getPeaks(p) {
+  const xs = Array.from({length:400}, (_,i) => 5 + i*5);
+  let b=0,a1=0,a2=0,bx=50,a1x=50,a2x=50;
+  xs.forEach(x => {
+    const cb = gauss(x,p.y,p.z,p.Q,p.u,p.H,p.st);
+    const c1 = gauss(x,p.y,p.z,p.Q*(1-p.e1),p.u,p.H,p.st);
+    const c2 = gauss(x,p.y,p.z,p.Q*(1-p.e2),p.u,p.H,p.st);
+    if(cb>b){b=cb;bx=x;} if(c1>a1){a1=c1;a1x=x;} if(c2>a2){a2=c2;a2x=x;}
+  });
+  return {b,bx,a1,a1x,a2,a2x};
+}
+
+const distances = [50,100,150,200,300,400,500,700,1000,1500,2000];
+
+function upd() {
+  const p = getP();
+  document.getElementById('Q-out').textContent  = p.Q.toFixed(1) + ' g/s';
+  document.getElementById('U-out').textContent  = p.u.toFixed(1) + ' m/s';
+  document.getElementById('H-out').textContent  = p.H + ' m';
+  document.getElementById('Z-out').textContent  = p.z.toFixed(1) + ' m';
+  document.getElementById('Y-out').textContent  = p.y + ' m';
+  document.getElementById('eff1-out').textContent = Math.round(p.e1*100) + '%';
+  document.getElementById('eff2-out').textContent = Math.round(p.e2*100) + '%';
+  document.getElementById('eff1-bar').style.width = Math.round(p.e1*100) + '%';
+  document.getElementById('eff2-bar').style.width = Math.round(p.e2*100) + '%';
+  renderMetrics(p);
+  renderAltCards(p);
+  renderMCDA(p);
+  if (plumeChart) drawChart(p);
+}
+
+function renderMetrics(p) {
+  const pk = getPeaks(p);
+  const r1 = ((pk.b - pk.a1)/pk.b*100).toFixed(0);
+  const r2 = ((pk.b - pk.a2)/pk.b*100).toFixed(0);
+  document.getElementById('metric-cards').innerHTML = `
+    <div class="metric baseline">
+      <div class="metric-label">Baseline peak</div>
+      <div class="metric-num">${pk.b.toFixed(1)}<span class="metric-unit">µg/m³</span></div>
+      <div class="metric-sub">@ ${pk.bx}m downwind</div>
+    </div>
+    <div class="metric alt1">
+      <div class="metric-label">Alt 1 peak</div>
+      <div class="metric-num">${pk.a1.toFixed(1)}<span class="metric-unit">µg/m³</span></div>
+      <div class="metric-sub">↓ ${r1}% reduction</div>
+    </div>
+    <div class="metric alt2">
+      <div class="metric-label">Alt 2 peak</div>
+      <div class="metric-num">${pk.a2.toFixed(1)}<span class="metric-unit">µg/m³</span></div>
+      <div class="metric-sub">↓ ${r2}% reduction</div>
+    </div>
+    <div class="metric standard">
+      <div class="metric-label">EPA 24-hr NAAQS</div>
+      <div class="metric-num">35<span class="metric-unit">µg/m³</span></div>
+      <div class="metric-sub">PM2.5 standard</div>
+    </div>`;
+}
+
+function renderAltCards(p) {
+  const pk = getPeaks(p);
+  const r1 = ((pk.b-pk.a1)/pk.b*100).toFixed(0);
+  const r2 = ((pk.b-pk.a2)/pk.b*100).toFixed(0);
+  const a1wins = pk.a1 <= pk.a2;
+  const naaqs1 = pk.a1 > 35 ? '<span style="color:#e07060">Yes — exceeds standard</span>' : '<span style="color:#5dba7e">No — below NAAQS</span>';
+  const naaqs2 = pk.a2 > 35 ? '<span style="color:#e07060">Yes — exceeds standard</span>' : '<span style="color:#5dba7e">No — below NAAQS</span>';
+  document.getElementById('alt-cards').innerHTML = `
+    <div class="alt-card ${a1wins?'recommended':''}">
+      ${a1wins?'<span class="alt-card-tag tag-rec">Higher PM reduction</span><br>':''}
+      <span class="alt-card-tag tag-alt1">Alternative 1</span>
+      <div class="alt-card-name">Enclosed storage<br>+ fabric filter baghouse</div>
+      <div class="alt-stat"><span>Peak concentration</span><strong>${pk.a1.toFixed(1)} µg/m³</strong></div>
+      <div class="alt-stat"><span>Reduction vs. baseline</span><strong>${r1}%</strong></div>
+      <div class="alt-stat"><span>Exceeds NAAQS?</span><strong>${naaqs1}</strong></div>
+      <div class="alt-stat"><span>Controlled emission rate</span><strong>${(p.Q*(1-p.e1)).toFixed(2)} g/s</strong></div>
+    </div>
+    <div class="alt-card ${!a1wins?'recommended':''}">
+      ${!a1wins?'<span class="alt-card-tag tag-rec">Higher PM reduction</span><br>':''}
+      <span class="alt-card-tag tag-alt2">Alternative 2</span>
+      <div class="alt-card-name">Road paving +<br>wet surface suppression</div>
+      <div class="alt-stat"><span>Peak concentration</span><strong>${pk.a2.toFixed(1)} µg/m³</strong></div>
+      <div class="alt-stat"><span>Reduction vs. baseline</span><strong>${r2}%</strong></div>
+      <div class="alt-stat"><span>Exceeds NAAQS?</span><strong>${naaqs2}</strong></div>
+      <div class="alt-stat"><span>Controlled emission rate</span><strong>${(p.Q*(1-p.e2)).toFixed(2)} g/s</strong></div>
+    </div>`;
+}
+
+function scoreClass(s) {
+  return s >= 5 ? 'score-5' : s >= 4 ? 'score-4' : s >= 3 ? 'score-3' : s >= 2 ? 'score-2' : 'score-1';
+}
+
+function renderMCDA(p) {
+  const r1pct = p.e1*100, r2pct = p.e2*100;
+  const ts1 = r1pct>=85?5:r1pct>=70?4:r1pct>=55?3:2;
+  const ts2 = r2pct>=85?5:r2pct>=70?4:r2pct>=55?3:2;
+
+  const criteria = [
+    {
+      name:'Technical effectiveness', weight:0.35,
+      s1:ts1, s2:ts2,
+      r1:`${r1pct.toFixed(0)}% source PM reduction. Baghouse captures process emissions from cement loading and aggregate handling. Effective under all meteorological conditions.`,
+      r2:`${r2pct.toFixed(0)}% reduction of fugitive road dust only. Does not address process PM. Effectiveness degrades in dry or high-wind conditions.`
+    },
+    {
+      name:'Public health & safety', weight:0.25,
+      s1:4, s2:3,
+      r1:'Reduces PM2.5 reaching all residential receptors downwind. No secondary health risks from the control technology itself. Co-benefit: reduced nuisance dust for adjacent properties.',
+      r2:'Reduces road-dust PM near truck entry/exit. Residual process emissions from cement handling still reach nearby homes. Wet suppression reduces worker slip hazards on-site.'
+    },
+    {
+      name:'Environmental considerations', weight:0.20,
+      s1:3, s2:4,
+      r1:'Generates spent filter media requiring solid waste disposal (~200–400 lbs/yr). Fan motor energy use (~15–30 kW). No pollutant shifting; captures PM directly.',
+      r2:'Requires 500–2,000 gal/day water for suppression. Lower energy footprint than baghouse. Minor stormwater runoff risk if containment is inadequate. No solid waste stream.'
+    },
+    {
+      name:'Cost & practicality', weight:0.20,
+      s1:2, s2:5,
+      r1:'$120K–$230K capital outlay. 12–18 month implementation. Likely triggers NSR permit modification. High upfront cost and administrative burden.',
+      r2:'$25K–$50K capital. 2–4 month implementation. Dust control plan update only. Immediately actionable with minimal permitting.'
+    }
+  ];
+
+  let w1=0, w2=0;
+  const rows = criteria.map(c => {
+    w1 += c.weight * c.s1;
+    w2 += c.weight * c.s2;
+    return `<tr>
+      <td class="criterion">${c.name}</td>
+      <td class="weight">
+        <div class="weight-bar-wrap">
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);">${Math.round(c.weight*100)}%</span>
+          <div class="weight-bar"><div class="weight-fill" style="width:${c.weight*100}%"></div></div>
+        </div>
+      </td>
+      <td><span class="score-badge ${scoreClass(c.s1)}">${c.s1}</span></td>
+      <td>${c.r1}</td>
+      <td><span class="score-badge ${scoreClass(c.s2)}">${c.s2}</span></td>
+      <td>${c.r2}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('mcda-body').innerHTML = rows;
+
+  const w1wins = w1 >= w2;
+  document.getElementById('mcda-totals').innerHTML = `
+    <div class="total-card ${w1wins?'winner':''}">
+      <div class="total-label">Alt 1: Enclosure + baghouse</div>
+      <div class="total-score" style="color:var(--alt1)">${w1.toFixed(2)}<span>/5.00</span></div>
+      ${w1wins ? '<div class="winner-tag">Higher weighted score</div>' : ''}
+    </div>
+    <div class="total-card ${!w1wins?'winner':''}">
+      <div class="total-label">Alt 2: Road/surface controls</div>
+      <div class="total-score" style="color:var(--alt2)">${w2.toFixed(2)}<span>/5.00</span></div>
+      ${!w1wins ? '<div class="winner-tag">Higher weighted score</div>' : ''}
+    </div>`;
+}
+
+function drawChart(p) {
+  const base = distances.map(x => parseFloat(gauss(x,p.y,p.z,p.Q,p.u,p.H,p.st).toFixed(2)));
+  const alt1 = distances.map(x => parseFloat(gauss(x,p.y,p.z,p.Q*(1-p.e1),p.u,p.H,p.st).toFixed(2)));
+  const alt2 = distances.map(x => parseFloat(gauss(x,p.y,p.z,p.Q*(1-p.e2),p.u,p.H,p.st).toFixed(2)));
+
+  if (plumeChart) { plumeChart.destroy(); plumeChart = null; }
+
+  const ctx = document.getElementById('plumeChart').getContext('2d');
+  plumeChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: distances.map(d => d + 'm'),
+      datasets: [
+        {label:'Baseline', data:base, borderColor:'#8a8680', backgroundColor:'rgba(138,134,128,0.07)', borderWidth:2, pointRadius:3, pointBackgroundColor:'#8a8680', tension:0.35, fill:true},
+        {label:'Alt 1', data:alt1, borderColor:'#1a5f8a', backgroundColor:'rgba(26,95,138,0.1)', borderWidth:2.5, pointRadius:3, pointBackgroundColor:'#1a5f8a', tension:0.35, fill:true, borderDash:[0,0]},
+        {label:'Alt 2', data:alt2, borderColor:'#2e7d52', backgroundColor:'rgba(46,125,82,0.1)', borderWidth:2.5, pointRadius:3, pointBackgroundColor:'#2e7d52', tension:0.35, fill:true, borderDash:[6,3]},
+        {label:'EPA NAAQS', data:distances.map(()=>35), borderColor:'#e8a020', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false}
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(30,28,24,0.95)',
+          titleColor:'#c8c4b8',
+          bodyColor:'#9a9690',
+          borderColor:'rgba(200,196,184,0.2)',
+          borderWidth:1,
+          callbacks:{label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + ' µg/m³'}
+        }
+      },
+      scales:{
+        x:{
+          ticks:{color:'#9a9690', font:{size:11, family:"'DM Mono', monospace"}, autoSkip:false, maxRotation:45},
+          grid:{color:'rgba(200,196,184,0.06)'},
+          border:{color:'rgba(200,196,184,0.15)'}
+        },
+        y:{
+          title:{display:true, text:'Concentration (µg/m³)', color:'#9a9690', font:{size:11, family:"'DM Mono', monospace"}},
+          ticks:{color:'#9a9690', font:{size:11, family:"'DM Mono', monospace"}},
+          grid:{color:'rgba(200,196,184,0.06)'},
+          border:{color:'rgba(200,196,184,0.15)'}
+        }
+      }
+    }
+  });
+}
+
+function showTab(t) {
+  document.querySelectorAll('.nav-tab').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick').includes("'"+t+"'"));
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-'+t).classList.add('active');
+  if (t === 'results') {
+    const p = getP();
+    setTimeout(() => drawChart(p), 50);
+  }
+}
+
+// Init
+upd();
+setTimeout(() => { const p = getP(); drawChart(p); }, 100);
+</script>
+</body>
+</html>

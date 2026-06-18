@@ -1,9 +1,9 @@
 {
   "name": "Lunar Velvet",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Mine Emissions Reduction Design",
+  "description": "This tool is a simple Streamlit app that compares two ways to reduce worker exposure to diesel pollutants in an underground mine: increasing ventilation or reducing emissions at the source. The user can adjust inputs like tunnel volume, ventilation rate, number of vehicles, emission level, exposure time, and worker activity. The tool uses a well-mixed box model to estimate how pollutant concentration builds up over time and calculates the inhaled dose for each alternative. It shows results like concentration vs. time, peak and final concentrations, so it is easy to compare how each strategy performs under the same conditions. The tool also includes a basic MCDA framework that compares the two options based on technical effectiveness, cost and practicality, public health and safety, and environmental impacts. The results should be understood as approximate estimates that help visualize trends and trade-offs, since the model assumes conditions like uniform mixing that may not fully represent real mine conditions.",
+  "projectUrl": "https://gemini.google.com/share/5ad26752513b",
   "projectPath": "../images/LV2.png",
   "folderName": "valenzuela"
 }

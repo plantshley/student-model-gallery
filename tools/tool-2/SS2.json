@@ -1,9 +1,9 @@
 {
   "name": "Sparkling Stardust",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "School Traffic CO₂ Dispersion Calculator",
+  "description": "This tool provides CO2 concentration data for a user to compare recirculation cycles and satellite parking. There are only two inputs required: total number of students and students transported by car. There is an optional/adjustable input for distance to school used to calculate CO2 concentration at this distance. Gaussian dispersion is used to model the scenario because of a focus on steady-state vehicle emissions, a short range, and reasonably translating plume spread by vehicles. Four numerical outputs are created: total CO2 (kg/day), total vehicles per day, peak emission rate (g/s), and max concentration at a chosen distance; there is also a graphical representation of the CO2 concentration over distance curve.",
+  "projectUrl": "tools/tool-2/projects/SS2.html",
   "projectPath": "../images/SS2.png",
   "folderName": "stratton"
 }

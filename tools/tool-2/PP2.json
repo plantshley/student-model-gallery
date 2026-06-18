@@ -1,9 +1,9 @@
 {
   "name": "Paradise Phantom",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
-  "projectPath": "../images/PP2.jpeg",
+  "projectTitle": "PM2.5 Emissions Reduction Design Tool —  Prescribed Burn vs. Mechanical Thinning",
+  "description": "The tool estimates how much air pollution (PM2.5) from a forest treatment, like a prescribed burn or mechanical thinning, will reach the Lory Student Center and affect the CSU population. It takes inputs such as emission rate (or near-zero emissions for thinning), wind speed, atmospheric stability, and the distance between the fire and the receptor. It uses a Gaussian dispersion model, which is a common air quality model that predicts how pollution spreads in the air based on weather and emissions. This approach is appropriate because it is simple, widely used, and works well for estimating smoke impacts over short distances . The tool outputs predicted PM2.5 concentrations at the LSC and allows users to compare results between prescribed burning and mechanical thinning under the same conditions. It structures the comparison by showing how each method performs under different weather scenarios and whether concentrations exceed the EPA standard. Users should interpret the results as approximate estimates, not exact values, and focus on whether pollution levels stay below or exceed the health standard. This helps users understand the tradeoff between short-term smoke exposure from prescribed burns and the lower-emission but more costly mechanical thinning option.",
+  "projectUrl": "https://ppeyton12.github.io/Tool-2-Air-Quality/",
+  "projectPath": "../images/PP2.png",
   "folderName": "philips"
 }

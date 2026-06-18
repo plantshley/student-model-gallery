@@ -1,9 +1,9 @@
 {
   "name": "Wisteria Twist",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
-  "projectPath": "../images/WT2.jpg",
+  "projectTitle": "Comparative PM emissions tool for coal vs. natural gas power generation",
+  "description": "This tool estimates uncontrolled and controlled PM2.5 and PM10 emission rates from two power plant alternatives — a pulverized coal (dry-bottom) plant and a natural gas combined-cycle (CCGT) plant — sized to meet a user-specified AI data center electrical demand. For the coal plant, three optional particulate control configurations are available: ESP only, baghouse only, or ESP followed by baghouse in series.",
+  "projectUrl": "tools/tool-2/projects/WT2.html",
+  "projectPath": "../images/WT2.png",
   "folderName": "turf"
 }

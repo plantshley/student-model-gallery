@@ -1,9 +1,9 @@
 {
   "name": "Swirly Crystal",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Exhaust Treatment Modeling Tool",
+  "description": "The tool compares three different methods of reducing the emissions from vehicles. These methods include the catalytic converter (three-way catalyst, TWC), lean NOx traps (LNT), Selective Catalytic Reduction (SCR), and an uncontrolled vehicle. It compares them using NOx concentration at receptor distance, percent pollutant reduction, and MCDA analysis.",
+  "projectUrl": "/tools/tool-2/projects/SC2.html",
   "projectPath": "../images/SC2.png",
   "folderName": "sicat"
 }

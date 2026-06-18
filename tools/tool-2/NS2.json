@@ -1,9 +1,9 @@
 {
   "name": "Numinous Sugarberry",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "3D Printing Lab Air Quality Model",
+  "description": "This interactive tool evaluates indoor air quality within a multi-user 3D printing laboratory by modeling steady-state Volatile Organic Compound (VOC) concentrations. It utilizes a single-zone mass balance modeling approach, allowing the user to adjust room volume, baseline ventilation, and VOC generation rates. The tool calculates the resulting steady-state concentration and compares a 'Do Nothing' baseline against two engineering interventions: upgrading the exhaust fan (+200 m³/hr) or installing local carbon scrubbers (k = 3.0 hr⁻¹). To support robust decision-making, the outputs feed directly into a weighted Multi-Criteria Decision Analysis (MCDA) matrix, making the trade-offs between quantitative pollutant reduction, financial constraints, and environmental shifting explicitly visible.",
+  "projectUrl": "https://hatchnelson19.github.io/CIVE_442-tool-2/",
   "projectPath": "../images/NS2.png",
   "folderName": "nelson"
 }

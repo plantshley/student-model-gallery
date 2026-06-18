@@ -1,9 +1,9 @@
 {
   "name": "Echoes of Hibiscus Sunset",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "BUS TERMINAL NO₂ MODEL",
+  "description": "This interactive tool models NO₂ concentrations in a semi-enclosed bus terminal using a fixedvolume box model with governing equation 𝑉 𝑑𝐶 𝑑𝑡 =𝐸(1−𝑓𝑒𝑙𝑒𝑐)−(𝑄𝑤𝑖𝑛𝑑 +𝑄𝑟𝑜𝑜𝑓)(𝐶 − 𝐶𝑜𝑢𝑡). The semi-enclosed terminal can be reasonably approximated as a single well-mixed volume, allowing for analytical comparison of scenarios without too much computational complexity.\n\nTo use the tool, click the binder link and run Cell 1 to load the model function, then run Cell 2 to display the interactive dropdown menus. Adjust the inputs—terminal volume (5,000-15,000 m³), fleet size (20-60 buses), peak buses per hour (10-25), idle time per bus (3-9 minutes), and natural wind (0.5-1.5 ACH)—to match your scenario. The parameter summary updates automatically. Run Cell 3 to generate a time-series plot of NO₂ concentrations over a 16-hour day and a bar chart comparing steady-state concentrations for the baseline (all diesel, no fans), Alternative A (50% fleet electrification), and Alternative B (3 ACH rooftop exhaust upgrade). Run Cell 4 to see the dynamic multi-criteria decision analysis matrix, which evaluates the alternatives across technical effectiveness, cost, public health, and environmental dimensions using weighted scoring that responds to your inputs. The time-series plot shows how concentrations approach steady-state, with the red dotted line marking the EPA 1-hour standard of 100 ppb. The bar chart provides a direct comparison of equilibrium concentrations. The MCDA matrix translates model results and cost estimates into a structured decision framework. Higher total scores indicate better overall performance given the assigned weights. Note that the weights are subjective and can be easily adjusted to reflect different stakeholder priorities. The tool is designed to support engineering judgment by making tradeoffs explicit, not to give a single correct answer.",
+  "projectUrl": "https://mybinder.org/v2/gh/elijahsorenson14/Bus-Terminal-NO2-Model/7f830dcd23b0ffce3d1996df576ac4c177459579?urlpath=lab%2Ftree%2FBus%20Terminal.ipynb",
   "projectPath": "../images/EHS2.png",
   "folderName": "sorenson"
 }

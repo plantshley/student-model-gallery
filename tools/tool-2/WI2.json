@@ -1,9 +1,9 @@
 {
   "name": "Watermelon Ice",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Nail Salon PM2.5 Exposure Tool",
+  "description": "Compare indoor air quality control strategies using a single-zone box model.",
+  "projectUrl": "https://nail-air-compare.lovable.app",
   "projectPath": "../images/WI2.png",
   "folderName": "williams"
 }

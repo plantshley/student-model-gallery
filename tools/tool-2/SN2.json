@@ -1,9 +1,9 @@
 {
   "name": "Starswirl Night",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Emissions Reduction Design: NOx from Diesel Excavators",
+  "description": "This tool models and compares ground-level NOx concentrations from diesel excavator operations at the Glover Building remodel site at Colorado State University under three scenarios: No Action, Alternative 1 (stack retrofit to 3 m), and Alternative 2 (full fleet electrification). It requires user inputs including emission rate per machine, wind speed, number of machines, atmospheric stability class, and stack heights for each applicable scenario. A simplified Gaussian dispersion model is used because the site represents an outdoor point source with a defined population at a known downwind distance, making this approach appropriate for estimating near ground-level concentrations under varying atmospheric conditions. The tool produces a concentration-versus-distance plot, a bar chart of peak NOx at key receptor distances, a weighted MCDA scoring matrix across four criteria, and a cost estimate comparison with practicality assessment. Users should interpret the concentration outputs as a model to show the risks they are posed to from the diesel excavators when nearby rather than precise predictions, and use the MCDA matrix to understand how technical performance, cost, public health, and environmental considerations together inform which alternative is most defensible given real-world constraints.",
+  "projectUrl": "tools/tool-2/projects/SN2.html",
   "projectPath": "../images/SN2.png",
   "folderName": "shon"
 }

@@ -1,9 +1,9 @@
 {
   "name": "Nocturnal Zebra",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "VOC Exposure Estimation from Indoor 3D Printing",
+  "description": "This tool estimates the total VOC concentration in a room based on the room volume, number of printers, and by the air exchange rate while assuming a steady state environment. TVOC dose is then estimated by an inhalation rate with duration in the room. The final output will be the total VOC concentration in micrograms. Once a final output is produced, this value can be compared against existing occupational exposure limits in order to determine if room changes are necessary. This tool can also be utilized to determine how changes in the inputs correspond to changes in a final VOC concentration which can assist with decision making for future improvements.",
+  "projectUrl": "https://vocprinteremissions.lovable.app/",
   "projectPath": "../images/NZ2.png",
   "folderName": "zucker"
 }

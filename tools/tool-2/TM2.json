@@ -1,9 +1,9 @@
 {
   "name": "Trilling Magnolia",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Highway Corridor Air Quality Model",
+  "description": "This tool models PM2.5 air quality concentrations downwind of a highway corridor and compares three engineering interventions, EV fleet adoption, a roadside barrier, and a combined approach to quantify their effectiveness in reducing receptor exposure. It requires the user to specify traffic volume, emission factors for ICE and EV vehicles, EV fleet penetration, wind speed, atmospheric stability class, barrier height, and receptor distance, all of which can be adjusted directly in the Inputs & Assumptions sheet. The tool applies a simplified Gaussian line source dispersion model, which treats the highway as a continuous emission source and computes ground-level concentrations as a function of downwind distance, wind speed, and atmospheric stability. This approach is well-suited to this scenario because highway corridors are spatially uniform linear sources with receptors distributed perpendicular to the road. Outputs include a full concentration table across twelve downwind distances (5–500 m) for all four scenarios, percentage reductions relative to baseline, a sensitivity analysis identifying which inputs most influence results, and a multi-criteria decision analysis matrix scoring each alternative across technical effectiveness, cost and practicality, public health, and environmental co-benefits. The AI Analysis sheet and companion report provide Claude-generated written interpretation of these outputs, including a weighted recommendation. Users should interpret concentrations relative to the WHO 24-hour PM2.5 guideline of 15 µg/m³, noting that the barrier is most protective close to the road while EV adoption delivers uniform reductions at all distances, and that the MCDA recommendation will shift if criterion weights are adjusted to reflect different planning priorities.",
+  "projectUrl": "tools/tool-2/projects/TM2.xlsm",
   "projectPath": "../images/TM2.png",
   "folderName": "miller"
 }

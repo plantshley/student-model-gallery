@@ -1,9 +1,9 @@
 {
   "name": "Moonlit Wave",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "CSU Tailgate PM2.5 Alternative Comparison Tool",
+  "description": "This tool is a web-based decision-support model that estimates PM2.5 exposure at CSU tailgates and compares two engineering alternatives: fuel conversion and layout redesign. Users input tailgate conditions such as grill counts, vehicle activity, and wind parameters. The tool uses a fixed-box air quality model to estimate pollutant concentrations and visualize differences between alternatives. Results are presented through charts, sensitivity analysis, and a multi-criteria decision analysis (MCDA). The tool allows users to explore how different assumptions affect outcomes and identify the most effective strategy. Outputs are designed to support both technical comparison and practical decision-making.",
+  "projectUrl": "https://wardlawjm.github.io/tailgate-tool/",
   "projectPath": "../images/MW2.png",
   "folderName": "wardlaw"
 }
