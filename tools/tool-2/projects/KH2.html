@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Air Quality Alternatives Tool</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    :root {
+      --blue-900: #0b2545;
+      --blue-700: #134074;
+      --blue-500: #3b82c4;
+      --blue-100: #e7f1ff;
+      --orange-500: #f08a24;
+      --bg: #f4f9ff;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #f6fbff 0%, #ecf5ff 100%);
+      color: var(--blue-900);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    h1, h2, h3 { color: var(--blue-900); }
+    .grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+    }
+    .card {
+      background: white;
+      border: 1px solid #cfe3ff;
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 1px 4px rgba(12, 56, 96, 0.08);
+    }
+    label { font-size: 14px; font-weight: bold; color: var(--blue-700); }
+    input[type="number"], input[type="range"] { width: 100%; margin: 6px 0 12px; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .tab-btn {
+      border: 1px solid var(--blue-700);
+      background: white;
+      color: var(--blue-700);
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .tab-btn.active { background: var(--blue-700); color: white; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    table { border-collapse: collapse; width: 100%; background: white; }
+    th, td { border: 1px solid #b9d6fa; padding: 8px; text-align: left; }
+    th { background: var(--blue-100); color: var(--blue-900); }
+    .metric {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #cfe3ff;
+      background: #f9fcff;
+      margin-bottom: 12px;
+    }
+    .accent { color: var(--orange-500); font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Air Quality Decision Tool: Data Center Backup Power Scenario</h1>
+    <p>Compare two engineering alternatives using a simplified Gaussian plume model and your MCDA/cost framework.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Adjustable Inputs</h3>
+        <label>Base NOx emission rate (g/s)</label>
+        <input id="qNox" type="number" value="120" min="0.1" step="1" />
+
+        <label>Base DPM emission rate (g/s)</label>
+        <input id="qDpm" type="number" value="12" min="0.01" step="0.1" />
+
+        <label>Wind speed (m/s): <span id="windVal">3</span></label>
+        <input id="wind" type="range" min="0.5" max="12" step="0.1" value="3" />
+
+        <label>Current stack height (m): <span id="stackVal">30</span></label>
+        <input id="stack" type="range" min="10" max="80" step="1" value="30" />
+
+        <label>Ventilation / ACH: <span id="achVal">1</span></label>
+        <input id="ach" type="range" min="0.2" max="8" step="0.1" value="1" />
+
+        <h3>Alternative 1</h3>
+        <label>DPF efficiency (fraction): <span id="dpfVal">0.9</span></label>
+        <input id="dpf" type="range" min="0" max="0.99" step="0.01" value="0.9" />
+
+        <label>Stack increase (m): <span id="raiseVal">10</span></label>
+        <input id="raise" type="range" min="0" max="30" step="1" value="10" />
+
+        <h3>Alternative 2</h3>
+        <label>BESS replacement fraction: <span id="bessVal">0.5</span></label>
+        <input id="bess" type="range" min="0" max="1" step="0.05" value="0.5" />
+      </div>
+
+      <div class="card">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="tab1">Alternative 1</button>
+          <button class="tab-btn" data-tab="tab2">Alternative 2</button>
+          <button class="tab-btn" data-tab="tab3">Comparison + MCDA + Cost</button>
+        </div>
+
+        <div id="tab1" class="tab-panel active">
+          <h2>Alternative 1: DPF + Stack Raise</h2>
+          <div id="chart1"></div>
+        </div>
+
+        <div id="tab2" class="tab-panel">
+          <h2>Alternative 2: 50% BESS Replacement</h2>
+          <div id="chart2"></div>
+        </div>
+
+        <div id="tab3" class="tab-panel">
+          <h2>Comparison, MCDA, and Cost</h2>
+          <div class="metric">MCDA recommendation: <span class="accent">Alternative 1</span> (4.05 vs 3.65)</div>
+          <div id="chartCompare"></div>
+          <div id="chartSens"></div>
+          <h3>MCDA Table (Provided)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Criteria</th><th>Weight</th><th>Alternative 1 (Increase stack height)</th>
+                <th>Alternative 1 Weighted</th><th>Alternative 2 (BESS)</th><th>Alternative 2 Weighted</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Technical Effectiveness</td><td>0.2</td><td>5</td><td>1.00</td><td>3</td><td>0.60</td></tr>
+              <tr><td>Public Health and Safety</td><td>0.4</td><td>4</td><td>1.60</td><td>5</td><td>2.00</td></tr>
+              <tr><td>Environmental Considerations</td><td>0.25</td><td>4</td><td>1.00</td><td>3</td><td>0.75</td></tr>
+              <tr><td>Cost and Practicality</td><td>0.15</td><td>3</td><td>0.45</td><td>2</td><td>0.30</td></tr>
+              <tr><td>Total</td><td>1.00</td><td></td><td><b>4.05</b></td><td></td><td><b>3.65</b></td></tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin-top:16px;">Cost Estimate Table (Provided)</h3>
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Alternative 1</th><th>Alternative 2</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Capital Equipment</td><td>$200K - $450K</td><td>$3.5M - $5M</td></tr>
+              <tr><td>Installation and Construction</td><td>$100K - $200K</td><td>$400K - $800K</td></tr>
+              <tr><td>Permitting and Compliance</td><td>$15K - $30K</td><td>$40K - $80K</td></tr>
+              <tr><td>Annual O&amp;M</td><td>$20K - $40K</td><td>$40K - $90K</td></tr>
+              <tr><td><b>Estimated Total</b></td><td><b>$315K - $680K</b></td><td><b>$3.94M - $5.88M</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ids = ["qNox","qDpm","wind","stack","ach","dpf","raise","bess"];
+    const v = () => Object.fromEntries(ids.map(id => [id, parseFloat(document.getElementById(id).value)]));
+
+    function sigmaY(x){ return 0.08*x*Math.pow(1+0.0001*x,-0.5); }
+    function sigmaZ(x){ return 0.06*x*Math.pow(1+0.0015*x,-0.5); }
+    function gaussian(q,u,h,x){
+      const sy = sigmaY(Math.max(x,1));
+      const sz = sigmaZ(Math.max(x,1));
+      const us = Math.max(u,0.1);
+      return (q/(Math.PI*us*sy*sz))*Math.exp(-(h*h)/(2*sz*sz))*1e6; // ug/m3
+    }
+    function indoor(c, ach){ return c * (0.8/(1+0.15*Math.max(ach,0.1))); }
+
+    function run() {
+      const p = v();
+      document.getElementById("windVal").textContent = p.wind;
+      document.getElementById("stackVal").textContent = p.stack;
+      document.getElementById("achVal").textContent = p.ach;
+      document.getElementById("dpfVal").textContent = p.dpf;
+      document.getElementById("raiseVal").textContent = p.raise;
+      document.getElementById("bessVal").textContent = p.bess;
+
+      const x = [];
+      for (let d = 50; d <= 2000; d += 12.25) x.push(d);
+
+      const qNox1 = p.qNox*(1-0.15*p.dpf), qDpm1 = p.qDpm*(1-p.dpf), h1 = p.stack+p.raise;
+      const qNox2 = p.qNox*(1-p.bess), qDpm2 = p.qDpm*(1-p.bess), h2 = p.stack;
+
+      const a1n = x.map(xx => gaussian(qNox1,p.wind,h1,xx));
+      const a1d = x.map(xx => gaussian(qDpm1,p.wind,h1,xx));
+      const a2n = x.map(xx => gaussian(qNox2,p.wind,h2,xx));
+      const a2d = x.map(xx => gaussian(qDpm2,p.wind,h2,xx));
+      const a1ni = a1n.map(c => indoor(c,p.ach));
+      const a1di = a1d.map(c => indoor(c,p.ach));
+      const a2ni = a2n.map(c => indoor(c,p.ach));
+      const a2di = a2d.map(c => indoor(c,p.ach));
+
+      const baseLayout = { paper_bgcolor:"#ffffff", plot_bgcolor:"#ffffff", font:{color:"#0b2545"} };
+      Plotly.newPlot("chart1", [
+        {x, y:a1n, name:"NOx Outdoor", line:{color:"#134074"}},
+        {x, y:a1d, name:"DPM Outdoor", line:{color:"#f08a24"}},
+        {x, y:a1ni, name:"NOx Indoor", line:{color:"#3b82c4"}},
+        {x, y:a1di, name:"DPM Indoor", line:{color:"#fb923c"}}
+      ], {...baseLayout, title:"Alternative 1 Concentration Profiles", xaxis:{title:"Distance (m)"}, yaxis:{title:"ug/m3"}});
+
+      Plotly.newPlot("chart2", [
+        {x, y:a2n, name:"NOx Outdoor", line:{color:"#134074"}},
+        {x, y:a2d, name:"DPM Outdoor", line:{color:"#f08a24"}},
+        {x, y:a2ni, name:"NOx Indoor", line:{color:"#3b82c4"}},
+        {x, y:a2di, name:"DPM Indoor", line:{color:"#fb923c"}}
+      ], {...baseLayout, title:"Alternative 2 Concentration Profiles", xaxis:{title:"Distance (m)"}, yaxis:{title:"ug/m3"}});
+
+      Plotly.newPlot("chartCompare", [
+        {x, y:a1d, name:"Alt1 DPM", line:{color:"#f08a24"}},
+        {x, y:a2d, name:"Alt2 DPM", line:{color:"#fb923c"}},
+        {x, y:a1n, name:"Alt1 NOx", line:{color:"#134074"}},
+        {x, y:a2n, name:"Alt2 NOx", line:{color:"#3b82c4"}}
+      ], {...baseLayout, title:"Outdoor concentration comparison", xaxis:{title:"Distance (m)"}, yaxis:{title:"ug/m3"}});
+
+      const ws = [], s1 = [], s2 = [];
+      const minW = Math.max(0.5, 0.5*p.wind), maxW = 1.5*p.wind;
+      const target = 1000;
+      for (let i = 0; i < 20; i++) {
+        const w = minW + i*(maxW-minW)/19;
+        ws.push(w);
+        s1.push(gaussian(qDpm1,w,h1,target));
+        s2.push(gaussian(qDpm2,w,h2,target));
+      }
+      Plotly.newPlot("chartSens", [
+        {x:ws, y:s1, name:"Alt1 DPM @1000m", line:{color:"#134074"}},
+        {x:ws, y:s2, name:"Alt2 DPM @1000m", line:{color:"#f08a24"}}
+      ], {...baseLayout, title:"Sensitivity: Wind speed vs DPM at 1000m", xaxis:{title:"Wind speed (m/s)"}, yaxis:{title:"DPM (ug/m3)"}});
+    }
+
+    ids.forEach(id => document.getElementById(id).addEventListener("input", run));
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.tab).classList.add("active");
+      });
+    });
+    run();
+  </script>
+</body>
+</html>

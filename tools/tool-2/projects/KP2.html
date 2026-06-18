@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiteAir Analytical - CSU Design Dashboard</title>
+    <!-- Core Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prop-types@15.8.1/prop-types.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/recharts@2.1.12/umd/Recharts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.23.10/babel.min.js"></script>
+    <!-- Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        input[type="range"] { accent-color: #2563eb; }
+        .card-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); }
+        .plume-animate { transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo, Fragment } = React;
+        
+        // Safely extract Recharts from the window object
+        const rechartsLib = window.Recharts || {};
+        const { 
+            BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
+        } = rechartsLib;
+
+        // --- ICONS COMPONENT ---
+        const Icon = ({ name, className = "w-5 h-5" }) => {
+            const icons = {
+                construction: <path d="M2 21h20M7 21l-4-8h18l-4 8M9 21V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v12M12 7V3m-4 4 4-4 4 4" />,
+                wind: <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2m12.6 3.8A2 2 0 1 0 13 19h7M2 17h10M2 11h18" />,
+                settings: <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2zM12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />,
+                droplets: <path d="M7 16.3c2.2 0 4-1.8 4-4s-4-5.6-4-5.6S3 10.1 3 12.3s1.8 4 4 4zM17 19c2.2 0 4-1.8 4-4s-4-5.6-4-5.6-4 3.4-4 5.6 1.8 4 4 4z" />,
+                zap: <path d="M13 2 L3 14h9l-1 8 10-12h-9z" />,
+                info: <g><circle cx="12" cy="12" r="10" /><path d="M12 16v-4m0-4h.01" /></g>,
+                trophy: <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7c0 3.31 2.69 6 6 6s6-2.69 6-6V2z" />,
+                target: <g><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></g>,
+                eye: <g><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></g>,
+                dollar: <g><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></g>,
+                users: <g><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><circle cx="19" cy="4" r="4" /></g>,
+                clock: <g><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></g>,
+                file: <g><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></g>,
+                leaf: <g><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8a13 13 0 0 1-10 10Z"/><path d="M19 21v-4a7 7 0 0 0-14 0v4"/><path d="M12 11.2V20" /></g>
+            };
+            return (
+                <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    {icons[name] || null}
+                </svg>
+            );
+        };
+
+        const App = () => {
+            const [inputs, setInputs] = useState({
+                equipmentCount: 6, 
+                siteArea: 2.0, 
+                windSpeed: 4.0, 
+                distanceToReceptor: 60, 
+                stabilityClass: 'C', 
+                siltContent: 12, 
+                vehicleSpeed: 15,
+                receptorHeight: 1.5,
+                releaseHeight: 2.5, 
+                soilMoisture: 5, 
+                fleetTier: 'Tier 2', 
+                wateringIntensity: 70, 
+                fenceHeight: 2, 
+                evapRate: 40, 
+                elecPercentage: 50, 
+                gridGreenness: 40, // % Renewable energy impact
+                infraScale: 'Medium', 
+            });
+
+            const stabilityParams = {
+                A: { ay: 213, by: 0.894, cz: 440.8, dz: 1.941, fz: 9.27 },
+                B: { ay: 156, by: 0.894, cz: 106.6, dz: 1.149, fz: 3.3 },
+                C: { ay: 104, by: 0.894, cz: 61.0, dz: 0.911, fz: 0 },
+                D: { ay: 68,  by: 0.894, cz: 33.2, dz: 0.725, fz: -1.7 },
+                E: { ay: 50.5, by: 0.894, cz: 20.9, dz: 0.678, fz: -1.3 },
+                F: { ay: 34,  by: 0.894, cz: 14.3, dz: 0.740, fz: -0.35 },
+            };
+
+            const results = useMemo(() => {
+                const { 
+                    equipmentCount, siteArea, windSpeed, distanceToReceptor, stabilityClass, 
+                    siltContent, vehicleSpeed, receptorHeight, releaseHeight, soilMoisture, fleetTier,
+                    wateringIntensity, fenceHeight, evapRate, elecPercentage, infraScale, gridGreenness 
+                } = inputs;
+                
+                const x_km = distanceToReceptor / 1000;
+                const p = stabilityParams[stabilityClass];
+                const sy = p.ay * Math.pow(x_km, p.by);
+                const sz = p.cz * Math.pow(x_km, p.dz) + p.fz;
+
+                const tierMultiplier = fleetTier === 'Tier 1' ? 1.8 : (fleetTier === 'Tier 4' ? 0.2 : 1.0);
+                const moistureFactor = 10 / (soilMoisture + 1); 
+                const qDustBase = (0.45 * siteArea) * (siltContent / 10) * Math.pow(vehicleSpeed / 10, 1.2) * moistureFactor;
+                
+                const activeDieselCount = equipmentCount * (1 - elecPercentage / 100);
+                const qNOxBase = (1.3 * activeDieselCount * tierMultiplier); 
+                const qPM25Base = (0.05 * activeDieselCount * tierMultiplier);
+
+                const getConc = (Q, u, sy, sz, z, H) => {
+                    if (u <= 0.1) u = 0.1; 
+                    const term1 = Q / (2 * Math.PI * u * sy * sz);
+                    const vertical = Math.exp(-Math.pow(z - H, 2) / (2 * Math.pow(sz, 2))) + 
+                                     Math.exp(-Math.pow(z + H, 2) / (2 * Math.pow(sz, 2)));
+                    return term1 * vertical * 1000000; 
+                };
+
+                const effectiveWatering = (wateringIntensity / 100) * (1 - (evapRate / 200));
+                const altADustRed = (effectiveWatering * 0.8) + (fenceHeight / 4 * 0.15);
+
+                const scenarios = [
+                    { 
+                        name: 'Baseline', dRed: 0, eRed: 0, color: '#94a3b8', 
+                        hScore: 2, cost: 0, count: 0, envScore: 3 
+                    },
+                    { 
+                        name: 'Water & Fences', dRed: altADustRed, eRed: 0.05, color: '#3b82f6',
+                        hScore: 3 + (altADustRed * 5),
+                        cost: 5000 + (wateringIntensity * 150) + (fenceHeight * 2500),
+                        // Water waste reduces environment score
+                        envScore: Math.max(1, 8 - (wateringIntensity / 15)) 
+                    },
+                    { 
+                        name: 'Fleet Electrification', dRed: 0.15, eRed: 1.0, color: '#10b981',
+                        hScore: 2 + (elecPercentage/100 * 7.5), 
+                        count: Math.round(equipmentCount * (elecPercentage / 100)),
+                        cost: (Math.round(equipmentCount * (elecPercentage / 100)) * 250000) + 
+                              (infraScale === 'Large' ? 250000 : (infraScale === 'Medium' ? 80000 : 20000)),
+                        // Renewable grid improves environment score
+                        envScore: Math.min(10, 4 + (gridGreenness / 12) + (elecPercentage / 40))
+                    }
+                ];
+
+                return scenarios.map(s => ({
+                    ...s,
+                    pm10: parseFloat(getConc(qDustBase * (1 - s.dRed), windSpeed, sy, sz, receptorHeight, 0.5).toFixed(1)),
+                    nox: parseFloat(getConc(qNOxBase, windSpeed, sy, sz, receptorHeight, releaseHeight).toFixed(1)),
+                    pm25: parseFloat(getConc(qPM25Base, windSpeed, sy, sz, receptorHeight, releaseHeight).toFixed(1)),
+                    sz: sz 
+                }));
+            }, [inputs]);
+
+            const mcdaData = useMemo(() => {
+                return [
+                    { criteria: 'Tech. Impact', Baseline: 2, 'Water & Fences': (results[1].dRed * 10).toFixed(1), 'Fleet Electrification': (inputs.elecPercentage / 10).toFixed(1) },
+                    { criteria: 'Public Health', Baseline: 1, 'Water & Fences': results[1].hScore.toFixed(1), 'Fleet Electrification': results[2].hScore.toFixed(1) },
+                    { criteria: 'Environment', Baseline: results[0].envScore.toFixed(1), 'Water & Fences': results[1].envScore.toFixed(1), 'Fleet Electrification': results[2].envScore.toFixed(1) },
+                    // FIX: Adjusted divisors so cheaper costs yield much higher scores
+                    { criteria: 'Cost Factor', Baseline: 10, 'Water & Fences': Math.max(1, 10 - (results[1].cost / 5000)).toFixed(1), 'Fleet Electrification': Math.max(1, 10 - (results[2].cost / 100000)).toFixed(1) },
+                ];
+            }, [results, inputs.elecPercentage]);
+
+            // FIX: Calculate Total MCDA Scores for the Final Verdict
+            const totalScoreA = mcdaData.reduce((sum, row) => sum + parseFloat(row['Water & Fences']), 0);
+            const totalScoreB = mcdaData.reduce((sum, row) => sum + parseFloat(row['Fleet Electrification']), 0);
+
+            const getSafetyLevel = (val, pollutant) => {
+                const thresholds = pollutant === 'pm25' ? [12, 35] : [53, 100]; 
+                if (val <= thresholds[0]) return { label: 'Good', color: 'text-emerald-600', bg: 'bg-emerald-50' };
+                if (val <= thresholds[1]) return { label: 'Moderate', color: 'text-amber-600', bg: 'bg-amber-50' };
+                return { label: 'Unhealthy', color: 'text-rose-600', bg: 'bg-rose-50' };
+            };
+
+            // Safe fallback if the library is still initializing
+            if (!BarChart) {
+                return (
+                    <div className="flex items-center justify-center min-h-screen">
+                        <div className="text-center p-8 bg-white rounded-2xl shadow-xl border border-slate-200">
+                            <Icon name="info" className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+                            <h2 className="text-xl font-bold text-slate-800">Dependencies Loading...</h2>
+                            <p className="text-slate-500 mt-2">Checking Recharts library status.</p>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="p-4 md:p-8 bg-slate-50 min-h-screen font-inter overflow-x-hidden">
+                    <div className="max-w-7xl mx-auto space-y-6">
+                        {/* HEADER */}
+                        <header className="bg-white rounded-[2rem] p-8 card-shadow border border-slate-200 flex flex-col lg:flex-row justify-between items-center gap-6">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-blue-600 p-4 rounded-2xl shadow-lg shadow-blue-100">
+                                    <Icon name="construction" className="text-white w-8 h-8" />
+                                </div>
+                                <div>
+                                    <h1 className="text-3xl font-black tracking-tighter text-slate-800 uppercase leading-none italic">SiteAir <span className="text-blue-600">Analytical</span></h1>
+                                    <p className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.3em] mt-2">v2.6 Hybrid Gaussian Engine</p>
+                                </div>
+                            </div>
+                            <div className="flex gap-3">
+                                <span className="px-4 py-2 bg-slate-100 rounded-xl text-[10px] font-black text-slate-500 border border-slate-200 uppercase tracking-widest leading-none flex items-center">Decision Support Mode</span>
+                                <span className="px-4 py-2 bg-emerald-50 rounded-xl text-[10px] font-black text-emerald-600 border border-emerald-100 uppercase tracking-widest leading-none flex items-center">Environmental Tracking Active</span>
+                            </div>
+                        </header>
+
+                        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                            {/* SIDEBAR */}
+                            <aside className="xl:col-span-4 space-y-6">
+                                <div className="bg-white rounded-[2rem] p-8 card-shadow border border-slate-200">
+                                    <h2 className="text-[10px] font-black mb-8 flex items-center gap-3 uppercase text-slate-400 tracking-[0.2em]">
+                                        <Icon name="settings" className="w-4 h-4" /> 1. Baseline Site Logic
+                                    </h2>
+                                    <div className="space-y-6">
+                                        <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                                            <div className="flex justify-between text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">
+                                                <span>Diesel Fleet Size</span>
+                                                <span className="text-blue-600">{inputs.equipmentCount} units</span>
+                                            </div>
+                                            <input type="range" min="1" max="25" value={inputs.equipmentCount} onChange={(e) => setInputs({...inputs, equipmentCount: parseInt(e.target.value)})} className="w-full h-1.5" />
+                                        </div>
+
+                                        <div className="space-y-4 px-1">
+                                            <div className="flex justify-between text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                                <span className="flex items-center gap-2">Baseline Soil Moisture <Icon name="droplets" className="w-3 h-3 text-blue-400"/></span>
+                                                <span className="text-blue-600 font-bold">{inputs.soilMoisture}%</span>
+                                            </div>
+                                            <input type="range" min="1" max="25" value={inputs.soilMoisture} onChange={(e) => setInputs({...inputs, soilMoisture: parseInt(e.target.value)})} className="w-full h-1.5" />
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Atm. Stability</label>
+                                                <select value={inputs.stabilityClass} onChange={(e) => setInputs({...inputs, stabilityClass: e.target.value})} className="w-full bg-slate-50 p-3 rounded-xl text-xs font-bold border border-slate-200">
+                                                    {['A','B','C','D','E','F'].map(c => <option key={c} value={c}>Class {c}</option>)}
+                                                </select>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Fleet Tier</label>
+                                                <select value={inputs.fleetTier} onChange={(e) => setInputs({...inputs, fleetTier: e.target.value})} className="w-full bg-slate-50 p-3 rounded-xl text-xs font-bold border border-slate-200">
+                                                    <option value="Tier 1">Tier 1</option><option value="Tier 2">Tier 2</option><option value="Tier 4">Tier 4</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-3 px-1">
+                                            <div className="flex justify-between text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                                <span>Receptor Height</span>
+                                                <span className="text-blue-600 font-bold">{inputs.receptorHeight}m</span>
+                                            </div>
+                                            <input type="range" min="0" max="15" step="0.5" value={inputs.receptorHeight} onChange={(e) => setInputs({...inputs, receptorHeight: parseFloat(e.target.value)})} className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-[2rem] p-8 card-shadow border border-blue-50">
+                                    <h2 className="text-[10px] font-black mb-8 flex items-center gap-3 uppercase text-blue-500 tracking-[0.2em]">
+                                        <Icon name="droplets" className="w-4 h-4" /> 2. Alt A: Water Misting
+                                    </h2>
+                                    <div className="space-y-6">
+                                        <div className="space-y-2">
+                                            <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-wider">
+                                                <span>Misting Intensity</span>
+                                                <span className="text-blue-600">{inputs.wateringIntensity}%</span>
+                                            </div>
+                                            <input type="range" value={inputs.wateringIntensity} onChange={(e) => setInputs({...inputs, wateringIntensity: parseInt(e.target.value)})} className="w-full h-1.5 bg-blue-50 rounded-lg" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-wider">
+                                                <span>Evaporation Rate</span>
+                                                <span className="text-blue-600">{inputs.evapRate}%</span>
+                                            </div>
+                                            <input type="range" value={inputs.evapRate} onChange={(e) => setInputs({...inputs, evapRate: parseInt(e.target.value)})} className="w-full h-1.5 bg-blue-50 rounded-lg" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-[2rem] p-8 card-shadow border border-emerald-50">
+                                    <h2 className="text-[10px] font-black mb-8 flex items-center gap-3 uppercase text-emerald-500 tracking-[0.2em]">
+                                        <Icon name="zap" className="w-4 h-4" /> 3. Alt B: Fleet Transformation
+                                    </h2>
+                                    <div className="space-y-6">
+                                        <div>
+                                            <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">
+                                                <span>Electric Conversion</span>
+                                                <span className="text-emerald-600">{inputs.elecPercentage}%</span>
+                                            </div>
+                                            <input type="range" value={inputs.elecPercentage} onChange={(e) => setInputs({...inputs, elecPercentage: parseInt(e.target.value)})} className="w-full h-1.5 bg-emerald-50 rounded-lg" />
+                                        </div>
+                                        <div>
+                                            <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">
+                                                <span>Grid Greenness</span>
+                                                <span className="text-emerald-600">{inputs.gridGreenness}%</span>
+                                            </div>
+                                            <input type="range" value={inputs.gridGreenness} onChange={(e) => setInputs({...inputs, gridGreenness: parseInt(e.target.value)})} className="w-full h-1.5 bg-emerald-50 rounded-lg" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </aside>
+
+                            {/* MAIN PANEL */}
+                            <main className="xl:col-span-8 space-y-6">
+                                {/* Quantitative Stats */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    {results.map(res => (
+                                        <div key={res.name} className="bg-white p-7 rounded-[2.5rem] card-shadow border border-slate-200">
+                                            <div className="flex items-center gap-3 mb-6">
+                                                <div className="w-3 h-3 rounded-full" style={{backgroundColor: res.color}}></div>
+                                                <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{res.name}</span>
+                                            </div>
+                                            <div className="text-4xl font-black text-slate-800 tracking-tighter mb-1">{res.pm10}</div>
+                                            <div className="text-[10px] font-bold text-slate-400 uppercase mb-8 tracking-widest">PM10 (Dust) µg/m³</div>
+                                            <div className="flex justify-between pt-6 border-t border-slate-50">
+                                                <div className="text-sm font-black text-slate-700">{res.nox} <span className="text-[8px] text-slate-400 font-bold uppercase tracking-tighter ml-1">NOx</span></div>
+                                                <div className="text-sm font-black text-slate-700">{res.pm25} <span className="text-[8px] text-slate-400 font-bold uppercase tracking-tighter ml-1">PM2.5</span></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Overhauled Visual Layout */}
+                                <div className="grid grid-cols-1 gap-6">
+                                    {/* PLUME PROFILE OVERHAUL */}
+                                    <div className="bg-white p-10 rounded-[2.5rem] card-shadow border border-slate-200 flex flex-col">
+                                        <div className="flex justify-between items-center mb-8">
+                                            <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-3">
+                                                <Icon name="eye" className="text-blue-500" /> Spatial Dispersion Visualization
+                                            </h3>
+                                            <span className="px-3 py-1 bg-slate-50 rounded-lg text-[9px] font-black text-slate-400 border border-slate-100 uppercase tracking-widest">Cross-Sectional View</span>
+                                        </div>
+                                        <div className="relative bg-slate-50 rounded-[2.5rem] overflow-hidden border border-slate-100 h-64">
+                                            <svg viewBox="0 0 400 150" className="w-full h-full">
+                                                {/* Ground & Building */}
+                                                <rect x="0" y="130" width="400" height="20" fill="#cbd5e1" opacity="0.3" />
+                                                <rect x="360" y="20" width="40" height="110" fill="#e2e8f0" />
+                                                
+                                                {/* Gaussian Plume Shape */}
+                                                <path 
+                                                    className="plume-animate" 
+                                                    d={`M 40 ${130 - inputs.releaseHeight*8} Q 180 ${130 - (inputs.releaseHeight*8 + results[0].sz*4)} 360 ${130 - inputs.receptorHeight*8}`} 
+                                                    fill="none" 
+                                                    stroke="#3b82f6" 
+                                                    strokeWidth="35" 
+                                                    strokeOpacity="0.12" 
+                                                />
+                                                
+                                                {/* Markers */}
+                                                <circle cx="40" cy={130 - inputs.releaseHeight*8} r="6" fill="#ef4444" />
+                                                <circle cx="360" cy={130 - inputs.receptorHeight*8} r="6" fill="#ef4444" className="animate-pulse" />
+                                                
+                                                {/* Visual Labels */}
+                                                <text x="35" y="145" fontSize="7" fontWeight="900" fill="#64748b" textAnchor="middle">SITE SOURCE</text>
+                                                <text x="360" y="145" fontSize="7" fontWeight="900" fill="#64748b" textAnchor="middle">RECEPTOR</text>
+                                            </svg>
+                                        </div>
+                                        <div className="mt-6 flex flex-wrap gap-4">
+                                            <div className="flex-1 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Release Height</span>
+                                                <span className="text-sm font-black text-slate-700">{inputs.releaseHeight} Meters</span>
+                                            </div>
+                                            <div className="flex-1 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Receptor Elev.</span>
+                                                <span className="text-sm font-black text-slate-700">{inputs.receptorHeight} Meters</span>
+                                            </div>
+                                            <div className="flex-1 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Spread (σz)</span>
+                                                <span className="text-sm font-black text-slate-700">{results[0].sz.toFixed(1)} Meters</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* SAFETY VERDICT OVERHAUL */}
+                                    <div className="bg-white p-10 rounded-[2.5rem] card-shadow border border-slate-200">
+                                        <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 flex items-center gap-3">
+                                            <Icon name="target" className="text-emerald-500" /> Health Risk & Engineering Verdict
+                                        </h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                                            {results.map(res => {
+                                                const s = getSafetyLevel(res.pm25, 'pm25');
+                                                return (
+                                                    <div key={res.name} className="bg-slate-50/50 p-6 rounded-3xl border border-slate-100 group transition-all hover:bg-white hover:shadow-lg">
+                                                        <div className="flex items-center gap-2 mb-4">
+                                                            <div className="w-2 h-2 rounded-full" style={{backgroundColor: res.color}}></div>
+                                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{res.name}</span>
+                                                        </div>
+                                                        <div className={`inline-block px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest ${s.bg} ${s.color} border border-current shadow-sm`}>
+                                                            {s.label}
+                                                        </div>
+                                                        <p className="text-[9px] text-slate-400 font-bold mt-4 uppercase tracking-tighter">NAAQS Exposure Tier</p>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                        
+                                        {/* Final Recommendation Box */}
+                                        <div className="bg-amber-50 p-8 rounded-[2.5rem] border border-amber-100 flex flex-col md:flex-row items-center gap-8">
+                                            <div className="p-6 bg-white rounded-3xl shadow-sm border border-amber-100 scale-110">
+                                                <Icon name="trophy" className="w-10 h-10 text-amber-500" />
+                                            </div>
+                                            <div className="text-center md:text-left">
+                                                <h4 className="text-[10px] font-black text-amber-600 uppercase tracking-[0.3em] mb-2">Optimal Engineering Pathway</h4>
+                                                <p className="text-2xl font-black text-slate-800 leading-tight">
+                                                    {/* FIX: Recommendation is now based on total combined MCDA scores */}
+                                                    {totalScoreA > totalScoreB 
+                                                        ? 'Alternative A: Physical Mitigation (Water)' 
+                                                        : 'Alternative B: Source Transformation (Electric)'}
+                                                </p>
+                                                <div className="flex gap-4 mt-4 justify-center md:justify-start">
+                                                    <span className="flex items-center gap-1 text-[9px] font-black text-slate-400 uppercase"><Icon name="shield" className="w-3 h-3"/> Safety Checked</span>
+                                                    <span className="flex items-center gap-1 text-[9px] font-black text-slate-400 uppercase"><Icon name="dollar" className="w-3 h-3"/> ROM Optimized</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Quantitative Plot */}
+                                <div className="bg-white p-10 rounded-[2.5rem] card-shadow border border-slate-200 h-[26rem]">
+                                    <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10">Localized Pollutant Assessment</h3>
+                                    <ResponsiveContainer width="100%" height="90%">
+                                        <BarChart data={results}>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fontWeight: 900, fill: '#64748b'}} />
+                                            <YAxis axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94a3b8'}} />
+                                            <Tooltip cursor={{fill: '#f8fafc'}} contentStyle={{borderRadius: '24px', border: 'none', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'}} />
+                                            <Legend verticalAlign="top" align="right" wrapperStyle={{paddingBottom: '30px', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase'}} />
+                                            <Bar dataKey="pm10" fill="#94a3b8" radius={[8, 8, 0, 0]} name="PM10 (Dust)" barSize={50} />
+                                            <Bar dataKey="nox" fill="#3b82f6" radius={[8, 8, 0, 0]} name="NOx (Exhaust)" barSize={50} />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+
+                                {/* ROM COST TABLE - RESTORED */}
+                                <div className="bg-white rounded-[2.5rem] card-shadow border border-slate-200 overflow-hidden">
+                                    <div className="bg-slate-50/50 p-8 border-b border-slate-100 flex justify-between items-center">
+                                        <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-3">
+                                            <Icon name="dollar" className="w-4 h-4" /> Comparative ROM Cost Analysis
+                                        </h3>
+                                        <span className="text-[10px] font-black text-slate-400 bg-white border border-slate-200 px-4 py-1.5 rounded-full uppercase tracking-widest leading-none">±30% Tolerance</span>
+                                    </div>
+                                    <div className="p-10 overflow-x-auto">
+                                        <table className="w-full text-sm text-left border-collapse">
+                                            <thead>
+                                                <tr className="text-[11px] text-slate-400 uppercase tracking-widest border-b border-slate-100">
+                                                    <th className="pb-6 font-black">Metric Category</th>
+                                                    <th className="pb-6 font-black">Baseline</th>
+                                                    <th className="pb-6 font-black">Alt A: Mitigation</th>
+                                                    <th className="pb-6 font-black">Alt B: Transformation</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="text-slate-600 divide-y divide-slate-50 font-bold">
+                                                <tr>
+                                                    <td className="py-6 font-black text-slate-400 text-[11px] uppercase flex items-center gap-3"><Icon name="dollar" className="w-4 h-4" /> Capital Exp.</td>
+                                                    <td className="py-6 font-bold text-slate-800">$0</td>
+                                                    <td className="py-6 font-black text-blue-600 text-lg">${results[1].cost.toLocaleString()}</td>
+                                                    <td className="py-6 font-black text-emerald-600 text-lg">
+                                                        ${results[2].cost.toLocaleString()} 
+                                                        <span className="block text-[9px] text-slate-400 mt-1 uppercase tracking-tighter leading-tight font-black">
+                                                            Incl. {results[2].count} Units @ $220k/ea + $30k Port/ea
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="py-6 font-black text-slate-400 text-[11px] uppercase flex items-center gap-3"><Icon name="construction" className="w-4 h-4" /> Installment & Grid</td>
+                                                    <td className="py-6 text-slate-400 italic font-medium">None</td>
+                                                    <td className="py-6 text-slate-600">Temporary Hydrant Drop</td>
+                                                    <td className="py-6 text-slate-800">{inputs.infraScale} Scale Grid Upgrades</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="py-6 font-black text-slate-400 text-[11px] uppercase flex items-center gap-3"><Icon name="clock" className="w-4 h-4" /> O&M (Annual)</td>
+                                                    <td className="py-6 text-slate-800 font-bold">$0</td>
+                                                    <td className="py-6 text-slate-600">$1,500 – $3k (Water)</td>
+                                                    <td className="py-6 text-emerald-600">-$15k – -$45k (Fuel Save)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="py-6 font-black text-slate-400 text-[11px] uppercase flex items-center gap-3"><Icon name="users" className="w-4 h-4" /> Personnel Training</td>
+                                                    <td className="py-6 text-slate-800 font-bold">$0</td>
+                                                    <td className="py-6 text-slate-600">$500 (Standard Safety)</td>
+                                                    <td className="py-6 text-slate-600">$15k – $25k (EV Safety)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="py-6 font-black text-slate-400 text-[11px] uppercase flex items-center gap-3"><Icon name="file" className="w-4 h-4" /> Permitting</td>
+                                                    <td className="py-6 text-slate-800 font-bold">Standard</td>
+                                                    <td className="py-6 text-slate-600">Dust Control Plan</td>
+                                                    <td className="py-6 text-slate-600">Utility Variance Permit</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div className="bg-slate-50/50 p-4 border-t border-slate-100">
+                                        <p className="text-[9px] text-center text-slate-400 uppercase tracking-widest font-black italic">Source Methodology: EPA 452/B-02-001</p>
+                                    </div>
+                                </div>
+
+                                {/* MCDA Results Plot */}
+                                <div className="bg-white p-10 rounded-[2.5rem] card-shadow border border-slate-200 h-[28rem]">
+                                    <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-12 flex items-center gap-3">
+                                        <Icon name="construction" className="w-4 h-4 text-slate-400" /> Decision Criteria Scoring (MCDA 0-10)
+                                    </h3>
+                                    <ResponsiveContainer width="100%" height="85%">
+                                        <BarChart data={mcdaData} margin={{bottom: 20}}>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                            <XAxis dataKey="criteria" axisLine={false} tickLine={false} tick={{fontSize: 10, fontWeight: 900, fill: '#475569'}} dy={10} />
+                                            <YAxis domain={[0, 10]} axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94a3b8'}} />
+                                            <Tooltip cursor={{fill: '#f8fafc'}} />
+                                            <Legend verticalAlign="top" align="right" wrapperStyle={{paddingBottom: '30px', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase'}} />
+                                            <Bar dataKey="Baseline" fill="#cbd5e1" radius={[6, 6, 0, 0]} barSize={35} />
+                                            <Bar dataKey="Water & Fences" fill="#3b82f6" radius={[6, 6, 0, 0]} barSize={35} />
+                                            <Bar dataKey="Fleet Electrification" fill="#10b981" radius={[6, 6, 0, 0]} barSize={35} />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </main>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
+    </script>
+</body>
+</html>

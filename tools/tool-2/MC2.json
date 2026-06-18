@@ -1,9 +1,9 @@
 {
   "name": "Midnight Celestia",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "FlocBot Run Insights & ROI Estimator",
+  "description": "[Demo Data A](tools/tool-2/projects/MC-demo-A.xlsx) | [Demo Data C](tools/tool-2/projects/MC-demo-C.xlsx)\n\nThis tool is made up of two Streamlit web applications that work together as a decisionsupport system for evaluating coagulant optimization strategies in drinking water treatment: the [FlocBot Run Insights Data Analyzer](https://flocbot-run-insights.onrender.com/) and the [FlocBot ROI Estimator](https://flocbot-roi-estimator.onrender.com/). The Run Insights tool takes in RoboJar Excel test exports and automatically identifies flocculation phases like rapid mix, flocculation, and settling. From there it computes performance KPIs such as floc growth rate, pre-settle diameter, settling half-life (t50), and plateau stability, then rolls those into a weighted composite score from 0 to 100 for each run. The ROI Estimator takes in plant-specific financial and operational inputs, including annual chemical spend (or a calculated cost based on dose, flow rate, and unit price), FlocBot purchase or subscription cost, an estimated overdosing reduction percentage, and a chemical cost escalation rate. It then projects payback period, 5-year net savings, and break-even thresholds using escalation-aware cashflow modeling. Instead of a traditional air quality dispersion model, the modeling approach uses quantitative performance scoring on the Run Insights side paired with financial net present value projections on the ROI side. This is appropriate because the design problem is about comparing dosing control strategies where the 'pollutant' is excess coagulant and the outcomes that matter are treatment quality and cost efficiency, not atmospheric concentration.",
+  "projectUrl": "https://flocbot-run-insights.onrender.com/",
   "projectPath": "../images/MC2.png",
   "folderName": "mccurren"
 }

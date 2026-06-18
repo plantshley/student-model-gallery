@@ -3,7 +3,7 @@
   "toolTag": "♡ Tool 2",
   "projectTitle": "VOC Emissions Reduction Tool – Jubail Industrial Case Study",
   "description": "This tool compares two emissions-reduction alternatives for a petrochemical VOC source under the same meteorological and source assumptions. The user enters an emission rate Q (g/s), wind speed U (m/s), effective release height H (m), receptor distance range (m), and atmospheric stability class. A simplified Gaussian plume approach is used because the scenario is an outdoor industrial source with downwind transport and a need for a transparent first-pass comparison. The model estimates ground-level centerline concentration (mg/m³) for the base case and then applies two alternatives: flare optimization with an assumed 40% emissions reduction and a vapor recovery unit (VRU) with an assumed 85% reduction. These are representative assumed values based on typical literature ranges and are used for comparative analysis only. The outputs include concentration profiles, a receptor-specific comparison table, a cost table, sensitivity information, and a weighted MCDA. The results should be interpreted as structured engineering evidence for comparing alternatives rather than as a final site-specific compliance prediction.",
-  "projectUrl": "https://gemini.google.com/share/d8cef7d704e9",
+  "projectUrl": "tools/tool-2/projects/AB2.html",
   "projectPath": "../images/AB2.png",
   "folderName": "almubarak"
 }

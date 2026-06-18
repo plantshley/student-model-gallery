@@ -1,9 +1,9 @@
 {
   "name": "Sapphire Horizon",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "NOx Exposure Comparison Tool — BNSF Front Range Subdivision",
+  "description": "This tool compares two engineering alternatives for reducing Nox exposure among people living and working near train tracks in Fort Collins, Colorado: full electrification of locomotives and scheduling modifications that shift freight traffic to off-peak hours when fewer people are present. Users adjust inputs via sliders, including baseline NOx emission rates for idling and moving locomotives, trains per day, locomotives per train, idle duration, wind speed, exhaust stack height, atmospheric stability class, receptor height, and peak and off-peak population density within 200 meters of the track; alternative-specific inputs such as emission reduction efficiency, percent of trains shifted off-peak, estimated cost, and implementation timeline are also adjustable. The tool applies a Gaussian dispersion model to estimate downwind NOx concentrations, an approach well-suited to this scenario given the open, relatively flat terrain along the Front Range and the need to capture how concentration varies with distance under different wind and stability conditions. Outputs include a concentration-versus-distance figure comparing baseline and both alternatives, a 24-hour time-series of concentrations at 50 meters from the track, a distance table flagging WHO NO₂ guideline exceedances, and a sensitivity analysis identifying which input parameters most influence the results. The tool structures its comparison across total and peak-hour NOx reduction, population-weighted exposure burden, cost, implementation timeline, permanence, and secondary risk, both in tabular form and through a multi-criteria decision analysis framework with user-adjustable criterion weights. Users should interpret the dispersion outputs as order-of-magnitude estimates rather than regulatory-grade predictions and should pay attention to how the time-series and population-weighting results differ between alternatives: electrification reduces concentrations at all hours, while scheduling reduces peak-hour exposure but redistributes emissions to nighttime hours. Varying the sliders (especially wind speed, stability class, and percent of trains shifted) reveals which assumptions most affect the relative performance of each alternative and supports more transparent decision-making.",
+  "projectUrl": "tools/tool-2/projects/SH2.html",
   "projectPath": "../images/SH2.png",
   "folderName": "herring"
 }

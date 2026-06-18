@@ -1,9 +1,9 @@
 {
   "name": "Kingly Kelpy",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "Joppa Neighborhood — Air Quality Model",
+  "description": "his tool models the Joppa Neighborhood in Dallas, Texas which has been the center of a long-running debate on air quality equity, Joppa was the first predominantly Black neighbourhood in Dallas and it has been classified as a ‘Sacrifice Zone’ for many years and the construction of the two asphalt plants is at the center of it. This tool models the ambient air quality (PM2.5, PM10, VOC) at 200m from two asphalt plants using EPA AP-42 emission factors and Gaussian plume dispersion. You can adjust throughput, baghouse efficiency, wind speed, and dust factors to explore how operational changes affect nearby residents. The Gaussian plume model is well-suited to this urban industrial scenario because it accounts for stack height, atmospheric stability, and how concentrations decline with distance. The tool produces real-time AQI values (combining PM2.5 and PM10), concentration maps, downwind dispersion profiles, and side-by-side comparisons across baseline, baghouse upgrade, and plant removal scenarios.",
+  "projectUrl": "tools/tool-2/projects/KK2.html",
   "projectPath": "../images/KK2.png",
   "folderName": "korte"
 }

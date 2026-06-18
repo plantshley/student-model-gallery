@@ -1,9 +1,9 @@
 {
   "name": "Meadow Bluebell",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Air Dispersion Modeling Tool: New Belgium Brewing",
+  "description": "This interactive tool models air pollutant dispersion from a point source (brewery exhaust stack) using a simplified Gaussian plume equation. It accepts user-defined inputs including emission rate, wind speed, stack height, and receptor distance. The Gaussian model is appropriate for this scenario because it provides a well-validated, analytically tractable estimate of ground-level pollutant concentrations under steady-state meteorological conditions over flat terrain. The outputs — ground-level concentration values and percentage reductions — indicate how effectively each engineering alternative reduces pollutant exposure at downwind receptor locations. Lower concentrations correspond to reduced health risk for nearby residents. Results should be interpreted comparatively across alternatives rather than as absolute regulatory compliance values.",
+  "projectUrl": "tools/tool-2/projects/MB2.html",
   "projectPath": "../images/MB2.png",
   "folderName": "macabobby"
 }

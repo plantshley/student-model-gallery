@@ -1,9 +1,9 @@
 {
   "name": "Kiwi PeonyHeart",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "SiteAir Analytical v2.6 Hybrid Gaussian Engine Decision Support Tool",
+  "description": "This analytical tool facilitates a high-fidelity comparative design between a construction baseline, a water-misting mitigation strategy, and a fleet electrification transformation on the CSU campus. The tool requires detailed user inputs covering baseline physics (stack release height, engine fleet tier, soil moisture), environmental constraints (Pasquill stability, wind speed, evaporation rates), and specific implementation levels for each alternative (e.g., percentage of fleet converted or misting intensity). It implements a hybrid Gaussian Dispersion model that treats fugitive dust as an area source and diesel exhaust as a point source, which is ideal for modeling localized 'canyons' between campus buildings where vertical dispersion and ground reflection are critical factors. The output is structured through an interactive dashboard featuring quantitative concentration plots, a grouped Multi-Criteria Decision Analysis (MCDA) bar chart, and a dynamic side-by-side ROM cost table that scales with implementation complexity. To support engineering judgment, the tool also includes a spatial plume profile visualizer that maps the trajectory of pollutants relative to receptor heights and a safety-threshold 'stoplight' system based on NAAQS health guidelines. Users should interpret these outputs by assessing the 'Practical Optimum'—observing how the safety verdict changes in real-time as they balance technical pollutant reduction against increasing infrastructure.",
+  "projectUrl": "tools/tool-2/projects/KP2.html",
   "projectPath": "../images/KP2.png",
   "folderName": "khounphachansy"
 }

@@ -1,9 +1,9 @@
 {
   "name": "Misty Twinkle",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "LFG Emissions Reduction Tool",
+  "description": "The tool is an interactive air quality modeling dashboard that compares two alternative methods for reducing methane emissions at a municipal solid waste landfill. It takes site conditions (wind speed, stack height, and atmospheric stability). It runs a Gaussian plume dispersion model to estimate ground-level CH4 concentrations downwind of the landfill before and after the two alternative options. The alternatives I have chosen to compare are active gas collection and passive compost biofilter. The model assumes a level of efficiency that is explained in the assumptions. From the chosen site conditions, the outputs include concentration-distance plots, receptor comparisons at fixed downwind distances, and a wind speed sensitivity analysis. Finally, a multi-criteria decision analysis tab scores both alternatives across technical effectiveness, cost, public health, and environmental impact to support a weighted comparison between the two models. ",
+  "projectUrl": "https://claude.ai/public/artifacts/1916f80f-c818-41e9-8e80-23680e0defe3",
   "projectPath": "../images/MT2.png",
   "folderName": "martinez"
 }

@@ -1,9 +1,9 @@
 {
   "name": "Amaranthine Kumquat",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
-  "projectPath": "../images/AKing2.jpg",
+  "toolTag": "Tool 2",
+  "projectTitle": "Fugitive Dust PM10 Control: Chemical Sealant vs. Vegetative Windbreak",
+  "description": "This tool compares how well a chemical surface sealant works against a vegetative windbreak for controlling PM10 dust on mine tailings. To use it, you just plug in your specific scenario details like wind speed, how much dust is being kicked up, and how far away the nearest residents are. It runs a ground-level Gaussian dispersion model, which fits this project perfectly because it lets us estimate steady-state concentrations as the plume moves downwind from the tailings pile. The tool doesn't just give you a single concentration number; it generates a side-by-side comparison table and an MCDA matrix. This allows for a much broader look at the problem, weighing things like the high recurring cost of chemicals against the long-term ecological benefits of planting native vegetation. When interpreting the results, the user should look at which design keeps the community under the 150 μg/m3 NAAQS limit while still being practical to maintain over time. ",
+  "projectUrl": "tools/tool-2/projects/AKing2.html",
+  "projectPath": "../images/AKing2.png",
   "folderName": "king"
 }

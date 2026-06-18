@@ -1,9 +1,9 @@
 {
   "name": "Jeweled Orchid",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Campfire PM2.5 Exposure Tool",
+  "description": "This Excel-based tool estimates PM2.5 exposure from a campfire by allowing the user to input fire size, distance from the fire, and fire pit type (traditional or low smoke). It uses a simplified box-model approach with predefined concentration ranges based on distance, which are then adjusted for fire size and emission differences between fire types. This approach is appropriate because it captures the main factors affecting near-source exposure without requiring complex modeling. The tool outputs PM2.5 concentration in µg/m³ and allows comparison between scenarios, such as traditional versus low-smoke fire pits or increasing distance from the fire. Users should interpret higher values as greater exposure and health risk and can compare results to understand how different choices reduce exposure relative to standards like the EPA guideline of 35 µg/m³. Note: You may have to enable macros for the tool to work.",
+  "projectUrl": "https://colostate-my.sharepoint.com/:x:/r/personal/torilu_colostate_edu/Documents/Campfire_PM2.5_Exposure_Tool.xlsm?d=w1f1455aa858a484e9673da5a792be0ae&csf=1&web=1&e=zSMxyk",
   "projectPath": "../images/JO2.png",
   "folderName": "jones"
 }

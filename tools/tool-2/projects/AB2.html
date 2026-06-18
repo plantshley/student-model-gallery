@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VOC Emissions Reduction Tool – Jubail Industrial Case Study</title>
+  <style>
+    :root{
+      --bg:#eef4fa;
+      --bg2:#f8fbfd;
+      --card:#ffffff;
+      --ink:#17324d;
+      --muted:#5c7186;
+      --line:#d8e3ee;
+      --blue:#1f5f99;
+      --blue2:#2f7fc0;
+      --orange:#d97706;
+      --green:#15803d;
+      --purple:#6d28d9;
+      --gold:#b7791f;
+      --teal:#0f766e;
+      --red:#b42318;
+      --soft-blue:#eef6ff;
+      --soft-orange:#fff4e8;
+      --soft-green:#eef9f1;
+      --soft-gold:#fff9ea;
+      --soft-purple:#f5efff;
+      --shadow:0 14px 36px rgba(18,45,71,0.08);
+      --radius:20px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:"Segoe UI", Inter, Arial, sans-serif;
+      color:var(--ink);
+      background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
+    }
+
+    .container{
+      width:min(1460px,94%);
+      margin:24px auto 40px;
+    }
+
+    .header{
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,255,255,0.96));
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:30px 22px 18px;
+      text-align:center;
+    }
+
+    .header::before{
+      content:"";
+      position:absolute;
+      left:-70px;
+      top:-90px;
+      width:260px;
+      height:260px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(47,127,192,0.14), transparent 70%);
+      pointer-events:none;
+    }
+
+    .header::after{
+      content:"";
+      position:absolute;
+      right:-90px;
+      bottom:-110px;
+      width:300px;
+      height:300px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(21,128,61,0.10), transparent 70%);
+      pointer-events:none;
+    }
+
+    .header h1{
+      margin:0;
+      font-size:clamp(1.9rem,3vw,2.8rem);
+      font-weight:850;
+      position:relative;
+      z-index:1;
+    }
+
+    .header h2{
+      margin:10px 0 8px;
+      font-size:clamp(1rem,1.9vw,1.32rem);
+      color:var(--muted);
+      font-weight:650;
+      position:relative;
+      z-index:1;
+    }
+
+    .student{
+      font-size:1.03rem;
+      font-weight:800;
+      position:relative;
+      z-index:1;
+    }
+
+    .divider{
+      height:1px;
+      margin-top:14px;
+      background:linear-gradient(90deg, transparent, #bfd0e3, transparent);
+      position:relative;
+      z-index:1;
+    }
+
+    .tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:18px 0 20px;
+    }
+
+    .tab-btn{
+      border:none;
+      cursor:pointer;
+      background:#eaf1f8;
+      color:var(--ink);
+      padding:13px 18px;
+      border-radius:999px;
+      font-weight:850;
+      border:1px solid #d1deea;
+      box-shadow:0 2px 0 rgba(255,255,255,0.75) inset;
+      transition:all 0.2s ease;
+      outline:none;
+    }
+
+    .tab-btn:hover{transform:translateY(-1px)}
+    .tab-btn.active,
+    .tab-btn[aria-selected="true"]{
+      background:linear-gradient(135deg,var(--blue),var(--blue2));
+      color:#fff;
+      border-color:var(--blue);
+      box-shadow:0 12px 24px rgba(31,95,153,0.22);
+    }
+
+    .tab-btn:focus-visible{
+      box-shadow:0 0 0 3px rgba(47,127,192,0.22);
+    }
+
+    .tab-panel{
+      display:none;
+      animation:fade 0.22s ease;
+    }
+
+    .tab-panel.active{display:block}
+
+    @keyframes fade{
+      from{opacity:0; transform:translateY(4px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+      margin-bottom:18px;
+    }
+
+    .section-title{
+      margin:0 0 14px;
+      font-size:1.5rem;
+      font-weight:850;
+    }
+
+    .subtle{
+      color:var(--muted);
+      line-height:1.72;
+    }
+
+    .small{font-size:0.92rem}
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1.08fr 1fr;
+      gap:18px;
+    }
+
+    .grid-2-equal{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .diagram-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:1.1fr 1fr;
+      gap:18px;
+    }
+
+    .badge-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:10px;
+    }
+
+    .badge{
+      display:inline-block;
+      background:#eef5ff;
+      color:#245f96;
+      border:1px solid #d4e4f5;
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:0.84rem;
+      font-weight:800;
+    }
+
+    .hero-svg{
+      width:100%;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:#e9f3fb;
+      display:block;
+    }
+
+    .caption{
+      margin-top:8px;
+      font-size:0.93rem;
+      color:var(--muted);
+      line-height:1.65;
+    }
+
+    .list-card{
+      padding:16px 18px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fbfdff;
+      margin-bottom:12px;
+    }
+
+    .list-card h4{
+      margin:0 0 8px;
+      font-size:1rem;
+      font-weight:850;
+    }
+
+    .list-card ul{
+      margin:0;
+      padding-left:20px;
+      line-height:1.78;
+    }
+
+    .question-box{
+      background:linear-gradient(135deg,#edf6ff,#f9fcff);
+      border:1px solid #d4e4f5;
+      border-left:5px solid var(--blue2);
+      border-radius:18px;
+      padding:16px;
+      line-height:1.72;
+      font-weight:650;
+    }
+
+    .diagram-box{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fcfdff;
+      padding:16px;
+    }
+
+    .tool-layout{
+      display:grid;
+      grid-template-columns:370px 1fr;
+      gap:18px;
+    }
+
+    .controls{
+      position:sticky;
+      top:12px;
+      align-self:start;
+    }
+
+    .control-group{margin-bottom:16px}
+    .control-group label{
+      display:block;
+      margin-bottom:7px;
+      font-weight:850;
+      font-size:0.95rem;
+    }
+
+    .control-group input,
+    .control-group select{
+      width:100%;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid #cfdae6;
+      background:#fff;
+      font-size:0.96rem;
+      color:var(--ink);
+    }
+
+    input[type="range"]{accent-color:var(--blue2)}
+
+    .range-wrap{
+      display:grid;
+      grid-template-columns:1fr 76px;
+      gap:10px;
+      align-items:center;
+    }
+
+    .tiny{
+      margin-top:6px;
+      font-size:0.84rem;
+      color:var(--muted);
+      line-height:1.52;
+    }
+
+    .weight-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    .weight-box{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fbfdff;
+      padding:10px;
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      cursor:pointer;
+      background:linear-gradient(135deg,var(--blue),var(--blue2));
+      color:#fff;
+      padding:13px 16px;
+      border-radius:14px;
+      font-weight:850;
+      box-shadow:0 12px 24px rgba(31,95,153,0.22);
+      transition:all 0.2s ease;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+
+    .metrics{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .metric{
+      background:linear-gradient(180deg,#ffffff,#f8fbfe);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .metric .label{
+      font-size:0.88rem;
+      color:var(--muted);
+      font-weight:800;
+      margin-bottom:7px;
+    }
+
+    .metric .value{
+      font-size:1.18rem;
+      font-weight:850;
+      letter-spacing:0.1px;
+    }
+
+    .kpi-blue{color:var(--blue)}
+    .kpi-orange{color:var(--orange)}
+    .kpi-green{color:var(--green)}
+    .kpi-purple{color:var(--purple)}
+
+    .plot-card{
+      min-height:500px;
+    }
+
+    .plot-wrap{
+      width:100%;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:linear-gradient(180deg,#ffffff,#fcfdff);
+      padding:10px;
+    }
+
+    #plotSvg{
+      width:100%;
+      min-width:760px;
+      height:auto;
+      display:block;
+    }
+
+    .callout{
+      border-radius:16px;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      line-height:1.7;
+      background:#fbfdff;
+      margin-bottom:12px;
+    }
+
+    .callout.blue{background:var(--soft-blue); border-color:#d8e6f5}
+    .callout.orange{background:var(--soft-orange); border-color:#f0debf}
+    .callout.green{background:var(--soft-green); border-color:#d8ebde}
+    .callout.gold{background:var(--soft-gold); border-color:#efdfa6}
+
+    details{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:0 14px;
+      background:#fcfdff;
+    }
+
+    details summary{
+      cursor:pointer;
+      padding:14px 0;
+      font-weight:850;
+      color:var(--ink);
+    }
+
+    details p, details ul{
+      color:var(--muted);
+      line-height:1.75;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:#fff;
+      border-radius:14px;
+      overflow:hidden;
+    }
+
+    th, td{
+      border:1px solid #dee7ef;
+      padding:11px 12px;
+      text-align:left;
+      font-size:0.95rem;
+      vertical-align:top;
+    }
+
+    th{
+      background:#eef4fa;
+      font-weight:850;
+    }
+
+    .recommendation{
+      border-radius:18px;
+      padding:18px;
+      border:1px solid #d5e7d8;
+      background:linear-gradient(135deg,#effaf0,#fbfffb);
+    }
+
+    .recommendation.alt{
+      border-color:#eadbb4;
+      background:linear-gradient(135deg,#fff8eb,#fffdf8);
+    }
+
+    .rec-title{
+      font-size:1.15rem;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .notes-list{
+      margin:0;
+      padding-left:20px;
+      line-height:1.8;
+      color:var(--muted);
+    }
+
+    .footer-note{
+      color:var(--muted);
+      line-height:1.72;
+      font-size:0.92rem;
+    }
+
+    .mono{
+      font-family:Consolas, Monaco, monospace;
+      color:#294761;
+      font-size:0.95rem;
+    }
+
+    .reflection{
+      font-size:1rem;
+      line-height:1.92;
+      color:#24384d;
+      text-align:justify;
+    }
+
+    .legend-dot{
+      display:inline-block;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      margin-right:6px;
+      transform:translateY(1px);
+    }
+
+    .svg-title{
+      font-size:18px;
+      font-weight:800;
+      fill:#18324b;
+    }
+
+    .svg-sub{
+      font-size:12px;
+      fill:#5c7186;
+    }
+
+    .svg-label{
+      font-size:12px;
+      font-weight:700;
+      fill:#16324f;
+    }
+
+    .svg-label-sm{
+      font-size:11px;
+      fill:#3d556b;
+    }
+
+    @media (max-width:1150px){
+      .tool-layout{grid-template-columns:1fr}
+      .controls{position:static}
+      .metrics{grid-template-columns:1fr 1fr}
+      .grid-2, .grid-2-equal, .diagram-grid, .info-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width:720px){
+      .metrics{grid-template-columns:1fr}
+      .tabs .tab-btn{width:100%}
+      .header{padding:24px 16px 16px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>VOC Emissions Reduction Tool – Jubail Industrial Case Study</h1>
+      <h2>CIVE 442 – Air Quality Engineering</h2>
+      <div class="student">Student Name: Atheer Almubarak</div>
+      <div class="divider"></div>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="Assignment Parts">
+      <button type="button" class="tab-btn active" data-tab="part1" aria-selected="true">Part 1 – Embodied Noticing</button>
+      <button type="button" class="tab-btn" data-tab="part2" aria-selected="false">Part 2 – Making Thinking Visible</button>
+      <button type="button" class="tab-btn" data-tab="part3" aria-selected="false">Part 3 – The Tool</button>
+      <button type="button" class="tab-btn" data-tab="part4" aria-selected="false">Part 4 – Reflection</button>
+    </div>
+
+    <section id="part1" class="tab-panel active">
+      <div class="card">
+        <h3 class="section-title">👀 Part 1 – Embodied Noticing</h3>
+        <div class="grid-2">
+          <div>
+            <svg viewBox="0 0 920 470" class="hero-svg" aria-label="Representative petrochemical facility illustration">
+              <rect x="0" y="0" width="920" height="470" fill="#dceefc"/>
+              <rect x="0" y="332" width="920" height="138" fill="#d7d0c2"/>
+
+              <rect x="70" y="246" width="135" height="86" fill="#6b7b8c"/>
+              <rect x="230" y="204" width="120" height="128" fill="#5e6f81"/>
+              <rect x="382" y="232" width="146" height="100" fill="#8494a5"/>
+              <rect x="565" y="178" width="126" height="154" fill="#697a89"/>
+              <circle cx="701" cy="274" r="56" fill="#a7b3bf"/>
+              <circle cx="798" cy="279" r="48" fill="#b0bbc6"/>
+              <rect x="626" y="92" width="16" height="240" fill="#404040"/>
+              <polygon points="634,56 616,98 635,118 652,92" fill="#ff7f0e"/>
+
+              <g fill="#b7c0cb" opacity="0.56">
+                <circle cx="665" cy="100" r="19"/>
+                <circle cx="694" cy="92" r="24"/>
+                <circle cx="726" cy="86" r="25"/>
+                <circle cx="760" cy="80" r="22"/>
+                <circle cx="793" cy="75" r="20"/>
+                <circle cx="823" cy="71" r="17"/>
+              </g>
+
+              <line x1="644" y1="129" x2="860" y2="129" stroke="#6b90ae" stroke-width="3" stroke-dasharray="10 7"/>
+
+              <text x="34" y="42" font-size="28" font-weight="850" fill="#16324f" style="paint-order:stroke; stroke:#e9f3fb; stroke-width:6px;">
+                Representative Petrochemical Facility
+              </text>
+              <text x="34" y="66" font-size="15" fill="#4e657c" style="paint-order:stroke; stroke:#e9f3fb; stroke-width:5px;">
+                Industrial VOC source, flare activity, and nearby receptor pathways
+              </text>
+
+              <text x="598" y="46" font-size="15" font-weight="700" fill="#8a3b12" style="paint-order:stroke; stroke:#e9f3fb; stroke-width:5px;">
+                VOC release and downwind transport
+              </text>
+              <text x="598" y="66" font-size="13" fill="#5f7288" style="paint-order:stroke; stroke:#e9f3fb; stroke-width:5px;">
+                Illustrative plume pathway under wind
+              </text>
+
+              <text x="720" y="118" font-size="14" fill="#355674" font-weight="700" style="paint-order:stroke; stroke:#e9f3fb; stroke-width:5px;">
+                Wind-driven plume
+              </text>
+
+              <text x="68" y="402" font-size="16" fill="#536577" font-weight="700" style="paint-order:stroke; stroke:#ede6d8; stroke-width:6px;">
+                Worker access / roadway receptor zone
+              </text>
+
+              <line x1="120" y1="332" x2="120" y2="382" stroke="#7a7065" stroke-width="4"/>
+              <line x1="308" y1="332" x2="308" y2="380" stroke="#7a7065" stroke-width="4"/>
+              <line x1="460" y1="332" x2="460" y2="381" stroke="#7a7065" stroke-width="4"/>
+              <line x1="610" y1="332" x2="610" y2="382" stroke="#7a7065" stroke-width="4"/>
+            </svg>
+            <div class="caption">
+              Representative image of an industrial VOC emissions scenario relevant to petrochemical operations in Jubail: flare handling, process equipment, worker routes, and downwind transport under variable meteorological conditions. This representative image reflects petrochemical facilities similar to those in the Jubail industrial area.
+            </div>
+          </div>
+
+          <div>
+            <div class="list-card">
+              <h4>🔍 Observations</h4>
+              <ul>
+                <li>Petrochemical facilities can include flare systems, storage and transfer equipment, and hydrocarbon process units that may release VOCs during routine operation, maintenance activity, or upset conditions.</li>
+                <li>These sources are often located near worker circulation routes, maintenance access areas, and transportation corridors that can function as realistic receptor locations.</li>
+              </ul>
+            </div>
+
+            <div class="list-card">
+              <h4>🧠 Inferences</h4>
+              <ul>
+                <li>Downwind exposure is likely to change substantially with wind speed, atmospheric stability, and effective release height, so identical emissions can create very different receptor concentrations on different days.</li>
+                <li>Visible flare activity does not fully describe emissions performance; less obvious fugitive or vent-related losses may still contribute meaningfully to VOC exposure and environmental burden.</li>
+              </ul>
+            </div>
+
+            <div class="list-card">
+              <h4>❓ Explicit Unknowns</h4>
+              <ul>
+                <li>What VOC concentration reaches a worker route or site-boundary receptor under realistic Jubail-like meteorological conditions?</li>
+                <li>How closely do assumed control efficiencies match actual field performance once maintenance, operating variability, and plant integration constraints are considered?</li>
+              </ul>
+            </div>
+
+            <div class="question-box">
+              <strong>Engineering Question:</strong><br>
+              For a Jubail-style petrochemical VOC source, which emissions reduction strategy is more defensible overall—<strong>flare optimization</strong> or a <strong>vapor recovery unit (VRU)</strong>—when technical effectiveness, cost and practicality, public health and safety, and broader environmental considerations are evaluated together?
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="part2" class="tab-panel">
+      <div class="card">
+        <h3 class="section-title">🧠 Part 2 – Making Thinking Visible</h3>
+        <p class="subtle">
+          This section presents both the initial mental model and a cleaner AI-assisted version. The aim is to communicate the system clearly before running calculations: source, controls, receptors, modeling assumptions, outputs, and decision criteria.
+        </p>
+
+        <div class="diagram-grid">
+          <div class="diagram-box">
+            <div class="badge-row">
+              <span class="badge">Stage A — Initial Representation</span>
+              <span class="badge">Self-generated starting point</span>
+            </div>
+            <svg viewBox="0 0 760 430" style="width:100%;" aria-label="Initial system diagram">
+              <defs>
+                <marker id="arrowInit" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#294761"></path>
+                </marker>
+              </defs>
+
+              <text x="22" y="28" class="svg-title">Initial System Sketch</text>
+              <text x="22" y="48" class="svg-sub">A simple source–model–output pathway with two control options.</text>
+
+              <rect x="24" y="86" width="150" height="70" rx="14" fill="#f8fbff" stroke="#294761" stroke-dasharray="6 4" stroke-width="2"/>
+              <text x="99" y="114" text-anchor="middle" class="svg-label">Inputs</text>
+              <text x="99" y="134" text-anchor="middle" class="svg-label-sm">Q, U, H, distance</text>
+
+              <rect x="214" y="86" width="160" height="70" rx="14" fill="#f8fbff" stroke="#294761" stroke-dasharray="6 4" stroke-width="2"/>
+              <text x="294" y="114" text-anchor="middle" class="svg-label">VOC Source</text>
+              <text x="294" y="134" text-anchor="middle" class="svg-label-sm">tank / flare system</text>
+
+              <rect x="414" y="86" width="160" height="70" rx="14" fill="#f8fbff" stroke="#294761" stroke-dasharray="6 4" stroke-width="2"/>
+              <text x="494" y="114" text-anchor="middle" class="svg-label">Gaussian Model</text>
+              <text x="494" y="134" text-anchor="middle" class="svg-label-sm">ground-level C(x)</text>
+
+              <rect x="614" y="86" width="122" height="70" rx="14" fill="#f8fbff" stroke="#294761" stroke-dasharray="6 4" stroke-width="2"/>
+              <text x="675" y="114" text-anchor="middle" class="svg-label">Output</text>
+              <text x="675" y="134" text-anchor="middle" class="svg-label-sm">concentration</text>
+
+              <rect x="208" y="248" width="170" height="84" rx="14" fill="#fff4e8" stroke="#294761" stroke-dasharray="6 4" stroke-width="2"/>
+              <text x="293" y="278" text-anchor="middle" class="svg-label">Flare Optimization</text>
+              <text x="293" y="300" text-anchor="middle" class="svg-label-sm">improve combustion /</text>
+              <text x="293" y="317" text-anchor="middle" class="svg-label-sm">operational performance</text>
+
+              <rect x="404" y="248" width="170" height="84" rx="14" fill="#eef9f1" stroke="#294761" stroke-dasharray="6 4" stroke-width="2"/>
+              <text x="489" y="278" text-anchor="middle" class="svg-label">VRU System</text>
+              <text x="489" y="300" text-anchor="middle" class="svg-label-sm">capture and recover</text>
+              <text x="489" y="317" text-anchor="middle" class="svg-label-sm">hydrocarbon vapors</text>
+
+              <line x1="174" y1="121" x2="214" y2="121" stroke="#294761" stroke-width="2.8" marker-end="url(#arrowInit)"/>
+              <line x1="374" y1="121" x2="414" y2="121" stroke="#294761" stroke-width="2.8" marker-end="url(#arrowInit)"/>
+              <line x1="574" y1="121" x2="614" y2="121" stroke="#294761" stroke-width="2.8" marker-end="url(#arrowInit)"/>
+
+              <line x1="293" y1="248" x2="293" y2="156" stroke="#294761" stroke-width="2.8" marker-end="url(#arrowInit)"/>
+              <line x1="489" y1="248" x2="489" y2="156" stroke="#294761" stroke-width="2.8" marker-end="url(#arrowInit)"/>
+
+              <text x="24" y="392" class="svg-sub">This starting version captures the core logic, but it does not yet show receptors, uncertainty, or evaluation criteria clearly.</text>
+            </svg>
+          </div>
+
+          <div class="diagram-box">
+            <div class="badge-row">
+              <span class="badge">Stage B — AI-Assisted Enhancement</span>
+              <span class="badge">Improved communication structure</span>
+            </div>
+            <svg viewBox="0 0 820 470" style="width:100%;" aria-label="Enhanced system diagram">
+              <defs>
+                <marker id="arrowEnh" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#294761"></path>
+                </marker>
+              </defs>
+
+              <text x="20" y="28" class="svg-title">AI-Enhanced System Diagram</text>
+              <text x="20" y="48" class="svg-sub">Clearer pathways, explicit receptors, assumptions, uncertainty, and MCDA criteria.</text>
+
+              <rect x="18" y="84" width="162" height="92" rx="16" fill="#dcedff" stroke="#294761" stroke-width="1.7"/>
+              <text x="99" y="110" text-anchor="middle" class="svg-label">Inputs</text>
+              <text x="99" y="132" text-anchor="middle" class="svg-label-sm">Emission rate Q</text>
+              <text x="99" y="149" text-anchor="middle" class="svg-label-sm">Wind speed U</text>
+              <text x="99" y="166" text-anchor="middle" class="svg-label-sm">Height H, distance x</text>
+
+              <rect x="212" y="84" width="156" height="92" rx="16" fill="#ffe4d6" stroke="#294761" stroke-width="1.7"/>
+              <text x="290" y="110" text-anchor="middle" class="svg-label">Emission Source</text>
+              <text x="290" y="132" text-anchor="middle" class="svg-label-sm">VOC process / flare</text>
+              <text x="290" y="149" text-anchor="middle" class="svg-label-sm">Jubail industrial context</text>
+
+              <rect x="400" y="84" width="182" height="92" rx="16" fill="#efe7ff" stroke="#294761" stroke-width="1.7"/>
+              <text x="491" y="110" text-anchor="middle" class="svg-label">Model</text>
+              <text x="491" y="132" text-anchor="middle" class="svg-label-sm">Simplified Gaussian plume</text>
+              <text x="491" y="149" text-anchor="middle" class="svg-label-sm">ground-level centerline C(x)</text>
+
+              <rect x="614" y="84" width="188" height="92" rx="16" fill="#e5f4e7" stroke="#294761" stroke-width="1.7"/>
+              <text x="708" y="110" text-anchor="middle" class="svg-label">Outputs</text>
+              <text x="708" y="132" text-anchor="middle" class="svg-label-sm">concentration plot</text>
+              <text x="708" y="149" text-anchor="middle" class="svg-label-sm">receptor table, MCDA</text>
+
+              <rect x="92" y="236" width="190" height="98" rx="16" fill="#fff2e6" stroke="#294761" stroke-width="1.7"/>
+              <text x="187" y="264" text-anchor="middle" class="svg-label">Alternative 1</text>
+              <text x="187" y="286" text-anchor="middle" class="svg-label-sm">Flare optimization</text>
+              <text x="187" y="304" text-anchor="middle" class="svg-label-sm">40% assumed reduction</text>
+
+              <rect x="314" y="236" width="190" height="98" rx="16" fill="#e7f7ea" stroke="#294761" stroke-width="1.7"/>
+              <text x="409" y="264" text-anchor="middle" class="svg-label">Alternative 2</text>
+              <text x="409" y="286" text-anchor="middle" class="svg-label-sm">VRU system</text>
+              <text x="409" y="304" text-anchor="middle" class="svg-label-sm">85% assumed reduction</text>
+
+              <rect x="536" y="236" width="266" height="98" rx="16" fill="#fff7da" stroke="#294761" stroke-width="1.7"/>
+              <text x="669" y="264" text-anchor="middle" class="svg-label">Evaluation Criteria</text>
+              <text x="669" y="286" text-anchor="middle" class="svg-label-sm">technical effectiveness</text>
+              <text x="669" y="304" text-anchor="middle" class="svg-label-sm">cost/practicality, health/safety, environment</text>
+
+              <rect x="22" y="380" width="236" height="62" rx="12" fill="#f8fbff" stroke="#97abbe" stroke-width="1.2"/>
+              <text x="140" y="404" text-anchor="middle" class="svg-label">Receptors / context</text>
+              <text x="140" y="423" text-anchor="middle" class="svg-label-sm">worker routes, site boundary, transport road</text>
+
+              <rect x="286" y="380" width="244" height="62" rx="12" fill="#f8fbff" stroke="#97abbe" stroke-width="1.2"/>
+              <text x="408" y="404" text-anchor="middle" class="svg-label">Assumptions</text>
+              <text x="408" y="423" text-anchor="middle" class="svg-label-sm">steady release, inert VOC, simplified dispersion</text>
+
+              <rect x="558" y="380" width="246" height="62" rx="12" fill="#f8fbff" stroke="#97abbe" stroke-width="1.2"/>
+              <text x="681" y="404" text-anchor="middle" class="svg-label">Uncertainty / limits</text>
+              <text x="681" y="423" text-anchor="middle" class="svg-label-sm">weather, operations, actual control performance</text>
+
+              <line x1="180" y1="130" x2="212" y2="130" stroke="#294761" stroke-width="2.8" marker-end="url(#arrowEnh)"/>
+              <line x1="368" y1="130" x2="400" y2="130" stroke="#294761" stroke-width="2.8" marker-end="url(#arrowEnh)"/>
+              <line x1="582" y1="130" x2="614" y2="130" stroke="#294761" stroke-width="2.8" marker-end="url(#arrowEnh)"/>
+
+              <line x1="242" y1="236" x2="278" y2="176" stroke="#c56a1a" stroke-width="2.8" marker-end="url(#arrowEnh)"/>
+              <line x1="409" y1="236" x2="409" y2="176" stroke="#1d7a45" stroke-width="2.8" marker-end="url(#arrowEnh)"/>
+              <line x1="669" y1="236" x2="708" y2="176" stroke="#987013" stroke-width="2.8" marker-end="url(#arrowEnh)"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px; margin-bottom:0;">
+          <h4 style="margin:0 0 10px;">📌 Explanation of Improvement</h4>
+          <p class="subtle" style="margin:0;">
+            The AI-assisted version improves the original diagram by clarifying process flow, visually separating the two engineering pathways, and explicitly showing receptors, assumptions, uncertainty, and MCDA criteria. I then revised the wording and layout so the enhanced diagram matched the actual tool logic and communicated the decision problem more clearly than the initial sketch.
+          </p>
+          <p class="subtle" style="margin:10px 0 0;">
+            The 40% flare reduction and 85% VRU reduction shown here are representative assumed values based on typical literature ranges and are used for comparative analysis only.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="part3" class="tab-panel">
+      <div class="tool-layout">
+        <div class="controls">
+          <div class="card">
+            <h3 class="section-title">⚙️ Inputs</h3>
+
+            <div class="control-group">
+              <label for="Q">Emission rate, Q (g/s)</label>
+              <input type="number" id="Q" min="0.1" max="500" step="0.1" value="25">
+            </div>
+
+            <div class="control-group">
+              <label for="U">Wind speed, U (m/s)</label>
+              <div class="range-wrap">
+                <input type="range" id="U" min="0.5" max="15" step="0.1" value="4">
+                <input type="number" id="UVal" min="0.5" max="15" step="0.1" value="4">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="H">Effective release height, H (m)</label>
+              <div class="range-wrap">
+                <input type="range" id="H" min="5" max="150" step="1" value="35">
+                <input type="number" id="HVal" min="5" max="150" step="1" value="35">
+              </div>
+              <div class="tiny">Used as effective stack height in the simplified model. Separate plume rise is not resolved.</div>
+            </div>
+
+            <div class="control-group">
+              <label for="hoursYear">Operating hours per year (hr/yr)</label>
+              <input type="number" id="hoursYear" min="1" max="8760" step="10" value="4000">
+              <div class="tiny">Used for rough order-of-magnitude cost-effectiveness in $/ton VOC removed.</div>
+            </div>
+
+            <div class="control-group">
+              <label for="distanceMin">Distance min (m)</label>
+              <input type="number" id="distanceMin" min="1" max="20000" step="10" value="50">
+            </div>
+
+            <div class="control-group">
+              <label for="distanceMax">Distance max (m)</label>
+              <input type="number" id="distanceMax" min="10" max="20000" step="10" value="2000">
+            </div>
+
+            <div class="control-group">
+              <label for="distanceSelected">Selected receptor distance (m)</label>
+              <input type="number" id="distanceSelected" min="1" max="20000" step="10" value="500">
+              <div class="tiny">Interpret as a worker route, plant boundary, or nearby operational receptor.</div>
+            </div>
+
+            <div class="control-group">
+              <label for="stability">Atmospheric stability class</label>
+              <select id="stability">
+                <option value="A">A – Very Unstable</option>
+                <option value="B">B – Unstable</option>
+                <option value="C">C – Slightly Unstable</option>
+                <option value="D" selected>D – Neutral</option>
+                <option value="E">E – Slightly Stable</option>
+                <option value="F">F – Stable</option>
+              </select>
+              <div class="tiny">More stable conditions generally produce less vertical mixing and higher ground-level concentrations.</div>
+            </div>
+
+            <div class="control-group">
+              <label><input type="checkbox" id="sensitivity" checked> Enable wind sensitivity overlay</label>
+            </div>
+
+            <div class="control-group">
+              <label for="windVariation">Sensitivity: wind variation (%)</label>
+              <div class="range-wrap">
+                <input type="range" id="windVariation" min="5" max="50" step="5" value="20">
+                <input type="number" id="windVariationVal" min="5" max="50" step="5" value="20">
+              </div>
+            </div>
+
+            <div class="card" style="padding:14px; margin-top:12px;">
+              <h4 style="margin:0 0 10px;">📊 MCDA Weights</h4>
+              <div class="weight-grid">
+                <div class="weight-box">
+                  <label class="small" for="wTech">Technical (%)</label>
+                  <input type="number" id="wTech" min="0" max="100" step="5" value="35">
+                </div>
+                <div class="weight-box">
+                  <label class="small" for="wCost">Cost &amp; Practicality (%)</label>
+                  <input type="number" id="wCost" min="0" max="100" step="5" value="20">
+                </div>
+                <div class="weight-box">
+                  <label class="small" for="wHealth">Public Health &amp; Safety (%)</label>
+                  <input type="number" id="wHealth" min="0" max="100" step="5" value="20">
+                </div>
+                <div class="weight-box">
+                  <label class="small" for="wEnv">Environmental (%)</label>
+                  <input type="number" id="wEnv" min="0" max="100" step="5" value="25">
+                </div>
+              </div>
+              <div class="tiny" id="weightSummary">Normalized weights will appear here.</div>
+            </div>
+
+            <button type="button" class="btn" id="updateBtn">Update Tool</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <h3 class="section-title">🛠️ Part 3 – The Tool</h3>
+            <div class="badge-row">
+              <span class="badge">Recognized model: simplified Gaussian dispersion</span>
+              <span class="badge">Alternatives: flare optimization vs VRU</span>
+              <span class="badge">Decision support, not regulatory compliance modeling</span>
+            </div>
+            <p class="subtle" style="margin-bottom:0;">
+              This tool compares two emissions-reduction alternatives for a petrochemical VOC source under the same meteorological and source assumptions. The user enters an emission rate <strong>Q (g/s)</strong>, wind speed <strong>U (m/s)</strong>, effective release height <strong>H (m)</strong>, receptor distance range <strong>(m)</strong>, and atmospheric stability class. A simplified Gaussian plume approach is used because the scenario is an outdoor industrial source with downwind transport and a need for a transparent first-pass comparison. The model estimates ground-level centerline concentration <strong>(mg/m³)</strong> for the base case and then applies two alternatives: flare optimization with an assumed 40% emissions reduction and a vapor recovery unit (VRU) with an assumed 85% reduction. These are representative assumed values based on typical literature ranges and are used for comparative analysis only. The outputs include concentration profiles, a receptor-specific comparison table, a cost table, sensitivity information, and a weighted MCDA. The results should be interpreted as structured engineering evidence for comparing alternatives rather than as a final site-specific compliance prediction.
+            </p>
+          </div>
+
+          <div class="info-grid">
+            <div class="card">
+              <details open>
+                <summary>📘 Gaussian model explanation</summary>
+                <p>
+                  The tool uses a simplified ground-level centerline Gaussian plume equation:
+                </p>
+                <p class="mono">
+                  C(x) = Q / (π U σ<sub>y</sub> σ<sub>z</sub>) × exp[ -H² / (2σ<sub>z</sub>²) ]
+                </p>
+                <ul>
+                  <li><strong>Q</strong> = emission rate (g/s)</li>
+                  <li><strong>U</strong> = wind speed (m/s)</li>
+                  <li><strong>H</strong> = effective release height (m)</li>
+                  <li><strong>σ<sub>y</sub>, σ<sub>z</sub></strong> = lateral and vertical dispersion parameters that vary with distance and atmospheric stability</li>
+                  <li><strong>C(x)</strong> = ground-level centerline concentration (reported here in mg/m³)</li>
+                </ul>
+                <p>
+                  This formulation is appropriate for a comparative outdoor screening analysis because it links emissions and meteorology directly to downwind concentration in a transparent way. It does <strong>not</strong> fully capture complex plant geometry, transient releases, buoyant plume rise, VOC chemistry, terrain effects, or detailed site meteorology. Those limitations matter when moving from early design comparison to final engineering decision-making. This formulation is appropriate for screening-level analysis but should be supplemented with site-specific dispersion modeling (e.g., AERMOD) for regulatory or design decisions.
+                </p>
+              </details>
+            </div>
+
+            <div class="card">
+              <div class="callout blue">
+                <strong>Engineering note:</strong><br>
+                The most important meteorological driver in this simplified model is usually <strong>wind speed (m/s)</strong>, because dilution changes directly as U changes. Atmospheric stability also matters because it changes how quickly the plume spreads vertically and laterally.
+              </div>
+              <div class="callout orange">
+                <strong>Field reality note:</strong><br>
+                Rated or nominal control efficiency is not the same as field performance. Real results depend on operating load, maintenance quality, flare tuning, vapor composition, capture reliability, and how well the technology fits the facility’s process layout.
+              </div>
+              <div class="callout gold" style="margin-bottom:0;">
+                <strong>System design note:</strong><br>
+                Real industrial control decisions are often made within larger control trains and under rising marginal cost of control. This tool compares two VOC-focused options, but a final plant design would still need broader system-level review.
+              </div>
+            </div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="label">Base concentration at selected receptor (mg/m³)</div>
+              <div class="value kpi-blue" id="metricBase">--</div>
+            </div>
+            <div class="metric">
+              <div class="label">Flare reduction at receptor (%)</div>
+              <div class="value kpi-orange" id="metricFlare">--</div>
+            </div>
+            <div class="metric">
+              <div class="label">VRU reduction at receptor (%)</div>
+              <div class="value kpi-green" id="metricVRU">--</div>
+            </div>
+            <div class="metric">
+              <div class="label">Recommended option</div>
+              <div class="value kpi-purple" id="metricRec">--</div>
+            </div>
+          </div>
+
+          <div class="card plot-card">
+            <h4 style="margin:0 0 10px;">📈 Concentration vs Distance</h4>
+            <p class="subtle small" style="margin-top:0;">
+              Solid lines show the base case and the two engineering alternatives. Dashed lines show optional wind sensitivity for the base case. The vertical guide marks the selected receptor distance. Concentration is shown in <strong>mg/m³</strong> and distance in <strong>m</strong>.
+            </p>
+            <div class="badge-row small" style="margin-bottom:12px;">
+              <span><span class="legend-dot" style="background:#1f5f99;"></span>Base Case</span>
+              <span><span class="legend-dot" style="background:#d97706;"></span>Flare Optimization</span>
+              <span><span class="legend-dot" style="background:#15803d;"></span>VRU</span>
+              <span><span class="legend-dot" style="background:#6d28d9;"></span>Low Wind</span>
+              <span><span class="legend-dot" style="background:#b7791f;"></span>High Wind</span>
+            </div>
+            <div class="plot-wrap">
+              <svg id="plotSvg" viewBox="0 0 980 460" role="img" aria-label="Concentration vs distance plot"></svg>
+            </div>
+          </div>
+
+          <div class="grid-2-equal">
+            <div class="card">
+              <h4 style="margin-top:0;">📋 Receptor Comparison</h4>
+              <p class="subtle small" style="margin-top:0;">Concentration values at the selected receptor distance. Units are shown in <strong>mg/m³</strong> for readability.</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Scenario</th>
+                    <th>Concentration (mg/m³)</th>
+                    <th>Reduction vs Base (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="comparisonBody"></tbody>
+              </table>
+            </div>
+
+            <div class="card">
+              <h4 style="margin-top:0;">💰 ROM Cost Table</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Flare Optimization</th>
+                    <th>VRU</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Capital</td>
+                    <td>$50K–$200K</td>
+                    <td>$200K–$800K</td>
+                  </tr>
+                  <tr>
+                    <td>Installation</td>
+                    <td>$10K–$50K</td>
+                    <td>$50K–$150K</td>
+                  </tr>
+                  <tr>
+                    <td>O&amp;M</td>
+                    <td>$5K–$20K/year</td>
+                    <td>$20K–$80K/year</td>
+                  </tr>
+                  <tr>
+                    <td>Regulatory</td>
+                    <td>Low–Moderate</td>
+                    <td>Moderate–High</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="subtle small" style="margin:10px 0 0;">
+                Cost estimates are based on typical ranges reported in the EPA Air Pollution Control Cost Manual (EPA, 2017) and relevant industry case studies.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid-2-equal">
+            <div class="card">
+              <h4 style="margin-top:0;">💵 Rough Cost-Effectiveness</h4>
+              <p class="subtle small" style="margin-top:0;">Simple rough-order estimate using operating hours/year and the assumed control efficiencies. This is intended for comparison, not procurement.</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Alternative</th>
+                    <th>VOC Removed (ton/yr)</th>
+                    <th>Approx. Midpoint Annual Cost</th>
+                    <th>$ / ton removed</th>
+                  </tr>
+                </thead>
+                <tbody id="costEffectBody"></tbody>
+              </table>
+            </div>
+
+            <div class="card">
+              <h4 style="margin-top:0;">📊 MCDA Comparison</h4>
+              <p class="subtle small" style="margin-top:0;">
+                The MCDA is intentionally simple but explicit. Technical effectiveness comes directly from the model. The remaining categories make tradeoffs visible rather than assuming the technically strongest option automatically wins every dimension.
+              </p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Alternative</th>
+                    <th>Technical</th>
+                    <th>Cost &amp; Practicality</th>
+                    <th>Public Health &amp; Safety</th>
+                    <th>Environmental</th>
+                    <th>Final Score</th>
+                  </tr>
+                </thead>
+                <tbody id="mcdaBody"></tbody>
+              </table>
+              <div class="footer-note" id="mcdaNote"></div>
+              <div class="subtle small" style="margin-top:10px;">
+                <strong>MCDA justification:</strong>
+                <ul style="margin:8px 0 0 18px; padding:0;">
+                  <li><strong>Technical effectiveness:</strong> VRU achieves higher VOC reduction due to direct vapor capture, while flare optimization improves but does not eliminate emissions.</li>
+                  <li><strong>Cost &amp; practicality:</strong> Flare optimization is simpler and lower cost; VRU requires higher capital and system integration.</li>
+                  <li><strong>Public health &amp; safety:</strong> VRU reduces direct exposure more effectively by preventing VOC release.</li>
+                  <li><strong>Environmental:</strong> VRU avoids combustion byproducts, while flaring may generate secondary pollutants.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2-equal">
+            <div class="card">
+              <h4 style="margin-top:0;">✅ Recommendation</h4>
+              <div id="recommendationBox" class="recommendation">
+                <div class="rec-title" id="recTitle">Recommended option: --</div>
+                <div id="recText" class="subtle">Run the tool to generate an engineering recommendation and explanation.</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h4 style="margin-top:0;">🧪 Sensitivity &amp; Limitations</h4>
+              <ul class="notes-list" id="sensitivityNotes">
+                <li>Sensitivity notes will appear here.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid-2-equal">
+            <div class="card">
+              <h4 style="margin-top:0;">🏭 System Design Reflection Note</h4>
+              <p class="subtle" style="margin-top:0;">
+                In full industrial design, the control device is only one part of the system. Ordering, temperature constraints, maintenance burden, and interaction with other pollutant controls can change the preferred solution. This tool evaluates two VOC strategies directly, but a final plant design would need broader system-level review.
+              </p>
+            </div>
+
+            <div class="card">
+              <h4 style="margin-top:0;">🔧 Cost &amp; Practicality Constraints</h4>
+              <ul class="notes-list" style="margin-top:0;">
+                <li><strong>Flare optimization:</strong> low implementation time, minimal infrastructure changes, easier permitting.</li>
+                <li><strong>VRU:</strong> requires piping integration, higher installation time, more complex operation and maintenance.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid-2-equal">
+            <div class="card">
+              <h4 style="margin-top:0;">🤖 AI Use in Development</h4>
+              <p class="subtle" style="margin-top:0;">
+                AI was used as a web development assistant to help structure HTML/CSS/JavaScript, debug code, and improve interface design. All engineering modeling, assumptions, and decision logic were developed by the student.
+              </p>
+            </div>
+
+            <div class="card">
+              <h4 style="margin-top:0;">📌 Assumption Note</h4>
+              <p class="subtle" style="margin-top:0;">
+                The assumed 40% flare reduction and 85% VRU reduction are representative assumed values based on typical literature ranges and are used for comparative analysis only.
+              </p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4 style="margin-top:0;">📚 References</h4>
+            <p class="subtle" style="margin-bottom:8px;">References:</p>
+            <ul class="notes-list" style="margin-top:0;">
+              <li>EPA (2017). Air Pollution Control Cost Manual.</li>
+              <li>Seinfeld, J.H. &amp; Pandis, S.N. Atmospheric Chemistry and Physics (for Gaussian dispersion background).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="part4" class="tab-panel">
+      <div class="card">
+        <h3 class="section-title">📝 Part 4 – Reflection</h3>
+        <div class="reflection">
+          If I had to defend one design choice for this Jubail industrial case, I would defend the <strong>Vapor Recovery Unit (VRU)</strong> as the stronger long-term option. The main reason is that it reduces VOC emissions much more aggressively than flare optimization, and that difference appears directly in the modeled downwind concentrations. From an air quality engineering perspective, the important question is not just whether emissions are being managed, but whether concentrations at meaningful receptors—such as worker routes, nearby operational areas, or site boundaries—are reduced enough to matter. A VRU also offers a broader environmental advantage because it captures vapors rather than relying mainly on combustion performance, which better supports resource recovery and lower atmospheric loading.
+          <br><br>
+          The comparison still breaks down in important ways. The most influential assumption in this tool is probably <strong>wind speed</strong>, followed by atmospheric stability and effective release height, because those inputs strongly affect predicted concentration in the Gaussian model. Under low wind conditions, the difference between alternatives becomes more critical, as reduced dispersion leads to higher ground-level concentrations. The tool also assumes steady emissions, simplified dispersion coefficients, inert VOC behavior, and fixed control efficiencies. Real flare performance depends on operating conditions, and real VRU performance depends on vapor composition, capture reliability, maintenance, and process integration. To be more confident, I would want site-specific Jubail meteorological data, better source characterization, actual receptor locations, and vendor or operating data for both control technologies.
+          <br><br>
+          AI helped only with the <strong>web development side</strong> of this project—mainly structuring HTML, CSS, and JavaScript, improving layout, and fixing front-end issues. All engineering analysis, assumptions, modeling choices, scoring logic, and conclusions were mine. I treated AI as a coding assistant, not as a source of engineering judgment.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const tabButtons = Array.prototype.slice.call(document.querySelectorAll(".tab-btn"));
+      const tabPanels = Array.prototype.slice.call(document.querySelectorAll(".tab-panel"));
+
+      function showTab(tabId){
+        for(let i = 0; i < tabButtons.length; i++){
+          const btn = tabButtons[i];
+          const active = btn.getAttribute("data-tab") === tabId;
+          btn.classList.toggle("active", active);
+          btn.setAttribute("aria-selected", active ? "true" : "false");
+        }
+
+        for(let i = 0; i < tabPanels.length; i++){
+          const panel = tabPanels[i];
+          panel.classList.toggle("active", panel.id === tabId);
+        }
+      }
+
+      for(let i = 0; i < tabButtons.length; i++){
+        tabButtons[i].addEventListener("click", function () {
+          const target = this.getAttribute("data-tab");
+          if (target && document.getElementById(target)) {
+            showTab(target);
+          }
+        });
+      }
+
+      function el(id){
+        return document.getElementById(id);
+      }
+
+      const U = el("U");
+      const UVal = el("UVal");
+      const H = el("H");
+      const HVal = el("HVal");
+      const windVariation = el("windVariation");
+      const windVariationVal = el("windVariationVal");
+
+      function syncPair(rangeEl, numEl){
+        rangeEl.addEventListener("input", function(){ numEl.value = rangeEl.value; });
+        numEl.addEventListener("input", function(){ rangeEl.value = numEl.value; });
+      }
+
+      syncPair(U, UVal);
+      syncPair(H, HVal);
+      syncPair(windVariation, windVariationVal);
+
+      function computeSigmas(x, stability){
+        const xx = Math.max(x, 1);
+        let sigmaY, sigmaZ;
+
+        switch(stability){
+          case "A":
+            sigmaY = 0.22 * xx * Math.pow(1 + 0.0001 * xx, -0.5);
+            sigmaZ = 0.20 * xx;
+            break;
+          case "B":
+            sigmaY = 0.16 * xx * Math.pow(1 + 0.0001 * xx, -0.5);
+            sigmaZ = 0.12 * xx;
+            break;
+          case "C":
+            sigmaY = 0.11 * xx * Math.pow(1 + 0.0001 * xx, -0.5);
+            sigmaZ = 0.08 * xx * Math.pow(1 + 0.0002 * xx, -0.5);
+            break;
+          case "D":
+            sigmaY = 0.08 * xx * Math.pow(1 + 0.0001 * xx, -0.5);
+            sigmaZ = 0.06 * xx * Math.pow(1 + 0.0015 * xx, -0.5);
+            break;
+          case "E":
+            sigmaY = 0.06 * xx * Math.pow(1 + 0.0001 * xx, -0.5);
+            sigmaZ = 0.03 * xx * Math.pow(1 + 0.0003 * xx, -1.0);
+            break;
+          case "F":
+          default:
+            sigmaY = 0.04 * xx * Math.pow(1 + 0.0001 * xx, -0.5);
+            sigmaZ = 0.016 * xx * Math.pow(1 + 0.0003 * xx, -1.0);
+            break;
+        }
+
+        return {
+          sigmaY: Math.max(sigmaY, 0.1),
+          sigmaZ: Math.max(sigmaZ, 0.1)
+        };
+      }
+
+      function gaussianConcentration(Q, Ulocal, Hlocal, x, stability){
+        const wind = Math.max(Ulocal, 0.1);
+        const sigmas = computeSigmas(x, stability);
+        return (Q / (Math.PI * wind * sigmas.sigmaY * sigmas.sigmaZ)) *
+               Math.exp(-(Hlocal * Hlocal) / (2 * sigmas.sigmaZ * sigmas.sigmaZ));
+      }
+
+      function concentrationProfile(Q, Ulocal, Hlocal, minD, maxD, stability, n){
+        const points = n || 260;
+        const xs = [];
+        const cs = [];
+        const step = (maxD - minD) / (points - 1);
+
+        for(let i = 0; i < points; i++){
+          const x = minD + i * step;
+          xs.push(x);
+          cs.push(gaussianConcentration(Q, Ulocal, Hlocal, x, stability) * 1000);
+        }
+        return { xs, cs };
+      }
+
+      function percentReduction(base, alt){
+        if(base <= 0) return 0;
+        return ((base - alt) / base) * 100;
+      }
+
+      function clamp(value, min, max){
+        return Math.min(Math.max(value, min), max);
+      }
+
+      function average(arr){
+        let sum = 0;
+        for(let i = 0; i < arr.length; i++) sum += arr[i];
+        return sum / arr.length;
+      }
+
+      function maxOf(arr){
+        let m = -Infinity;
+        for(let i = 0; i < arr.length; i++) if(arr[i] > m) m = arr[i];
+        return m;
+      }
+
+      function maxAcrossSeries(seriesList){
+        let m = -Infinity;
+        for(let i = 0; i < seriesList.length; i++){
+          const arr = seriesList[i].cs;
+          for(let j = 0; j < arr.length; j++){
+            if(arr[j] > m) m = arr[j];
+          }
+        }
+        return m;
+      }
+
+      function fmt(value){
+        if(!isFinite(value)) return "--";
+        if(Math.abs(value) < 0.001 && value !== 0) return value.toExponential(3);
+        return value.toFixed(4);
+      }
+
+      function fmtMoney(value){
+        if(!isFinite(value)) return "--";
+        return "$" + Math.round(value).toLocaleString();
+      }
+
+      function renderPlot(config){
+        const svg = el("plotSvg");
+        const W = 980;
+        const Hs = 460;
+        const m = { top: 28, right: 28, bottom: 68, left: 84 };
+        const pw = W - m.left - m.right;
+        const ph = Hs - m.top - m.bottom;
+
+        const xMin = config.xMin;
+        const xMax = config.xMax;
+        const yMax = Math.max(config.yMax * 1.08, 0.001);
+
+        function sx(x){ return m.left + ((x - xMin) / (xMax - xMin)) * pw; }
+        function sy(y){ return m.top + ph - (y / yMax) * ph; }
+
+        function buildPath(series){
+          let d = "";
+          for(let i = 0; i < series.xs.length; i++){
+            d += (i === 0 ? "M " : " L ") + sx(series.xs[i]).toFixed(2) + " " + sy(series.cs[i]).toFixed(2);
+          }
+          return d;
+        }
+
+        let content = `<rect x="0" y="0" width="${W}" height="${Hs}" fill="#ffffff"/>`;
+
+        const yTicks = 5;
+        const xTicks = 6;
+
+        for(let i = 0; i <= yTicks; i++){
+          const yVal = (yMax / yTicks) * i;
+          const yp = sy(yVal);
+          content += `<line x1="${m.left}" y1="${yp}" x2="${W - m.right}" y2="${yp}" stroke="rgba(91,117,145,0.14)" stroke-width="1"/>`;
+          content += `<text x="${m.left - 10}" y="${yp + 4}" text-anchor="end" font-size="12" fill="#5e738a">${fmt(yVal)}</text>`;
+        }
+
+        for(let i = 0; i <= xTicks; i++){
+          const xVal = xMin + ((xMax - xMin) / xTicks) * i;
+          const xp = sx(xVal);
+          content += `<line x1="${xp}" y1="${m.top}" x2="${xp}" y2="${Hs - m.bottom}" stroke="rgba(91,117,145,0.10)" stroke-width="1"/>`;
+          content += `<text x="${xp}" y="${Hs - m.bottom + 22}" text-anchor="middle" font-size="12" fill="#5e738a">${Math.round(xVal)}</text>`;
+        }
+
+        content += `
+          <line x1="${m.left}" y1="${Hs - m.bottom}" x2="${W - m.right}" y2="${Hs - m.bottom}" stroke="#6f8399" stroke-width="1.5"/>
+          <line x1="${m.left}" y1="${m.top}" x2="${m.left}" y2="${Hs - m.bottom}" stroke="#6f8399" stroke-width="1.5"/>
+          <text x="${W / 2}" y="${Hs - 18}" text-anchor="middle" font-size="13" font-weight="700" fill="#18324b">Distance downwind (m)</text>
+          <text x="22" y="${Hs / 2}" transform="rotate(-90 22 ${Hs / 2})" text-anchor="middle" font-size="13" font-weight="700" fill="#18324b">Ground-level centerline concentration (mg/m³)</text>
+        `;
+
+        const receptorX = sx(config.receptorX);
+        content += `
+          <line x1="${receptorX}" y1="${m.top}" x2="${receptorX}" y2="${Hs - m.bottom}" stroke="#7f8fa3" stroke-width="1.6" stroke-dasharray="6 6"/>
+          <text x="${Math.min(receptorX + 8, W - 112)}" y="${m.top + 14}" font-size="12" fill="#6b7c91">Selected receptor</text>
+        `;
+
+        for(let i = 0; i < config.series.length; i++){
+          const series = config.series[i];
+          content += `<path d="${buildPath(series)}" fill="none" stroke="${series.color}" stroke-width="${series.width || 3}" ${series.dash ? `stroke-dasharray="${series.dash}"` : ""} stroke-linecap="round" stroke-linejoin="round"/>`;
+        }
+
+        for(let i = 0; i < config.markers.length; i++){
+          const marker = config.markers[i];
+          content += `<circle cx="${sx(marker.x)}" cy="${sy(marker.y)}" r="4.6" fill="${marker.color}" stroke="#ffffff" stroke-width="2"/>`;
+        }
+
+        svg.innerHTML = content;
+      }
+
+      function updateTool(){
+        const Q = parseFloat(el("Q").value);
+        const Uinput = parseFloat(el("UVal").value);
+        const Hinput = parseFloat(el("HVal").value);
+        const hoursYear = parseFloat(el("hoursYear").value);
+        const distanceMin = parseFloat(el("distanceMin").value);
+        const distanceMax = parseFloat(el("distanceMax").value);
+        let distanceSelected = parseFloat(el("distanceSelected").value);
+        const stability = el("stability").value;
+        const sensitivityOn = el("sensitivity").checked;
+        const windVariationPct = parseFloat(el("windVariationVal").value);
+
+        let wTech = parseFloat(el("wTech").value);
+        let wCost = parseFloat(el("wCost").value);
+        let wHealth = parseFloat(el("wHealth").value);
+        let wEnv = parseFloat(el("wEnv").value);
+
+        if(distanceMax <= distanceMin){
+          alert("Distance max must be greater than distance min.");
+          return;
+        }
+
+        distanceSelected = clamp(distanceSelected, distanceMin, distanceMax);
+        el("distanceSelected").value = distanceSelected;
+
+        let weightSum = wTech + wCost + wHealth + wEnv;
+        if(weightSum <= 0){
+          wTech = 35; wCost = 20; wHealth = 20; wEnv = 25;
+          weightSum = 100;
+        }
+
+        const wTechN = wTech / weightSum;
+        const wCostN = wCost / weightSum;
+        const wHealthN = wHealth / weightSum;
+        const wEnvN = wEnv / weightSum;
+
+        el("weightSummary").innerHTML =
+          `Normalized weights → <strong>Technical:</strong> ${wTechN.toFixed(2)}, <strong>Cost &amp; Practicality:</strong> ${wCostN.toFixed(2)}, <strong>Public Health &amp; Safety:</strong> ${wHealthN.toFixed(2)}, <strong>Environmental:</strong> ${wEnvN.toFixed(2)}.`;
+
+        const Qbase = Q;
+        const Qflare = 0.60 * Q;
+        const Qvru = 0.15 * Q;
+
+        const baseProfile = concentrationProfile(Qbase, Uinput, Hinput, distanceMin, distanceMax, stability);
+        const flareProfile = concentrationProfile(Qflare, Uinput, Hinput, distanceMin, distanceMax, stability);
+        const vruProfile = concentrationProfile(Qvru, Uinput, Hinput, distanceMin, distanceMax, stability);
+
+        const Cbase = gaussianConcentration(Qbase, Uinput, Hinput, distanceSelected, stability) * 1000;
+        const Cflare = gaussianConcentration(Qflare, Uinput, Hinput, distanceSelected, stability) * 1000;
+        const Cvru = gaussianConcentration(Qvru, Uinput, Hinput, distanceSelected, stability) * 1000;
+
+        const redFlare = percentReduction(Cbase, Cflare);
+        const redVRU = percentReduction(Cbase, Cvru);
+
+        const avgBase = average(baseProfile.cs);
+        const avgVRU = average(vruProfile.cs);
+        const peakBase = maxOf(baseProfile.cs);
+        const peakVRU = maxOf(vruProfile.cs);
+
+        el("metricBase").textContent = `${fmt(Cbase)} mg/m³`;
+        el("metricFlare").textContent = `${redFlare.toFixed(1)}%`;
+        el("metricVRU").textContent = `${redVRU.toFixed(1)}%`;
+
+        el("comparisonBody").innerHTML = `
+          <tr>
+            <td>Base Case</td>
+            <td>${fmt(Cbase)}</td>
+            <td>0.0</td>
+          </tr>
+          <tr>
+            <td>Flare Optimization</td>
+            <td>${fmt(Cflare)}</td>
+            <td>${redFlare.toFixed(1)}</td>
+          </tr>
+          <tr>
+            <td>VRU</td>
+            <td>${fmt(Cvru)}</td>
+            <td>${redVRU.toFixed(1)}</td>
+          </tr>
+        `;
+
+        const series = [
+          { xs: baseProfile.xs, cs: baseProfile.cs, color: "#1f5f99", width: 3 },
+          { xs: flareProfile.xs, cs: flareProfile.cs, color: "#d97706", width: 3 },
+          { xs: vruProfile.xs, cs: vruProfile.cs, color: "#15803d", width: 3 }
+        ];
+
+        if(sensitivityOn){
+          const Ulow = Math.max(0.2, Uinput * (1 - windVariationPct / 100));
+          const Uhigh = Uinput * (1 + windVariationPct / 100);
+
+          const lowProfile = concentrationProfile(Qbase, Ulow, Hinput, distanceMin, distanceMax, stability);
+          const highProfile = concentrationProfile(Qbase, Uhigh, Hinput, distanceMin, distanceMax, stability);
+
+          series.push(
+            { xs: lowProfile.xs, cs: lowProfile.cs, color: "#6d28d9", width: 2, dash: "8 6" },
+            { xs: highProfile.xs, cs: highProfile.cs, color: "#b7791f", width: 2, dash: "8 6" }
+          );
+
+          const lowAtReceptor = gaussianConcentration(Qbase, Ulow, Hinput, distanceSelected, stability) * 1000;
+          const highAtReceptor = gaussianConcentration(Qbase, Uhigh, Hinput, distanceSelected, stability) * 1000;
+
+          el("sensitivityNotes").innerHTML = `
+            <li>With wind variation set to ±${windVariationPct}%, the base-case concentration at ${distanceSelected.toFixed(0)} m changes from <strong>${fmt(highAtReceptor)}</strong> mg/m³ at higher wind to <strong>${fmt(lowAtReceptor)}</strong> mg/m³ at lower wind.</li>
+            <li>This shows why simplified tools should be interpreted carefully: meteorological assumptions can change absolute concentration substantially even when control efficiencies are fixed.</li>
+            <li>In a more detailed design study, I would evaluate multiple weather states or use site meteorological data rather than relying on a single nominal condition.</li>
+          `;
+        } else {
+          el("sensitivityNotes").innerHTML = `
+            <li>Sensitivity overlay is currently disabled, so the plot shows only the nominal comparison among the base case, flare optimization, and VRU.</li>
+            <li>The tool remains useful for structured comparison, but confidence would increase if the scenario were tested across a broader set of weather and operating conditions.</li>
+            <li>This is best interpreted as a comparative screening analysis, not a final predictive model for regulatory use.</li>
+          `;
+        }
+
+        renderPlot({
+          xMin: distanceMin,
+          xMax: distanceMax,
+          yMax: maxAcrossSeries(series),
+          receptorX: distanceSelected,
+          series: series,
+          markers: [
+            { x: distanceSelected, y: Cbase, color: "#1f5f99" },
+            { x: distanceSelected, y: Cflare, color: "#d97706" },
+            { x: distanceSelected, y: Cvru, color: "#15803d" }
+          ]
+        });
+
+        const flareRemovedTons = (Q * 0.40 * hoursYear * 3600) / 1000000;
+        const vruRemovedTons = (Q * 0.85 * hoursYear * 3600) / 1000000;
+
+        const flareAnnualMid = ((125000 + 30000) / 10) + 12500;
+        const vruAnnualMid = ((500000 + 100000) / 10) + 50000;
+
+        const flareCostPerTon = flareRemovedTons > 0 ? flareAnnualMid / flareRemovedTons : 0;
+        const vruCostPerTon = vruRemovedTons > 0 ? vruAnnualMid / vruRemovedTons : 0;
+
+        el("costEffectBody").innerHTML = `
+          <tr>
+            <td>Flare Optimization</td>
+            <td>${flareRemovedTons.toFixed(2)}</td>
+            <td>${fmtMoney(flareAnnualMid)}/yr</td>
+            <td>${fmtMoney(flareCostPerTon)}</td>
+          </tr>
+          <tr>
+            <td>VRU</td>
+            <td>${vruRemovedTons.toFixed(2)}</td>
+            <td>${fmtMoney(vruAnnualMid)}/yr</td>
+            <td>${fmtMoney(vruCostPerTon)}</td>
+          </tr>
+        `;
+
+        const techFlare = redFlare / 10;
+        const techVRU = redVRU / 10;
+
+        const flareFirstYearMid = 125000 + 30000 + 12500;
+        const vruFirstYearMid = 500000 + 100000 + 50000;
+        const minCost = 65000;
+        const maxCost = 1030000;
+
+        function costScore(cost){
+          return 10 * (maxCost - cost) / (maxCost - minCost);
+        }
+
+        const flareCostOnly = costScore(flareFirstYearMid);
+        const vruCostOnly = costScore(vruFirstYearMid);
+
+        const flarePracticality = 9.0;
+        const vruPracticality = 6.2;
+
+        const costPracFlare = 0.65 * flareCostOnly + 0.35 * flarePracticality;
+        const costPracVRU = 0.65 * vruCostOnly + 0.35 * vruPracticality;
+
+        const healthFlare = 6.7;
+        const healthVRU = 8.9;
+
+        const envFlare = 5.8;
+        const envVRU = 9.4;
+
+        const finalFlare =
+          wTechN * techFlare +
+          wCostN * costPracFlare +
+          wHealthN * healthFlare +
+          wEnvN * envFlare;
+
+        const finalVRU =
+          wTechN * techVRU +
+          wCostN * costPracVRU +
+          wHealthN * healthVRU +
+          wEnvN * envVRU;
+
+        el("mcdaBody").innerHTML = `
+          <tr>
+            <td>Flare Optimization</td>
+            <td>${techFlare.toFixed(2)}</td>
+            <td>${costPracFlare.toFixed(2)}</td>
+            <td>${healthFlare.toFixed(2)}</td>
+            <td>${envFlare.toFixed(2)}</td>
+            <td><strong>${finalFlare.toFixed(2)}</strong></td>
+          </tr>
+          <tr>
+            <td>VRU</td>
+            <td>${techVRU.toFixed(2)}</td>
+            <td>${costPracVRU.toFixed(2)}</td>
+            <td>${healthVRU.toFixed(2)}</td>
+            <td>${envVRU.toFixed(2)}</td>
+            <td><strong>${finalVRU.toFixed(2)}</strong></td>
+          </tr>
+        `;
+
+        el("mcdaNote").innerHTML =
+          `Technical effectiveness is taken directly from the modeled concentration reduction at the selected receptor. Cost &amp; practicality combines midpoint first-year cost estimates with retrofit complexity and implementation realism. Public health &amp; safety reflects how strongly each option is expected to reduce exposure for the most affected receptors while also considering operational reliability. Environmental scoring reflects broader tradeoffs: flare improvement still depends on combustion performance, while a VRU better supports vapor capture, reduced atmospheric loading, and hydrocarbon recovery. The rough $/ton section follows ROM thinking and should be interpreted within ±30–50% uncertainty.`;
+
+        let recOption = "";
+        let recText = "";
+        let recClass = "recommendation";
+
+        if(finalVRU >= finalFlare){
+          recOption = "Vapor Recovery Unit (VRU)";
+          recText = `
+            <p>
+              For the current inputs and MCDA weights, the <strong>VRU</strong> is the recommended option. It performs best technically because it produces the largest reduction in modeled ground-level concentration, and it also scores more strongly in public health/safety and environmental terms.
+            </p>
+            <p>
+              At the selected receptor distance of <strong>${distanceSelected.toFixed(0)} m</strong>, the model predicts a reduction of <strong>${redVRU.toFixed(1)}%</strong> for the VRU compared with <strong>${redFlare.toFixed(1)}%</strong> for flare optimization. Across the modeled distance range, average concentration drops from <strong>${fmt(avgBase)}</strong> mg/m³ in the base case to <strong>${fmt(avgVRU)}</strong> mg/m³ with a VRU, and peak concentration drops from <strong>${fmt(peakBase)}</strong> mg/m³ to <strong>${fmt(peakVRU)}</strong> mg/m³.
+            </p>
+            <p>
+              The recommendation is most robust under moderate to low wind conditions, where dispersion is limited and emission reduction effectiveness becomes more critical.
+            </p>
+            <p>
+              The main reason not to choose the VRU would be cost, installation complexity, or plant integration constraints. If those barriers are manageable, it is the stronger long-term engineering choice.
+            </p>
+          `;
+          el("metricRec").textContent = "VRU";
+        } else {
+          recOption = "Flare Optimization";
+          recClass = "recommendation alt";
+          recText = `
+            <p>
+              For the current assumptions and weightings, <strong>flare optimization</strong> is the recommended option because it provides a better balance of feasible implementation, lower cost, and meaningful concentration reduction under the selected conditions.
+            </p>
+            <p>
+              At <strong>${distanceSelected.toFixed(0)} m</strong>, flare optimization reduces concentration by <strong>${redFlare.toFixed(1)}%</strong>. While this is less effective than the VRU, the lower capital burden and easier retrofit can make flare optimization more realistic when budget, downtime, or infrastructure constraints are dominant.
+            </p>
+            <p>
+              The recommendation is most robust under moderate to low wind conditions, where dispersion is limited and emission reduction effectiveness becomes more critical.
+            </p>
+            <p>
+              This recommendation would become weaker if the facility prioritized maximum VOC reduction, long-term environmental performance, or stronger protection for highly exposed receptors.
+            </p>
+          `;
+          el("metricRec").textContent = "Flare";
+        }
+
+        el("recTitle").textContent = `Recommended option: ${recOption}`;
+        el("recText").innerHTML = recText;
+        el("recommendationBox").className = recClass;
+      }
+
+      el("updateBtn").addEventListener("click", updateTool);
+
+      const watchIds = [
+        "Q","U","UVal","H","HVal","hoursYear","distanceMin","distanceMax","distanceSelected",
+        "stability","sensitivity","windVariation","windVariationVal",
+        "wTech","wCost","wHealth","wEnv"
+      ];
+
+      for(let i = 0; i < watchIds.length; i++){
+        const node = el(watchIds[i]);
+        if(!node) continue;
+        node.addEventListener("change", updateTool);
+        node.addEventListener("input", function(){
+          if(["Q","hoursYear","distanceMin","distanceMax","distanceSelected","wTech","wCost","wHealth","wEnv"].indexOf(watchIds[i]) !== -1) return;
+          updateTool();
+        });
+      }
+
+      showTab("part1");
+      updateTool();
+    });
+  </script>
+</body>
+</html>

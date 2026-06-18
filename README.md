@@ -100,3 +100,31 @@ To avoid merge conflicts (where multiple people try to edit the same line of cod
 - **"Merge Conflict" Error:** This shouldn't happen if you created a unique file in the `submissions` folder. If it does, ensure you didn't accidentally modify other files.
 - **JSON Errors:** If your project doesn't appear on the site after merging, check that your JSON file is valid text.
 - Refer back to the [Setting Up GitHub Starmap](https://plantshley.github.io/making-thinking-visual/index.html) for further help.
+
+---
+
+## Maintainer Notes: Hosting Self-Contained Tool Files
+
+The Student Tools gallery (`tools/tool-1/`, `tools/tool-2/`) usually links each card's
+"View Tool" button to an external URL (e.g. a Gemini share link). When a student instead
+provides a **self-contained HTML file** (a single `.html` with everything inline), you can
+host it directly in this repo instead of relying on an external link:
+
+1. **Drop the HTML file** into the matching tool set's `projects/` folder, named after the
+   student's GitHub username — e.g. `tools/tool-2/projects/twinkle-fairy.html`. (Create the
+   `projects/` folder if it doesn't exist yet.)
+2. **Point `projectUrl`** in that student's JSON file at the relative path from the site
+   root, e.g.:
+   ```json
+   "projectUrl": "tools/tool-2/projects/twinkle-fairy.html"
+   ```
+   The "View Tool" link opens in a new tab, so it loads the hosted file directly.
+
+**Tips:**
+- **Embedded images are fine — preferred, even.** A self-contained HTML with base64-embedded
+  images works perfectly as a hosted link, since there are no external image paths to break.
+- **Watch for huge embedded images.** Some exported HTML files inline multi-megabyte images as
+  base64, which makes the file slow to open and impossible to copy-paste as text. That's only a
+  problem if you need to read/edit the source — for a hosted "View Tool" link it's harmless.
+- This works both on GitHub Pages and when opening the gallery locally, since the path is
+  relative.

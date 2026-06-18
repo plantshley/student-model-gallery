@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Strang Pit Fugitive Dust Tool | CIVE 442</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:         #0d1117;
+    --bg2:        #161b22;
+    --bg3:        #1c2128;
+    --border:     #30363d;
+    --border2:    #21262d;
+    --text:       #e6edf3;
+    --text2:      #8b949e;
+    --text3:      #6e7681;
+    --accent:     #58a6ff;
+    --accent2:    #1f6feb;
+    --green:      #3fb950;
+    --green-dim:  #1a4a22;
+    --orange:     #e08b3a;
+    --orange-dim: #4a2a0a;
+    --red:        #f85149;
+    --yellow:     #d29922;
+    --purple:     #bc8cff;
+    --mono:       'IBM Plex Mono', monospace;
+    --sans:       'IBM Plex Sans', sans-serif;
+    --radius:     6px;
+    --radius2:    10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── TOP HEADER ── */
+  .site-header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .site-header .logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .site-header .sep { color: var(--border); font-size: 18px; }
+  .site-header .subtitle {
+    font-size: 12px;
+    color: var(--text2);
+    font-family: var(--mono);
+  }
+  .site-header .badge {
+    margin-left: auto;
+    background: var(--accent2);
+    color: var(--text);
+    font-size: 11px;
+    font-family: var(--mono);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    padding: 0 32px;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .nav-tab {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 12px 18px;
+    cursor: pointer;
+    color: var(--text2);
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    user-select: none;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── MAIN LAYOUT ── */
+  .main { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+
+  /* ── TAB PANELS ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ── GRID LAYOUTS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .col-span-2 { grid-column: span 2; }
+  .col-span-3 { grid-column: span 3; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius2);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-header h3 {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .card-header .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-left: auto;
+  }
+  .tag-blue  { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+  .tag-green { background: rgba(63,185,80,0.15);  color: var(--green);  border: 1px solid rgba(63,185,80,0.3); }
+  .tag-orange{ background: rgba(224,139,58,0.15); color: var(--orange); border: 1px solid rgba(224,139,58,0.3); }
+  .tag-purple{ background: rgba(188,140,255,0.15);color: var(--purple); border: 1px solid rgba(188,140,255,0.3); }
+  .tag-yellow{ background: rgba(210,153,34,0.15); color: var(--yellow); border: 1px solid rgba(210,153,34,0.3); }
+
+  .card-body { padding: 18px; }
+
+  /* ── INPUTS ── */
+  .input-group { margin-bottom: 14px; }
+  .input-group label {
+    display: block;
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--text2);
+    margin-bottom: 5px;
+    letter-spacing: 0.3px;
+  }
+  .input-group label .unit {
+    color: var(--text3);
+    font-weight: 400;
+  }
+  .input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  input[type="number"], input[type="text"], select {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 11px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type="number"]:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(88,166,255,0.1);
+  }
+  select option { background: var(--bg3); }
+  .input-note {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 3px;
+    font-style: italic;
+  }
+
+  /* ── RANGE SLIDER ── */
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+    height: 4px;
+  }
+  .range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text3);
+    font-family: var(--mono);
+    margin-top: 3px;
+  }
+
+  /* ── STAT BOXES ── */
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .stat-box {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .stat-box.baseline::before { background: #8b949e; }
+  .stat-box.alt-a::before   { background: var(--orange); }
+  .stat-box.alt-b::before   { background: var(--green); }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .stat-value.baseline { color: var(--text2); }
+  .stat-value.alt-a    { color: var(--orange); }
+  .stat-value.alt-b    { color: var(--green); }
+  .stat-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 4px;
+  }
+  .stat-reduction {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 6px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+  .stat-reduction.alt-a { background: var(--orange-dim); color: var(--orange); }
+  .stat-reduction.alt-b { background: var(--green-dim);  color: var(--green); }
+
+  /* ── CHART ── */
+  .chart-wrap {
+    position: relative;
+    height: 340px;
+  }
+
+  /* ── EQUATION BOX ── */
+  .eq-box {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.9;
+    margin-bottom: 16px;
+  }
+  .eq-box .eq-title {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .eq-highlight { color: var(--text); font-weight: 600; }
+  .eq-var { color: var(--purple); }
+  .eq-comment { color: var(--text3); font-style: italic; }
+
+  /* ── TABLE ── */
+  .data-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
+  .data-table th {
+    background: var(--bg3);
+    color: var(--text2);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 9px 12px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table th:first-child { text-align: left; }
+  .data-table td {
+    padding: 7px 12px;
+    text-align: right;
+    border-bottom: 1px solid var(--border2);
+    color: var(--text2);
+  }
+  .data-table td:first-child { text-align: left; color: var(--text3); }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .data-table .receptor-row td {
+    background: rgba(88,166,255,0.05);
+    font-weight: 600;
+  }
+  .data-table .receptor-row td:first-child { color: var(--accent); }
+  .val-baseline { color: var(--text2); }
+  .val-a        { color: var(--orange); }
+  .val-b        { color: var(--green); }
+  .val-pct-a    { color: var(--orange); font-size: 11px; }
+  .val-pct-b    { color: var(--green);  font-size: 11px; }
+
+  /* ── SENSITIVITY HEATMAP ── */
+  .sens-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11px; }
+  .sens-table th {
+    background: var(--bg3);
+    color: var(--text2);
+    font-weight: 600;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 7px 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .sens-table td {
+    padding: 6px 10px;
+    text-align: center;
+    border: 1px solid var(--border2);
+    font-size: 11px;
+  }
+  .sens-class { text-align: left !important; font-weight: 600; color: var(--text2); }
+
+  /* ── MCDA ── */
+  .mcda-row {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .mcda-row-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .mcda-crit-name {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+  .mcda-weight-input {
+    width: 72px;
+    flex-shrink: 0;
+  }
+  .mcda-weight-input input {
+    width: 72px;
+    text-align: center;
+  }
+  .mcda-scores {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .mcda-score-label {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text3);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .mcda-score-label.a { color: var(--orange); }
+  .mcda-score-label.b { color: var(--green); }
+  .score-stars {
+    display: flex;
+    gap: 4px;
+  }
+  .star {
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    font-size: 11px;
+    font-family: var(--mono);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s;
+    background: var(--bg2);
+    color: var(--text3);
+  }
+  .star:hover { border-color: var(--accent); color: var(--text); }
+  .star.active-a { background: var(--orange-dim); border-color: var(--orange); color: var(--orange); }
+  .star.active-b { background: var(--green-dim);  border-color: var(--green);  color: var(--green); }
+  .mcda-rationale {
+    font-size: 11px;
+    color: var(--text3);
+    font-style: italic;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+  .weight-total {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .weight-total.ok    { background: var(--green-dim);  color: var(--green);  border: 1px solid rgba(63,185,80,0.3); }
+  .weight-total.error { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(224,139,58,0.3); }
+
+  /* ── MCDA RESULT ── */
+  .mcda-result {
+    border-radius: var(--radius2);
+    padding: 20px 24px;
+    margin-top: 20px;
+    border: 1px solid;
+    position: relative;
+    overflow: hidden;
+  }
+  .mcda-result::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .mcda-result.winner-a { border-color: rgba(224,139,58,0.4); background: rgba(224,139,58,0.05); }
+  .mcda-result.winner-a::before { background: var(--orange); }
+  .mcda-result.winner-b { border-color: rgba(63,185,80,0.4);  background: rgba(63,185,80,0.05); }
+  .mcda-result.winner-b::before { background: var(--green); }
+  .mcda-result-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text3);
+    margin-bottom: 8px;
+  }
+  .mcda-result-name {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .mcda-result.winner-a .mcda-result-name { color: var(--orange); }
+  .mcda-result.winner-b .mcda-result-name { color: var(--green); }
+  .mcda-score-bars {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+  }
+  .score-bar-wrap { flex: 1; }
+  .score-bar-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .score-bar-track {
+    height: 8px;
+    background: var(--border2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .score-bar-fill.a { background: var(--orange); }
+  .score-bar-fill.b { background: var(--green); }
+  .score-bar-val {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .score-bar-val.a { color: var(--orange); }
+  .score-bar-val.b { color: var(--green); }
+
+  /* ── INFO BOXES ── */
+  .info-box {
+    background: rgba(88,166,255,0.07);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .info-box strong { color: var(--accent); }
+  .warn-box {
+    background: rgba(210,153,34,0.07);
+    border: 1px solid rgba(210,153,34,0.25);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .warn-box strong { color: var(--yellow); }
+
+  /* ── SECTION DIVIDERS ── */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text3);
+    margin: 22px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border2);
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── NAAQS BADGE ── */
+  .naaqs-line {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .naaqs-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px dashed;
+  }
+  .naaqs-badge.pm10  { border-color: rgba(248,81,73,0.4); color: var(--red); background: rgba(248,81,73,0.07); }
+  .naaqs-badge.pm25  { border-color: rgba(210,153,34,0.4); color: var(--yellow); background: rgba(210,153,34,0.07); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .col-span-2, .col-span-3 { grid-column: span 1; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .main { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="logo">STRANG_PIT_AQ_TOOL</span>
+  <span class="sep">|</span>
+  <span class="subtitle">Gaussian Dispersion Model · Fort Collins, CO</span>
+  <span class="badge">CIVE 442</span>
+</header>
+
+<nav class="nav-tabs">
+  <button class="nav-tab active" data-tab="overview">01_Overview</button>
+  <button class="nav-tab" data-tab="inputs">02_Inputs</button>
+  <button class="nav-tab" data-tab="model">03_Model</button>
+  <button class="nav-tab" data-tab="results">04_Results</button>
+  <button class="nav-tab" data-tab="sensitivity">05_Sensitivity</button>
+  <button class="nav-tab" data-tab="mcda">06_MCDA</button>
+  <button class="nav-tab" data-tab="assignment">07_Assignment</button>
+</nav>
+
+<div class="main">
+
+<!-- ══════════════════ TAB 1: OVERVIEW ══════════════════ -->
+<div class="tab-panel active" id="tab-overview">
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card col-span-2">
+      <div class="card-header">
+        <h3>Scenario Overview</h3>
+        <span class="tag tag-blue">Strang Pit · SE Fort Collins</span>
+      </div>
+      <div class="card-body">
+        <!-- Site photo -->
+        <div style="margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid var(--border);position:relative">
+          <img
+            src="https://www.larimer.gov/sites/default/files/styles/large/public/2025-02/Strang%202_1.JPG?itok=jq4DMREZ"
+            alt="Strang Pit — active haul road and stockpile faces"
+            style="width:100%;max-height:320px;object-fit:cover;display:block"
+          />
+          <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(13,17,23,0.85));padding:10px 16px">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--text2)">
+              Strang Pit · Larimer County Roads &amp; Bridge · Horsetooth Rd &amp; Strauss Cabin Rd, Fort Collins, CO · Source: Larimer County (2025)
+            </span>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="section-label">Source</div>
+            <p style="color:var(--text2);font-size:13px;line-height:1.8">
+              The <strong style="color:var(--text)">Strang Pit</strong> is a 160-acre, county-owned gravel quarry near Horsetooth Rd & Strauss Cabin Rd in southeast Fort Collins, operated by Larimer County Roads & Bridge since 1977. It produces ~<strong style="color:var(--accent)">40,000 tons/yr</strong> of aggregate for unpaved road maintenance. The primary air quality concern is <strong style="color:var(--text)">fugitive PM10 dust</strong> from haul roads and active stockpile faces.
+            </p>
+            <div class="section-label" style="margin-top:18px">Engineering Alternatives</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="background:var(--orange-dim);border:1px solid rgba(224,139,58,0.3);border-radius:6px;padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:600;margin-bottom:4px">ALT A — WATER SUPPRESSION</div>
+                <div style="font-size:12px;color:var(--text2)">Periodic water truck application on unpaved haul roads and active stockpile faces. Standard practice. Control efficiency: ~50% PM10 reduction (EPA AP-42).</div>
+              </div>
+              <div style="background:var(--green-dim);border:1px solid rgba(63,185,80,0.3);border-radius:6px;padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:11px;color:var(--green);font-weight:600;margin-bottom:4px">ALT B — CHEMICAL DUST STABILIZER</div>
+                <div style="font-size:12px;color:var(--text2)">Lignosulfonate applied to haul roads, binding surface particles. Less frequent reapplication than water. Control efficiency: ~85% PM10 reduction (EPA AP-42).</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="section-label">Receptor Communities</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:600;margin-bottom:4px">RECEPTOR 1 · Kechter Farm Neighborhood · ~1,500 m SE</div>
+                <div style="font-size:12px;color:var(--text2)">Residential neighborhood southeast of the pit. Primary human health receptor. Downwind on prevailing NW→SE winds.</div>
+              </div>
+              <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:11px;color:var(--purple);font-weight:600;margin-bottom:4px">RECEPTOR 2 · Fossil Creek Reservoir Natural Area · ~3,000 m SE</div>
+                <div style="font-size:12px;color:var(--text2)">Popular natural area with trails and wildlife. Environmental receptor. Further downwind — captures longer-range transport.</div>
+              </div>
+            </div>
+            <div class="section-label" style="margin-top:18px">Data Sources</div>
+            <div style="font-size:12px;color:var(--text3);line-height:1.9;font-family:var(--mono)">
+              📄 Larimer County Roads: 40,000 tons/yr, 160 acres<br>
+              📄 EPA AP-42 §11.19.2: Emission factors & control efficiencies<br>
+              📄 Pasquill-Gifford (1961): σy, σz parameterization<br>
+              📄 Seinfeld & Pandis (2016): Gaussian plume formulation<br>
+              📄 CDPHE / fcgov.com/airquality: Local AQ context
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header"><h3>Air Quality Model</h3><span class="tag tag-blue">Gaussian</span></div>
+      <div class="card-body">
+        <div class="eq-box">
+          <div class="eq-title">Core Equation (H = 0)</div>
+          <span class="eq-highlight">C(x)</span> = <span class="eq-var">Q</span> / (π · <span class="eq-var">σy</span> · <span class="eq-var">σz</span> · <span class="eq-var">u</span>)<br><br>
+          <span class="eq-comment">H = 0 → ground-level area source</span><br>
+          <span class="eq-comment">σy, σz = P-G dispersion coefficients</span><br>
+          <span class="eq-comment">from stability class & distance</span>
+        </div>
+        <p style="font-size:12px;color:var(--text3)">Simplified Gaussian plume model for a ground-level area source. Gives PM10 concentration at any downwind distance given emission rate, wind speed, and atmospheric stability.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Key Assumptions</h3><span class="tag tag-yellow">Limitations</span></div>
+      <div class="card-body">
+        <div style="font-size:12px;color:var(--text2);line-height:1.9">
+          • Steady-state, single wind direction (worst case)<br>
+          • Flat terrain — reasonable for E. Fort Collins<br>
+          • Point-source approximation at pit centroid<br>
+          • No gravitational settling (conservative)<br>
+          • AP-42 emission factors — national averages<br>
+          • No building downwash or terrain effects<br>
+          • Receptor at ground level (1.5 m breathing height)
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>How to Use</h3><span class="tag tag-purple">Guide</span></div>
+      <div class="card-body">
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text2);line-height:2">
+          <span style="color:var(--accent)">02_Inputs</span> → set scenario parameters<br>
+          <span style="color:var(--accent)">03_Model</span> → view calculation table<br>
+          <span style="color:var(--accent)">04_Results</span> → concentration chart<br>
+          <span style="color:var(--accent)">05_Sensitivity</span> → wind/stability sweep<br>
+          <span style="color:var(--accent)">06_MCDA</span> → adjust weights & get recommendation
+        </div>
+        <div class="naaqs-line">
+          <span class="naaqs-badge pm10">PM10 24-hr: 150 μg/m³</span>
+          <span class="naaqs-badge pm25">PM2.5 24-hr: 35 μg/m³</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ TAB 2: INPUTS ══════════════════ -->
+<div class="tab-panel" id="tab-inputs">
+  <div class="grid-2">
+    <!-- Source Parameters -->
+    <div class="card">
+      <div class="card-header"><h3>Source Parameters</h3><span class="tag tag-blue">Strang Pit</span></div>
+      <div class="card-body">
+        <div class="section-label">Production</div>
+        <div class="input-group">
+          <label>Annual Production Rate <span class="unit">(tons/yr)</span></label>
+          <input type="number" id="i_prod" value="40000" min="1000" max="200000" oninput="recalc()">
+          <div class="input-note">Source: Larimer County Roads Dept. Default: 40,000 tons/yr</div>
+        </div>
+        <div class="input-group">
+          <label>Operating Days/Year <span class="unit">(days)</span></label>
+          <input type="number" id="i_days" value="250" min="1" max="365" oninput="recalc()">
+          <div class="input-note">5 days/week × 50 weeks. Default: 250</div>
+        </div>
+        <div class="input-group">
+          <label>Operating Hours/Day <span class="unit">(hr/day)</span></label>
+          <input type="number" id="i_hrs" value="8" min="1" max="24" oninput="recalc()">
+          <div class="input-note">Single shift. Default: 8 hrs/day</div>
+        </div>
+        <div class="section-label">Receptor Distances</div>
+        <div class="input-group">
+          <label>Kechter Farm Distance <span class="unit">(m)</span></label>
+          <input type="number" id="i_rec1" value="1500" min="100" max="10000" oninput="recalc()">
+          <div class="input-note">Estimated from map: Strang Pit → Kechter Farm</div>
+        </div>
+        <div class="input-group">
+          <label>Fossil Creek Distance <span class="unit">(m)</span></label>
+          <input type="number" id="i_rec2" value="3000" min="100" max="10000" oninput="recalc()">
+          <div class="input-note">Estimated from map: Strang Pit → Fossil Creek Reservoir</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emission Factors -->
+    <div class="card">
+      <div class="card-header"><h3>Emission Factors</h3><span class="tag tag-yellow">EPA AP-42 §11.19.2</span></div>
+      <div class="card-body">
+        <div class="eq-box">
+          <div class="eq-title">Emission Rate Formula</div>
+          <span class="eq-highlight">Q</span> = (<span class="eq-var">EF_road</span> + <span class="eq-var">EF_stockpile</span>) × <span class="eq-var">P_hourly</span> × (1 − <span class="eq-var">η</span>)<br>
+          <span class="eq-comment">× unit conversion (kg→μg, hr→s)</span><br><br>
+          <span class="eq-comment">P_hourly = Annual prod ÷ days ÷ hrs/day</span>
+        </div>
+        <div class="section-label">Baseline Emission Factors</div>
+        <div class="input-group">
+          <label>Haul Road EF (PM10) <span class="unit">(kg/ton)</span></label>
+          <input type="number" id="i_ef_road" value="0.6" min="0.01" max="5" step="0.01" oninput="recalc()">
+          <div class="input-note">AP-42 §11.19.2: unpaved road with aggregate traffic</div>
+        </div>
+        <div class="input-group">
+          <label>Stockpile Wind Erosion EF (PM10) <span class="unit">(kg/ton)</span></label>
+          <input type="number" id="i_ef_stock" value="0.04" min="0.001" max="1" step="0.001" oninput="recalc()">
+          <div class="input-note">AP-42 §11.19.2: wind erosion from exposed stockpiles</div>
+        </div>
+        <div class="section-label">Control Efficiencies</div>
+        <div class="input-group">
+          <label>Alt A — Water Suppression η <span class="unit">(fraction)</span></label>
+          <div class="input-row">
+            <input type="range" id="i_eta_a" min="0.1" max="0.99" step="0.01" value="0.50"
+              oninput="document.getElementById('i_eta_a_val').textContent=Math.round(this.value*100)+'%';recalc()">
+            <span id="i_eta_a_val" style="font-family:var(--mono);color:var(--orange);font-weight:600;width:42px;text-align:right;font-size:13px">50%</span>
+          </div>
+          <div class="range-labels"><span>10%</span><span>AP-42 default</span><span>99%</span></div>
+          <div class="input-note">AP-42 Table 11.19.2-2: water application reduces PM10 ~50%</div>
+        </div>
+        <div class="input-group">
+          <label>Alt B — Chemical Stabilizer η <span class="unit">(fraction)</span></label>
+          <div class="input-row">
+            <input type="range" id="i_eta_b" min="0.1" max="0.99" step="0.01" value="0.85"
+              oninput="document.getElementById('i_eta_b_val').textContent=Math.round(this.value*100)+'%';recalc()">
+            <span id="i_eta_b_val" style="font-family:var(--mono);color:var(--green);font-weight:600;width:42px;text-align:right;font-size:13px">85%</span>
+          </div>
+          <div class="range-labels"><span>10%</span><span>AP-42 default</span><span>99%</span></div>
+          <div class="input-note">AP-42: lignosulfonate reduces PM10 ~85%</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 14px;margin-top:14px">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Calculated Emission Rates</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px">
+              <span style="color:var(--text3)">Q_baseline</span>
+              <span id="disp_q0" style="color:var(--text2)">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px">
+              <span style="color:var(--orange)">Q_Alt A</span>
+              <span id="disp_qa" style="color:var(--orange)">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px">
+              <span style="color:var(--green)">Q_Alt B</span>
+              <span id="disp_qb" style="color:var(--green)">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meteorology -->
+    <div class="card col-span-2">
+      <div class="card-header"><h3>Meteorological Parameters</h3><span class="tag tag-orange">Sensitivity drivers</span></div>
+      <div class="card-body">
+        <div class="grid-2">
+          <div>
+            <div class="eq-box">
+              <div class="eq-title">P-G Dispersion Coefficients</div>
+              <span class="eq-var">σy</span>(x) = <span class="eq-highlight">a</span> · x<sup>b</sup>&nbsp;&nbsp;&nbsp;<span class="eq-comment">[x in km]</span><br>
+              <span class="eq-var">σz</span>(x) = <span class="eq-highlight">c</span> · x<sup>d</sup>&nbsp;&nbsp;&nbsp;<span class="eq-comment">[result in meters]</span><br><br>
+              <span class="eq-comment">a, b, c, d from P-G stability class</span><br>
+              <span class="eq-comment">Valid for x = 0.1–10 km</span>
+            </div>
+            <div class="input-group">
+              <label>Mean Wind Speed (u) <span class="unit">(m/s)</span></label>
+              <div class="input-row">
+                <input type="range" id="i_u" min="1" max="10" step="0.5" value="4"
+                  oninput="document.getElementById('i_u_val').textContent=this.value+' m/s';recalc()">
+                <span id="i_u_val" style="font-family:var(--mono);color:var(--accent);font-weight:600;width:55px;text-align:right;font-size:13px">4 m/s</span>
+              </div>
+              <div class="range-labels"><span>1 m/s</span><span>↑ typical FC daytime</span><span>10 m/s</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="input-group">
+              <label>Pasquill-Gifford Stability Class</label>
+              <select id="i_stab" onchange="recalc()">
+                <option value="A">A — Very Unstable (strong solar, light wind)</option>
+                <option value="B">B — Unstable (moderate solar)</option>
+                <option value="C">C — Slightly Unstable (slight solar, mod. wind)</option>
+                <option value="D" selected>D — Neutral (overcast / strong wind) ← baseline</option>
+                <option value="E">E — Stable (slight negative radiation)</option>
+                <option value="F">F — Very Stable (clear sky, calm, nighttime)</option>
+              </select>
+              <div class="input-note">Class D (neutral) is the conservative baseline for daytime conditions</div>
+            </div>
+            <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 14px">
+              <div style="font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Selected P-G Coefficients</div>
+              <div id="disp_pg" style="font-family:var(--mono);font-size:11px;color:var(--text2);line-height:1.9">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ TAB 3: MODEL ══════════════════ -->
+<div class="tab-panel" id="tab-model">
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header"><h3>Gaussian Model</h3><span class="tag tag-blue">C(x) at 13 distances</span></div>
+    <div class="card-body">
+      <div class="eq-box">
+        <div class="eq-title">Full Model Equation Applied</div>
+        <span class="eq-highlight">C(x)</span> = <span class="eq-var">Q</span> / (π · <span class="eq-var">σy</span>(x) · <span class="eq-var">σz</span>(x) · <span class="eq-var">u</span>)&nbsp;&nbsp;&nbsp;
+        <span class="eq-comment">[H=0, ground-level source]</span><br>
+        <span class="eq-var">σy</span>(x) = a·(x/1000)<sup>b</sup>&nbsp;&nbsp;
+        <span class="eq-var">σz</span>(x) = c·(x/1000)<sup>d</sup>&nbsp;&nbsp;
+        <span class="eq-comment">x in meters → divide by 1000 for km input to P-G coefficients</span><br>
+        <span class="eq-comment">C in μg/m³ | Q in μg/s | σ in m | u in m/s</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table" id="model_table">
+          <thead>
+            <tr>
+              <th>Distance x (m)</th>
+              <th>σy (m)</th>
+              <th>σz (m)</th>
+              <th>C_Baseline (μg/m³)</th>
+              <th>C_Alt A — Water (μg/m³)</th>
+              <th>C_Alt B — Chemical (μg/m³)</th>
+              <th>% Red. Alt A</th>
+              <th>% Red. Alt B</th>
+            </tr>
+          </thead>
+          <tbody id="model_tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ TAB 4: RESULTS ══════════════════ -->
+<div class="tab-panel" id="tab-results">
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card col-span-2">
+      <div class="card-header">
+        <h3>PM10 Concentration vs. Downwind Distance</h3>
+        <span class="tag tag-green">Strang Pit → SE Fort Collins</span>
+      </div>
+      <div class="card-body">
+        <div class="chart-wrap">
+          <canvas id="mainChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-header"><h3>Receptor 1 — Kechter Farm</h3><span class="tag tag-blue">~1,500 m SE</span></div>
+      <div class="card-body">
+        <div class="stat-grid" id="stats_rec1"></div>
+        <div class="naaqs-line">
+          <span class="naaqs-badge pm10">NAAQS PM10 24-hr: 150 μg/m³</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Receptor 2 — Fossil Creek Reservoir</h3><span class="tag tag-purple">~3,000 m SE</span></div>
+      <div class="card-body">
+        <div class="stat-grid" id="stats_rec2"></div>
+        <div class="naaqs-line">
+          <span class="naaqs-badge pm10">NAAQS PM10 24-hr: 150 μg/m³</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ TAB 5: SENSITIVITY ══════════════════ -->
+<div class="tab-panel" id="tab-sensitivity">
+  <div class="info-box">
+    <strong>How to read this:</strong> Each table shows PM10 concentration (μg/m³) at the receptor across wind speeds (columns) and stability classes (rows) for a fixed scenario. Lighter cells = lower concentration = better air quality. <strong>Stability class D, 4 m/s</strong> is the baseline case. These tables help identify when each alternative works best — or fails.
+  </div>
+  <div class="eq-box">
+    <div class="eq-title">Sensitivity Equation</div>
+    <span class="eq-highlight">C(x, u, class)</span> = <span class="eq-var">Q</span> / (π · <span class="eq-var">σy</span>(x, class) · <span class="eq-var">σz</span>(x, class) · <span class="eq-var">u</span>)<br>
+    <span class="eq-comment">Q fixed from inputs. Each cell varies u (columns) and stability class (rows) independently.</span>
+  </div>
+  <div id="sens_tables"></div>
+</div>
+
+<!-- ══════════════════ TAB 6: MCDA ══════════════════ -->
+<div class="tab-panel" id="tab-mcda">
+  <div class="grid-2">
+    <div>
+      <div class="info-box">
+        <strong>Instructions:</strong> Set criteria weights (must sum to 100%). Adjust qualitative scores (1–5) for Cost, Public Health, and Environment using the numbered buttons. Technical Effectiveness is calculated automatically from model output (% PM10 reduction at Kechter Farm).
+      </div>
+
+      <div id="mcda_rows"></div>
+
+      <div id="weight_status" class="weight-total ok">
+        <span>⬤</span><span id="weight_status_text">Weights sum to 100 — OK</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-header"><h3>MCDA Result</h3><span class="tag tag-purple">Recommendation</span></div>
+        <div class="card-body">
+          <div id="mcda_result"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-header"><h3>Weighted Score Breakdown</h3></div>
+        <div class="card-body">
+          <div style="overflow-x:auto">
+            <table class="data-table" id="mcda_breakdown_table">
+              <thead>
+                <tr>
+                  <th>Criterion</th>
+                  <th>Weight</th>
+                  <th style="color:var(--orange)">Score A</th>
+                  <th style="color:var(--green)">Score B</th>
+                  <th style="color:var(--orange)">Wtd A</th>
+                  <th style="color:var(--green)">Wtd B</th>
+                </tr>
+              </thead>
+              <tbody id="mcda_breakdown_body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════ TAB 7: ASSIGNMENT ══════════════════ -->
+<div class="tab-panel" id="tab-assignment">
+
+  <!-- ─── PART 1 ─── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <h3>Part 1 — Embodied Noticing</h3>
+      <span class="tag tag-blue">6 pts</span>
+    </div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--text3);font-family:var(--mono);margin-bottom:16px">
+        PURPOSE — Ground the design problem in a real air quality situation observed or documented in the field.
+      </p>
+      <div class="grid-2" style="gap:24px;align-items:start">
+        <!-- LEFT: Photos -->
+        <div>
+          <div class="section-label" style="margin-bottom:10px">Site Photographs · Strang Pit, SE Fort Collins</div>
+          <img
+            src="https://www.larimer.gov/sites/default/files/2025-02/Strang%201%20w%20mountains.JPG"
+            alt="Strang Pit with Rocky Mountains in background"
+            style="width:100%;border-radius:8px 8px 0 0;border:1px solid var(--border);border-bottom:none;display:block;max-height:220px;object-fit:cover"
+          />
+          <img
+            src="https://www.larimer.gov/sites/default/files/styles/large/public/2025-08/Pingreegrvl%2020080514.jpg?itok=s-palXJA"
+            alt="Gravel quarry haul road with fugitive dust"
+            style="width:100%;border-radius:0 0 8px 8px;border:1px solid var(--border);border-top:1px solid var(--border2);display:block;max-height:220px;object-fit:cover"
+          />
+          <p style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:8px;line-height:1.6">
+            Fig. 1 (top) — Strang Pit overview with Rocky Mountain backdrop, Larimer County (2025).<br>
+            Fig. 2 (bottom) — Active haul road with visible fugitive dust plume, representative gravel quarry operation, Larimer County (2008).
+          </p>
+        </div>
+        <!-- RIGHT: Annotations -->
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:14px 16px">
+            <div style="font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);letter-spacing:0.5px;margin-bottom:10px">OBSERVATIONS — What is visible / known</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--accent);background:rgba(88,166,255,0.12);border:1px solid rgba(88,166,255,0.25);border-radius:4px;padding:2px 6px;white-space:nowrap;margin-top:1px">OBS 1</span>
+                <p style="font-size:12px;color:var(--text2);line-height:1.7">Unpaved haul roads and exposed aggregate stockpile faces are visible across the 160-acre site. Vehicle traffic on these surfaces generates visible fugitive dust plumes consistent with EPA AP-42 §11.19.2 emission factors for aggregate quarries (~0.6 kg PM10 per vehicle pass).</p>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--accent);background:rgba(88,166,255,0.12);border:1px solid rgba(88,166,255,0.25);border-radius:4px;padding:2px 6px;white-space:nowrap;margin-top:1px">OBS 2</span>
+                <p style="font-size:12px;color:var(--text2);line-height:1.7">The Kechter Farm residential neighborhood (~1,500 m SE) lies directly downwind of the pit along the dominant NW→SE wind corridor recorded at Fort Collins weather stations. The quarry has operated continuously since 1977 with no documented emission controls beyond routine county practice.</p>
+              </div>
+            </div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:14px 16px">
+            <div style="font-family:var(--mono);font-size:11px;font-weight:600;color:var(--orange);letter-spacing:0.5px;margin-bottom:10px">INFERENCES — What may be occurring</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--orange);background:rgba(224,139,58,0.12);border:1px solid rgba(224,139,58,0.25);border-radius:4px;padding:2px 6px;white-space:nowrap;margin-top:1px">INF 1</span>
+                <p style="font-size:12px;color:var(--text2);line-height:1.7">During dry summer months and afternoon unstable atmospheric conditions (Pasquill-Gifford Class C–D), PM10 concentrations at Kechter Farm likely approach or exceed the 24-hr NAAQS standard of 150 µg/m³ — an exceedance risk invisible to residents without dispersion modeling.</p>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--orange);background:rgba(224,139,58,0.12);border:1px solid rgba(224,139,58,0.25);border-radius:4px;padding:2px 6px;white-space:nowrap;margin-top:1px">INF 2</span>
+                <p style="font-size:12px;color:var(--text2);line-height:1.7">The county's current practice likely relies on ad hoc water application (if any), which is insufficient during dry spells. A chemical stabilizer such as lignosulfonate — applied less frequently but with ~85% PM10 control efficiency — would offer meaningfully better protection without a proportional increase in operational cost.</p>
+              </div>
+            </div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:14px 16px">
+            <div style="font-family:var(--mono);font-size:11px;font-weight:600;color:var(--yellow);letter-spacing:0.5px;margin-bottom:8px">EXPLICIT UNKNOWN</div>
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <span style="font-family:var(--mono);font-size:10px;color:var(--yellow);background:rgba(210,153,34,0.12);border:1px solid rgba(210,153,34,0.25);border-radius:4px;padding:2px 6px;white-space:nowrap;margin-top:1px">UNK</span>
+              <p style="font-size:12px;color:var(--text2);line-height:1.7">The actual daily vehicle trip count on haul roads is not publicly documented. This model uses an estimated 20–60 trips/day based on a 40,000 ton/yr production rate and typical haul truck capacity (~20 tons/load). Real trip frequency could be higher during peak season, making the uncontrolled emission rate a significant source of uncertainty in all concentration estimates.</p>
+            </div>
+          </div>
+          <div style="background:rgba(88,166,255,0.06);border:1px solid rgba(88,166,255,0.25);border-radius:8px;padding:14px 16px">
+            <div style="font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);letter-spacing:0.5px;margin-bottom:8px">ENGINEERING QUESTION</div>
+            <p style="font-size:13px;color:var(--text);line-height:1.75;font-style:italic">"Between periodic water suppression and lignosulfonate chemical stabilization, which haul-road dust control strategy most effectively reduces PM10 concentrations at the Kechter Farm receptor to below the 24-hr NAAQS threshold — and under what operating conditions does each approach fail?"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PART 2 ─── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <h3>Part 2 — Making Thinking Visible</h3>
+      <span class="tag tag-orange">5 pts</span>
+    </div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--text3);font-family:var(--mono);margin-bottom:16px">
+        PURPOSE — Show how the system is conceptualized before building the tool; demonstrate AI-assisted design enhancement.
+      </p>
+
+      <!-- STAGE A -->
+      <div class="section-label">Stage A — Initial Hand-Drawn Representation</div>
+      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:20px;margin-bottom:20px">
+        <div style="border:2px dashed var(--border);border-radius:6px;padding:28px 20px;text-align:center;margin-bottom:14px">
+          <div style="font-family:var(--mono);font-size:12px;color:var(--text3);margin-bottom:6px">[ Hand-drawn sketch — attach scan or photo here ]</div>
+          <div style="font-size:11px;color:var(--text3);line-height:1.7">
+            Initial pencil diagram showing: Strang Pit source box → wind arrow → Gaussian plume cone →<br>
+            two control branches (Alt A water truck / Alt B lignosulfonate) → Kechter Farm receptor.<br>
+            Sketch completed prior to AI-assisted enhancement below.
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--text2);line-height:1.8">
+          The initial sketch was a rough flow diagram drawn on paper: a central source box labeled "Strang Pit,"
+          a wind arrow pointing southeast, a Gaussian plume cone spreading outward, and two parallel pathways
+          branching from the source — one labeled "water truck" and one "chemical." Both pathways converged at a
+          receptor box labeled "Kechter Farm (~1500 m)." Evaluation criteria (cost, health, environment) were
+          listed as bullet notes beside each pathway. The diagram captured the core logic but lacked quantitative
+          detail, connection to model inputs/outputs, and any representation of uncertainty.
+        </p>
+      </div>
+
+      <!-- STAGE B -->
+      <div class="section-label">Stage B — AI-Assisted Enhanced Diagram</div>
+      <div style="background:#0d1117;border-radius:8px;padding:16px;border:1px solid var(--border);margin-bottom:14px">
+        <svg width="100%" viewBox="0 0 680 920" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Strang Pit air quality system diagram — Part 2, Stage B</title>
+  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Flow diagram showing the Strang Pit emissions source, two engineering alternatives (water suppression and chemical dust stabilizer), the Gaussian dispersion model, receptor outputs, and multi-criteria evaluation framework.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  <mask id="imagine-text-gaps-1pw1vj" maskUnits="userSpaceOnUse"><rect x="0" y="0" width="680" height="920" fill="white"/><rect x="224.27880859375" y="43.263885498046875" width="231.44239807128906" height="21.47222900390625" fill="black" rx="2"/><rect x="208.69178771972656" y="64.44444274902344" width="262.616455078125" height="19.111119270324707" fill="black" rx="2"/><rect x="50.53947830200195" y="40.44444274902344" width="82.92105102539062" height="19.111119270324707" fill="black" rx="2"/><rect x="26.000001907348633" y="62.44444274902344" width="139.34425354003906" height="19.111119270324707" fill="black" rx="2"/><rect x="26.000001907348633" y="80.44444274902344" width="130.0326156616211" height="19.111119270324707" fill="black" rx="2"/><rect x="26.000001907348633" y="98.44444274902344" width="132.31256866455078" height="19.111119270324707" fill="black" rx="2"/><rect x="26.000001907348633" y="116.44444274902344" width="139.89764404296875" height="19.111119270324707" fill="black" rx="2"/><rect x="26.000001907348633" y="134.44444274902344" width="108.59814453125" height="19.111119270324707" fill="black" rx="2"/><rect x="256.29400634765625" y="123.44444274902344" width="167.41197204589844" height="19.111119270324707" fill="black" rx="2"/><rect x="82.7202377319336" y="181.26388549804688" width="184.55955505371094" height="21.472230911254883" fill="black" rx="2"/><rect x="71.78902435302734" y="202.44444274902344" width="206.42198181152344" height="19.111119270324707" fill="black" rx="2"/><rect x="50.77512741088867" y="218.44444274902344" width="248.4497833251953" height="19.111119270324707" fill="black" rx="2"/><rect x="413.1850891113281" y="181.26388549804688" width="183.62986755371094" height="21.472230911254883" fill="black" rx="2"/><rect x="393.5362243652344" y="202.44444274902344" width="222.92762756347656" height="19.111119270324707" fill="black" rx="2"/><rect x="367.8222351074219" y="218.44444274902344" width="274.3556213378906" height="19.111119270324707" fill="black" rx="2"/><rect x="246.84957885742188" y="295.263916015625" width="186.30087280273438" height="21.472230911254883" fill="black" rx="2"/><rect x="250.59783935546875" y="314.4444580078125" width="178.80435180664062" height="19.111119270324707" fill="black" rx="2"/><rect x="215.7345428466797" y="332.4444580078125" width="248.53094482421875" height="19.111119270324707" fill="black" rx="2"/><rect x="543.5049438476562" y="292.4444580078125" width="104.99006652832031" height="19.111119270324707" fill="black" rx="2"/><rect x="519.0700073242188" y="312.4444580078125" width="110.72314453125" height="19.111119270324707" fill="black" rx="2"/><rect x="519.0700073242188" y="330.4444580078125" width="148.16891479492188" height="19.111119270324707" fill="black" rx="2"/><rect x="519.0700073242188" y="348.4444580078125" width="139.13766479492188" height="19.111119270324707" fill="black" rx="2"/><rect x="519.0700073242188" y="366.4444274902344" width="142.5465087890625" height="19.111119270324707" fill="black" rx="2"/><rect x="519.0700073242188" y="384.4444580078125" width="137.77264404296875" height="19.111119270324707" fill="black" rx="2"/><rect x="537.4804077148438" y="434.4444580078125" width="117.03912353515625" height="19.111119270324707" fill="black" rx="2"/><rect x="519.0700073242188" y="452.4444274902344" width="119.04606628417969" height="19.111119270324707" fill="black" rx="2"/><rect x="519.0700073242188" y="468.4444580078125" width="164.9328155517578" height="19.1111478805542" fill="black" rx="2"/><rect x="203.02880859375" y="403.263916015625" width="273.9424133300781" height="21.472230911254883" fill="black" rx="2"/><rect x="125.55111694335938" y="424.4444580078125" width="428.8977966308594" height="19.111119270324707" fill="black" rx="2"/><rect x="126.16337585449219" y="489.263916015625" width="187.67327880859375" height="21.472230911254883" fill="black" rx="2"/><rect x="77.77533721923828" y="510.4444580078125" width="284.4493713378906" height="19.111119270324707" fill="black" rx="2"/><rect x="423.7347717285156" y="489.263916015625" width="182.5304718017578" height="21.472230911254883" fill="black" rx="2"/><rect x="431.6703186035156" y="510.4444580078125" width="166.6593780517578" height="19.111119270324707" fill="black" rx="2"/><rect x="242.72869873046875" y="586.4444580078125" width="194.54263305664062" height="19.111119270324707" fill="black" rx="2"/><rect x="58.8923454284668" y="619.263916015625" width="70.21531295776367" height="21.472230911254883" fill="black" rx="2"/><rect x="51.285133361816406" y="638.4444580078125" width="85.42972564697266" height="19.111119270324707" fill="black" rx="2"/><rect x="32.982826232910156" y="654.4444580078125" width="122.03434753417969" height="19.111119270324707" fill="black" rx="2"/><rect x="231.7280731201172" y="619.263916015625" width="52.543861389160156" height="21.472230911254883" fill="black" rx="2"/><rect x="215.91600036621094" y="637.263916015625" width="84.16800689697266" height="21.472230911254883" fill="black" rx="2"/><rect x="200.048583984375" y="654.4444580078125" width="115.90283966064453" height="19.111119270324707" fill="black" rx="2"/><rect x="374.89495849609375" y="619.263916015625" width="94.21011352539062" height="21.472230911254883" fill="black" rx="2"/><rect x="390.6221923828125" y="637.263916015625" width="62.755672454833984" height="21.472230911254883" fill="black" rx="2"/><rect x="364.048583984375" y="654.4444580078125" width="115.90283966064453" height="19.111119270324707" fill="black" rx="2"/><rect x="533.3536987304688" y="619.263916015625" width="105.29258728027344" height="21.472230911254883" fill="black" rx="2"/><rect x="540.2046508789062" y="638.4444580078125" width="91.59075927734375" height="19.111119270324707" fill="black" rx="2"/><rect x="528.048583984375" y="654.4444580078125" width="115.90283966064453" height="19.111119270324707" fill="black" rx="2"/><rect x="254.58221435546875" y="741.2638549804688" width="170.83558654785156" height="21.472230911254883" fill="black" rx="2"/><rect x="181.66073608398438" y="762.4445190429688" width="316.6785583496094" height="19.111119270324707" fill="black" rx="2"/><rect x="32" y="830.4444580078125" width="50.16799545288086" height="19.111119270324707" fill="black" rx="2"/><rect x="52" y="853.4444580078125" width="157.84947204589844" height="19.111119270324707" fill="black" rx="2"/><rect x="216" y="853.4444580078125" width="297.96673583984375" height="19.111119270324707" fill="black" rx="2"/><rect x="476.0000305175781" y="853.4444580078125" width="149.135498046875" height="19.111119270324707" fill="black" rx="2"/><rect x="52" y="875.4444580078125" width="189.57691955566406" height="19.111119270324707" fill="black" rx="2"/><rect x="216" y="875.4444580078125" width="228.6533203125" height="19.111119270324707" fill="black" rx="2"/><rect x="476.0000305175781" y="875.4444580078125" width="204.7249298095703" height="19.111119270324707" fill="black" rx="2"/></mask></defs>
+
+  <!-- ── ROW 0: SOURCE ── -->
+  <g onclick="sendPrompt('Tell me more about the Strang Pit emissions source')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="190" y="30" width="300" height="62" rx="8" stroke-width="0.5" style="fill:rgb(68, 68, 65);stroke:rgb(180, 178, 169);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="340" y="54" text-anchor="middle" dominant-baseline="central" style="fill:rgb(211, 209, 199);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Strang Pit — fugitive PM10 source</text>
+    <text x="340" y="74" text-anchor="middle" dominant-baseline="central" style="fill:rgb(180, 178, 169);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">160 ac quarry · 40,000 tons/yr · SE Fort Collins</text>
+  </g>
+
+  <!-- ── INPUTS SIDEBAR (left) ── -->
+  <rect x="18" y="30" width="148" height="130" rx="8" fill="none" stroke="var(--color-border-tertiary)" stroke-width="0.5" stroke-dasharray="4 3" style="fill:none;stroke:rgba(222, 220, 209, 0.15);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-dasharray:4px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="92" y="50" text-anchor="middle" dominant-baseline="central" style="font-weight:500;fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:500;text-anchor:middle;dominant-baseline:central">Model inputs</text>
+  <text x="30" y="72" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Q — emission rate (g/s)</text>
+  <text x="30" y="90" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">u — wind speed (m/s)</text>
+  <text x="30" y="108" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">η — control efficiency</text>
+  <text x="30" y="126" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">x — downwind dist. (m)</text>
+  <text x="30" y="144" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">P-G stability class</text>
+  <line x1="166" y1="95" x2="190" y2="95" stroke="var(--color-border-secondary)" marker-end="url(#arrow)" style="fill:none;stroke:rgb(156, 154, 146);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Arrow: source → split -->
+  <line x1="340" y1="92" x2="340" y2="118" marker-end="url(#arrow)" style="fill:none;stroke:rgb(156, 154, 146);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- ── SPLIT LABEL ── -->
+  <text x="340" y="133" text-anchor="middle" dominant-baseline="central" style="font-style:italic;fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;font-style:italic;text-anchor:middle;dominant-baseline:central">two engineering alternatives</text>
+
+  <!-- Horizontal branch line -->
+  <line x1="175" y1="148" x2="505" y2="148" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="175" y1="148" x2="175" y2="168" marker-end="url(#arrow)" style="fill:none;stroke:rgb(156, 154, 146);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="505" y1="148" x2="505" y2="168" marker-end="url(#arrow)" style="fill:none;stroke:rgb(156, 154, 146);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- ── ROW 1: ALTERNATIVES ── -->
+  <!-- Alt A -->
+  <g onclick="sendPrompt('How does water suppression control PM10 dust?')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="52" y="168" width="246" height="68" rx="8" stroke-width="0.5" style="fill:rgb(99, 56, 6);stroke:rgb(239, 159, 39);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="175" y="192" text-anchor="middle" dominant-baseline="central" style="fill:rgb(250, 199, 117);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Alt A — water suppression</text>
+    <text x="175" y="212" text-anchor="middle" dominant-baseline="central" style="fill:rgb(239, 159, 39);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">Water truck on haul roads · η ≈ 50%</text>
+    <text x="175" y="228" text-anchor="middle" dominant-baseline="central" style="fill:rgb(239, 159, 39);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">High freq. reapplication · standard practice</text>
+  </g>
+
+  <!-- Alt B -->
+  <g onclick="sendPrompt('How does lignosulfonate chemical stabilizer control PM10 dust?')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="382" y="168" width="246" height="68" rx="8" stroke-width="0.5" style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="505" y="192" text-anchor="middle" dominant-baseline="central" style="fill:rgb(159, 225, 203);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Alt B — chemical stabilizer</text>
+    <text x="505" y="212" text-anchor="middle" dominant-baseline="central" style="fill:rgb(93, 202, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">Lignosulfonate on haul roads · η ≈ 85%</text>
+    <text x="505" y="228" text-anchor="middle" dominant-baseline="central" style="fill:rgb(93, 202, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">Low freq. reapplication · binds surface particles</text>
+  </g>
+
+  <!-- Arrows alt → model -->
+  <line x1="175" y1="236" x2="175" y2="262" stroke="var(--color-border-secondary)" stroke-width="0.5" mask="url(#imagine-text-gaps-1pw1vj)" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="505" y1="236" x2="505" y2="262" stroke="var(--color-border-secondary)" stroke-width="0.5" mask="url(#imagine-text-gaps-1pw1vj)" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="175" y1="262" x2="316" y2="262" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="505" y1="262" x2="364" y2="262" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="340" y1="262" x2="340" y2="282" marker-end="url(#arrow)" style="fill:none;stroke:rgb(156, 154, 146);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- ── ROW 2: MODEL ── -->
+  <g onclick="sendPrompt('Explain the Gaussian dispersion model used in this tool')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="168" y="282" width="344" height="80" rx="8" stroke-width="0.5" style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="340" y="306" text-anchor="middle" dominant-baseline="central" style="fill:rgb(206, 203, 246);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Gaussian dispersion model</text>
+    <text x="340" y="324" text-anchor="middle" dominant-baseline="central" style="fill:rgb(175, 169, 236);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">C(x) = Q · (1−η) / (π · σy · σz · u)</text>
+    <text x="340" y="342" text-anchor="middle" dominant-baseline="central" style="fill:rgb(175, 169, 236);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">P-G σy, σz · ground-level area source · H = 0</text>
+  </g>
+
+  <!-- ── ASSUMPTIONS SIDEBAR (right) ── -->
+  <rect x="526" y="282" width="140" height="130" rx="8" fill="none" stroke="var(--color-border-tertiary)" stroke-width="0.5" stroke-dasharray="4 3" style="fill:none;stroke:rgba(222, 220, 209, 0.15);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-dasharray:4px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="596" y="302" text-anchor="middle" dominant-baseline="central" style="font-weight:500;fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:500;text-anchor:middle;dominant-baseline:central">Key assumptions</text>
+  <text x="523.07" y="322" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Steady-state wind</text>
+  <text x="523.07" y="340" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Flat terrain (E. Ft Collins)</text>
+  <text x="523.07" y="358" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Point src at pit centroid</text>
+  <text x="523.07" y="376" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">No gravitational settling</text>
+  <text x="523.07" y="394" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">AP-42 national avg. EFs</text>
+
+  <!-- ── UNCERTAINTY FLAG ── -->
+  <rect x="526" y="424" width="140" height="54" rx="8" fill="none" stroke="var(--color-border-tertiary)" stroke-width="0.5" stroke-dasharray="4 3" style="fill:none;stroke:rgba(222, 220, 209, 0.15);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-dasharray:4px, 3px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="596" y="444" text-anchor="middle" dominant-baseline="central" style="font-weight:500;fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:500;text-anchor:middle;dominant-baseline:central">Uncertainty / limits</text>
+  <text x="523.07" y="462" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Trip count unknown</text>
+  <text x="523.07" y="478" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Single wind dir. (worst case)</text>
+
+  <!-- Arrow: model → outputs -->
+  <line x1="340" y1="362" x2="340" y2="392" marker-end="url(#arrow)" style="fill:none;stroke:rgb(156, 154, 146);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- ── ROW 3: OUTPUTS ── -->
+  <g onclick="sendPrompt('What outputs does the Strang Pit tool produce?')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="130" y="392" width="420" height="62" rx="8" stroke-width="0.5" style="fill:rgb(12, 68, 124);stroke:rgb(133, 183, 235);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="340" y="414" text-anchor="middle" dominant-baseline="central" style="fill:rgb(181, 212, 244);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Model outputs — concentration profiles</text>
+    <text x="340" y="434" text-anchor="middle" dominant-baseline="central" style="fill:rgb(133, 183, 235);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">C(x) vs distance · Alt A vs Alt B · compared to PM10 24-hr NAAQS 150 µg/m³</text>
+  </g>
+
+  <!-- Arrows outputs → receptors -->
+  <line x1="220" y1="454" x2="220" y2="480" marker-end="url(#arrow)" style="fill:none;stroke:rgb(156, 154, 146);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="460" y1="454" x2="460" y2="480" marker-end="url(#arrow)" style="fill:none;stroke:rgb(156, 154, 146);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- ── ROW 4: RECEPTORS ── -->
+  <g onclick="sendPrompt('Who lives in the Kechter Farm neighborhood near Strang Pit?')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="52" y="480" width="336" height="56" rx="8" stroke-width="0.5" style="fill:rgb(113, 43, 19);stroke:rgb(240, 153, 123);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="220" y="500" text-anchor="middle" dominant-baseline="central" style="fill:rgb(245, 196, 179);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Receptor 1 — Kechter Farm</text>
+    <text x="220" y="520" text-anchor="middle" dominant-baseline="central" style="fill:rgb(240, 153, 123);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">~1,500 m SE · residential · primary health receptor</text>
+  </g>
+
+  <g onclick="sendPrompt('What is the Fossil Creek Reservoir Natural Area?')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="400" y="480" width="230" height="56" rx="8" stroke-width="0.5" style="fill:rgb(68, 68, 65);stroke:rgb(180, 178, 169);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="515" y="500" text-anchor="middle" dominant-baseline="central" style="fill:rgb(211, 209, 199);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Receptor 2 — Fossil Creek</text>
+    <text x="515" y="520" text-anchor="middle" dominant-baseline="central" style="fill:rgb(180, 178, 169);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">~3,000 m SE · environmental</text>
+  </g>
+
+  <!-- Arrow receptors → MCDA -->
+  <line x1="220" y1="536" x2="220" y2="560" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="515" y1="536" x2="515" y2="560" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="220" y1="560" x2="316" y2="560" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="515" y1="560" x2="364" y2="560" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="340" y1="560" x2="340" y2="580" marker-end="url(#arrow)" style="fill:none;stroke:rgb(156, 154, 146);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- ── ROW 5: MCDA EVALUATION ── -->
+  <text x="340" y="596" text-anchor="middle" dominant-baseline="central" style="font-style:italic;font-weight:500;fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:500;font-style:italic;text-anchor:middle;dominant-baseline:central">multi-criteria evaluation (MCDA)</text>
+
+  <!-- MCDA 4 boxes -->
+  <!-- Box 1: Technical -->
+  <g onclick="sendPrompt('How is technical effectiveness evaluated in the MCDA?')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="20" y="610" width="148" height="64" rx="8" stroke-width="0.5" style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="94" y="630" text-anchor="middle" dominant-baseline="central" style="fill:rgb(159, 225, 203);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Technical</text>
+    <text x="94" y="648" text-anchor="middle" dominant-baseline="central" style="fill:rgb(93, 202, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">effectiveness</text>
+    <text x="94" y="664" text-anchor="middle" dominant-baseline="central" style="fill:rgb(93, 202, 165);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">Quantitative · model</text>
+  </g>
+
+  <!-- Box 2: Cost -->
+  <g onclick="sendPrompt('How is cost and practicality evaluated in the MCDA?')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="184" y="610" width="148" height="64" rx="8" stroke-width="0.5" style="fill:rgb(99, 56, 6);stroke:rgb(239, 159, 39);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="258" y="630" text-anchor="middle" dominant-baseline="central" style="fill:rgb(250, 199, 117);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Cost &amp;</text>
+    <text x="258" y="648" text-anchor="middle" dominant-baseline="central" style="fill:rgb(250, 199, 117);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">practicality</text>
+    <text x="258" y="664" text-anchor="middle" dominant-baseline="central" style="fill:rgb(239, 159, 39);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">Qualitative · MCDA</text>
+  </g>
+
+  <!-- Box 3: Public health -->
+  <g onclick="sendPrompt('How is public health and safety evaluated in the MCDA?')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="348" y="610" width="148" height="64" rx="8" stroke-width="0.5" style="fill:rgb(113, 43, 19);stroke:rgb(240, 153, 123);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="422" y="630" text-anchor="middle" dominant-baseline="central" style="fill:rgb(245, 196, 179);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Public health</text>
+    <text x="422" y="648" text-anchor="middle" dominant-baseline="central" style="fill:rgb(245, 196, 179);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">&amp; safety</text>
+    <text x="422" y="664" text-anchor="middle" dominant-baseline="central" style="fill:rgb(240, 153, 123);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">Qualitative · MCDA</text>
+  </g>
+
+  <!-- Box 4: Environmental -->
+  <g onclick="sendPrompt('How are environmental considerations evaluated in the MCDA?')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="512" y="610" width="148" height="64" rx="8" stroke-width="0.5" style="fill:rgb(68, 68, 65);stroke:rgb(180, 178, 169);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="586" y="630" text-anchor="middle" dominant-baseline="central" style="fill:rgb(211, 209, 199);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Environmental</text>
+    <text x="586" y="648" text-anchor="middle" dominant-baseline="central" style="fill:rgb(180, 178, 169);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">considerations</text>
+    <text x="586" y="664" text-anchor="middle" dominant-baseline="central" style="fill:rgb(180, 178, 169);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">Qualitative · MCDA</text>
+  </g>
+
+  <!-- Vertical lines from MCDA label down to each box -->
+  <line x1="94" y1="580" x2="94" y2="610" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="258" y1="580" x2="258" y2="610" stroke="var(--color-border-secondary)" stroke-width="0.5" mask="url(#imagine-text-gaps-1pw1vj)" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="422" y1="580" x2="422" y2="610" stroke="var(--color-border-secondary)" stroke-width="0.5" mask="url(#imagine-text-gaps-1pw1vj)" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="586" y1="580" x2="586" y2="610" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="94" y1="580" x2="586" y2="580" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Arrow down from MCDA row → recommendation -->
+  <line x1="94" y1="674" x2="94" y2="710" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="258" y1="674" x2="258" y2="710" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="422" y1="674" x2="422" y2="710" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="586" y1="674" x2="586" y2="710" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="94" y1="710" x2="586" y2="710" stroke="var(--color-border-secondary)" stroke-width="0.5" style="fill:rgb(0, 0, 0);stroke:rgba(222, 220, 209, 0.3);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <line x1="340" y1="710" x2="340" y2="730" marker-end="url(#arrow)" style="fill:none;stroke:rgb(156, 154, 146);color:rgb(255, 255, 255);stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- ── ROW 6: RECOMMENDATION ── -->
+  <g onclick="sendPrompt('Which alternative does the Strang Pit tool recommend?')" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">
+    <rect x="140" y="730" width="400" height="62" rx="8" stroke-width="0.5" style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+    <text x="340" y="752" text-anchor="middle" dominant-baseline="central" style="fill:rgb(206, 203, 246);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:middle;dominant-baseline:central">Design recommendation</text>
+    <text x="340" y="772" text-anchor="middle" dominant-baseline="central" style="fill:rgb(175, 169, 236);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:central">Weighted MCDA score · justified engineering judgment</text>
+  </g>
+
+  <!-- ── LEGEND ── -->
+  <rect x="18" y="820" width="644" height="80" rx="8" fill="none" stroke="var(--color-border-tertiary)" stroke-width="0.5" style="fill:none;stroke:rgba(222, 220, 209, 0.15);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="36" y="840" dominant-baseline="central" style="font-weight:500;fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:500;text-anchor:start;dominant-baseline:central">Legend</text>
+
+  <rect x="36" y="856" width="14" height="14" rx="3" stroke-width="0.5" style="fill:rgb(99, 56, 6);stroke:rgb(239, 159, 39);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="56" y="863" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Alt A — water suppression</text>
+
+  <rect x="200" y="856" width="14" height="14" rx="3" stroke-width="0.5" style="fill:rgb(8, 80, 65);stroke:rgb(93, 202, 165);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="220" y="863" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Alt B — chemical stabilizer / technical effectiveness</text>
+
+  <rect x="460" y="856" width="14" height="14" rx="3" stroke-width="0.5" style="fill:rgb(60, 52, 137);stroke:rgb(175, 169, 236);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="480" y="863" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Model / recommendation</text>
+
+  <rect x="36" y="878" width="14" height="14" rx="3" stroke-width="0.5" style="fill:rgb(113, 43, 19);stroke:rgb(240, 153, 123);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="56" y="885" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Outputs / public health receptor</text>
+
+  <rect x="200" y="878" width="14" height="14" rx="3" stroke-width="0.5" style="fill:rgb(12, 68, 124);stroke:rgb(133, 183, 235);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="220" y="885" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Model outputs (concentration profiles)</text>
+
+  <rect x="460" y="878" width="14" height="14" rx="3" stroke-width="0.5" style="fill:rgb(68, 68, 65);stroke:rgb(180, 178, 169);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text x="480" y="885" dominant-baseline="central" style="fill:rgb(194, 192, 182);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:central">Structural / environmental / neutral</text>
+
+</svg>
+      </div>
+
+      <!-- CAPTION -->
+      <div style="background:var(--bg3);border:1px solid var(--border2);border-left:3px solid var(--purple);border-radius:6px;padding:14px 18px">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--purple);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Stage B Caption — AI Tool, Changes Made, and Improvement Over Original</div>
+        <p style="font-size:12px;color:var(--text2);line-height:1.8">
+          This diagram was produced using Claude (Anthropic) as a Tier 3 AI-assisted design tool. The AI
+          generated the full SVG structure — including the layered flow architecture, color-coded pathways
+          for each alternative, labeled inputs/outputs, uncertainty callout, and MCDA evaluation criteria
+          columns — based on a written description of the system and a rough hand-drawn layout. I revised
+          the AI output to correct the P-G coefficient notation, update receptor distances to match the
+          tool's modeled values (1,500 m and 3,000 m), and add the explicit "Uncertainty / Limits" callout
+          box that was absent in the first AI draft. The enhanced diagram improves on the original sketch
+          by making all model connections explicit (inputs → emission rate → Gaussian plume → receptor
+          concentration → MCDA criteria), showing the two alternatives as parallel, comparable pathways
+          rather than a branching list, and visually communicating where uncertainty enters the system —
+          information the hand-drawn version gestured at but did not encode structurally.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PART 3 ─── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <h3>Part 3 — The Tool</h3>
+      <span class="tag tag-green">19 pts</span>
+    </div>
+    <div class="card-body">
+      <div class="info-box" style="margin-bottom:0">
+        <strong>What the tool does.</strong> This tool is a web-based decision-support instrument that uses a
+        simplified Gaussian plume dispersion model to compare two dust control alternatives — periodic water
+        suppression (Alt A) and lignosulfonate chemical stabilization (Alt B) — for fugitive PM10 emissions
+        from the Strang Pit aggregate quarry in southeast Fort Collins. It accepts user-adjustable inputs
+        including annual production rate, operating schedule, EPA AP-42 emission factors for haul roads and
+        stockpiles, control efficiencies for each alternative, mean wind speed, and Pasquill-Gifford
+        atmospheric stability class. The tool implements the ground-level Gaussian plume equation
+        C(x) = Q / (π · σy · σz · u) with Pasquill-Gifford dispersion coefficients, computing PM10
+        concentrations at 13 downwind distances for all three scenarios (baseline, Alt A, Alt B) and
+        reporting results at two named receptor locations: Kechter Farm (~1,500 m SE) and Fossil Creek
+        Reservoir Natural Area (~3,000 m SE). Output includes an interactive concentration-vs-distance chart,
+        a receptor summary table with percent reduction values, a sensitivity heatmap sweeping wind speed
+        and stability class, and a multi-criteria decision analysis (MCDA) panel that auto-scores technical
+        effectiveness from model output and allows the user to adjust qualitative scores and criterion weights
+        for cost &amp; practicality, public health &amp; safety, and environmental considerations, producing
+        a weighted recommendation. To interpret results: concentration values at the receptor cards represent
+        worst-case daytime conditions under the selected stability class; values approaching or exceeding the
+        PM10 24-hr NAAQS of 150 µg/m³ indicate a potential compliance concern; the sensitivity heatmap
+        identifies conditions (high stability, low wind) where concentrations are highest and control
+        efficiency matters most; and the MCDA panel translates the quantitative model output into a
+        structured comparative recommendation that accounts for non-technical factors.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PART 4 ─── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <h3>Part 4 — Reflection</h3>
+      <span class="tag tag-purple">5 pts</span>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-left:3px solid var(--green);border-radius:6px;padding:14px 18px">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Design Recommendation — Which alternative and why</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.85">
+            I would defend <strong style="color:var(--green)">Alt B — lignosulfonate chemical stabilization</strong> as the
+            preferred dust control strategy for Strang Pit. Under default model conditions (neutral stability,
+            4 m/s wind, 40,000 tons/yr), Alt B reduces PM10 at Kechter Farm by approximately 85% compared to
+            50% for Alt A, bringing modeled concentrations well below the 24-hr NAAQS threshold across all
+            tested wind and stability conditions. The technical advantage is not marginal — Alt B produces
+            roughly a 2.3× greater absolute concentration reduction at the primary residential receptor.
+            Beyond the modeling: lignosulfonate requires reapplication only monthly or after rain events,
+            whereas water suppression demands daily truck operations, fuel, and driver labor that compound
+            over a Colorado dry season. The higher upfront material cost of the chemical stabilizer is
+            offset by substantially lower recurring operational burden, and its binding mechanism is not
+            compromised by the high-temperature, low-humidity summer days when dust risk is greatest and
+            water evaporation undermines the suppression benefit. For a county-operated facility with a
+            fixed roads budget, the reliability and consistency of Alt B makes it the more defensible choice
+            for protecting the Kechter Farm neighborhood.
+          </p>
+        </div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-left:3px solid var(--yellow);border-radius:6px;padding:14px 18px">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--yellow);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Limitations — Where the comparison breaks down</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.85">
+            The most significant limitation is the emission rate uncertainty. This model derives Q from
+            EPA AP-42 §11.19.2 emission factors and an estimated production schedule, but actual haul
+            road emissions depend on vehicle speed, road surface silt content, and trip frequency —
+            none of which are documented in publicly available Strang Pit records. A higher-than-assumed
+            trip count would increase baseline concentrations proportionally and could push even Alt B
+            scenarios above compliance thresholds. Second, the Gaussian plume model assumes a single
+            steady-state wind direction, which overstates concentrations during variable-wind periods
+            but may understate peak exposures during channeled drainage flow events in the evening
+            when the plume tracks directly toward Kechter Farm. Third, the model treats the pit as a
+            point source at its centroid — in reality, haul road emissions are distributed spatially
+            across the 160-acre site, and a line or area source formulation would be more physically
+            accurate. To increase confidence, I would need measured silt content and vehicle count
+            data from the county, an anemometer record at or near the pit to characterize local wind
+            variability, and ideally a PM10 ambient monitoring dataset at Kechter Farm against which
+            to validate the model output under known conditions.
+          </p>
+        </div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-left:3px solid var(--purple);border-radius:6px;padding:14px 18px">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--purple);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">AI Collaboration — How AI helped and where I intervened</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.85">
+            AI collaboration was central to building this tool. The initial HTML scaffold — tab structure,
+            CSS design system, chart initialization, and MCDA UI framework — was co-generated with Claude,
+            which I used as a coding collaborator rather than a code generator: I described the architecture
+            I wanted, reviewed each section, and directed revisions to the equation rendering, receptor snap
+            logic in the model table, and the heatmap color scaling function. The sensitivity analysis table
+            structure was AI-generated from a functional specification I wrote. I overrode the AI's initial
+            MCDA scoring formula, which normalized scores as percentages of maximum — I replaced it with a
+            raw weighted-sum approach (score × weight / 100) because I judged the normalized version obscured
+            the actual magnitude of score differences between alternatives. For Part 2, Claude generated the
+            SVG system diagram from a textual description; I revised it to correct the P-G notation, adjust
+            receptor distances to match modeled values, and add the uncertainty/limits callout that the AI
+            omitted. Throughout, my interventions centered on two things: engineering accuracy (checking that
+            equations and units were correct) and interpretive clarity (ensuring outputs communicated
+            decision-relevant information rather than just numbers).
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-assignment -->
+
+</div><!-- /main -->
+
+<script>
+// ══════════════════════════════════════════════════════
+//  P-G COEFFICIENTS
+// ══════════════════════════════════════════════════════
+const PG = {
+  A: { ay:0.22, by:0.894, cz:0.20,  dz:0.894, desc:"Very Unstable" },
+  B: { ay:0.16, by:0.894, cz:0.12,  dz:0.894, desc:"Unstable" },
+  C: { ay:0.11, by:0.894, cz:0.08,  dz:0.894, desc:"Slightly Unstable" },
+  D: { ay:0.08, by:0.894, cz:0.06,  dz:0.894, desc:"Neutral" },
+  E: { ay:0.06, by:0.894, cz:0.03,  dz:0.894, desc:"Stable" },
+  F: { ay:0.04, by:0.894, cz:0.016, dz:0.894, desc:"Very Stable" },
+};
+
+const DISTANCES = [100,200,300,500,750,1000,1250,1500,2000,2500,3000,4000,5000];
+const WIND_SPEEDS = [2,3,4,5,6,8];
+const STAB_CLASSES = ['A','B','C','D','E','F'];
+
+// ══════════════════════════════════════════════════════
+//  CORE MODEL
+// ══════════════════════════════════════════════════════
+function sigmaY(x_m, stab) {
+  const c = PG[stab];
+  const x_km = x_m / 1000;
+  return c.ay * Math.pow(x_km, c.by);
+}
+function sigmaZ(x_m, stab) {
+  const c = PG[stab];
+  const x_km = x_m / 1000;
+  return c.cz * Math.pow(x_km, c.dz);
+}
+function gaussianC(Q, x_m, stab, u) {
+  const sy = sigmaY(x_m, stab);
+  const sz = sigmaZ(x_m, stab);
+  if (sy * sz * u === 0) return 0;
+  return Q / (Math.PI * sy * sz * u);
+}
+
+// ══════════════════════════════════════════════════════
+//  GET INPUTS
+// ══════════════════════════════════════════════════════
+function getInputs() {
+  const prod   = parseFloat(document.getElementById('i_prod').value)   || 40000;
+  const days   = parseFloat(document.getElementById('i_days').value)   || 250;
+  const hrs    = parseFloat(document.getElementById('i_hrs').value)    || 8;
+  const efRoad = parseFloat(document.getElementById('i_ef_road').value)|| 0.6;
+  const efStck = parseFloat(document.getElementById('i_ef_stock').value)||0.04;
+  const etaA   = parseFloat(document.getElementById('i_eta_a').value)  || 0.50;
+  const etaB   = parseFloat(document.getElementById('i_eta_b').value)  || 0.85;
+  const u      = parseFloat(document.getElementById('i_u').value)      || 4;
+  const stab   = document.getElementById('i_stab').value               || 'D';
+  const rec1   = parseFloat(document.getElementById('i_rec1').value)   || 1500;
+  const rec2   = parseFloat(document.getElementById('i_rec2').value)   || 3000;
+
+  const hourlyProd = prod / days / hrs; // tons/hr
+  // Q in μg/s: (EF_road + EF_stockpile) [kg/ton] * hourlyProd [ton/hr] * 1e6 [μg/kg] / 3600 [s/hr]
+  const Q0 = (efRoad + efStck) * hourlyProd * 1e6 / 3600;
+  const QA = Q0 * (1 - etaA);
+  const QB = Q0 * (1 - etaB);
+
+  return { prod, days, hrs, efRoad, efStck, etaA, etaB, u, stab, rec1, rec2,
+           hourlyProd, Q0, QA, QB };
+}
+
+// ══════════════════════════════════════════════════════
+//  MCDA STATE
+// ══════════════════════════════════════════════════════
+const mcdaState = {
+  weights: { tech: 40, cost: 25, health: 20, env: 15 },
+  scoresA: { cost: 2, health: 3, env: 4 },
+  scoresB: { cost: 4, health: 4, env: 3 },
+};
+
+// ══════════════════════════════════════════════════════
+//  CHART
+// ══════════════════════════════════════════════════════
+let mainChart = null;
+function initChart() {
+  const ctx = document.getElementById('mainChart').getContext('2d');
+  mainChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels: [], datasets: [
+      { label: 'Baseline (No Control)',
+        data: [], borderColor: '#6e7681', backgroundColor: 'rgba(110,118,129,0.08)',
+        borderWidth: 2, pointRadius: 3, tension: 0.3 },
+      { label: 'Alt A — Water Suppression',
+        data: [], borderColor: '#e08b3a', backgroundColor: 'rgba(224,139,58,0.08)',
+        borderWidth: 2.5, pointRadius: 3, tension: 0.3 },
+      { label: 'Alt B — Chemical Stabilizer',
+        data: [], borderColor: '#3fb950', backgroundColor: 'rgba(63,185,80,0.08)',
+        borderWidth: 2.5, pointRadius: 3, tension: 0.3 },
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          labels: { color: '#8b949e', font: { family: "'IBM Plex Mono'", size: 11 },
+                    usePointStyle: true, pointStyleWidth: 10 }
+        },
+        tooltip: {
+          backgroundColor: '#161b22', borderColor: '#30363d', borderWidth: 1,
+          titleColor: '#e6edf3', bodyColor: '#8b949e',
+          titleFont: { family: "'IBM Plex Mono'", size: 11 },
+          bodyFont: { family: "'IBM Plex Mono'", size: 11 },
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)} μg/m³`
+          }
+        },
+        annotation: {}
+      },
+      scales: {
+        x: {
+          grid: { color: '#21262d' },
+          ticks: { color: '#6e7681', font: { family: "'IBM Plex Mono'", size: 10 } },
+          title: { display: true, text: 'Downwind Distance (m)',
+                   color: '#8b949e', font: { family: "'IBM Plex Mono'", size: 11 } }
+        },
+        y: {
+          grid: { color: '#21262d' },
+          ticks: { color: '#6e7681', font: { family: "'IBM Plex Mono'", size: 10 } },
+          title: { display: true, text: 'PM10 Concentration (μg/m³)',
+                   color: '#8b949e', font: { family: "'IBM Plex Mono'", size: 11 } }
+        }
+      }
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  RECALC — MASTER UPDATE
+// ══════════════════════════════════════════════════════
+function recalc() {
+  const inp = getInputs();
+
+  // Update displayed Q values
+  document.getElementById('disp_q0').textContent = inp.Q0.toFixed(2) + ' μg/s';
+  document.getElementById('disp_qa').textContent = inp.QA.toFixed(2) + ' μg/s';
+  document.getElementById('disp_qb').textContent = inp.QB.toFixed(2) + ' μg/s';
+
+  // Update displayed P-G coefficients
+  const pg = PG[inp.stab];
+  document.getElementById('disp_pg').innerHTML =
+    `Class <strong style="color:var(--accent)">${inp.stab}</strong> — ${pg.desc}<br>` +
+    `ay=${pg.ay}, by=${pg.by}<br>` +
+    `cz=${pg.cz}, dz=${pg.dz}`;
+
+  // Calculate concentrations at all distances
+  const rows = DISTANCES.map(x => {
+    const sy = sigmaY(x, inp.stab);
+    const sz = sigmaZ(x, inp.stab);
+    const c0 = gaussianC(inp.Q0, x, inp.stab, inp.u);
+    const ca = gaussianC(inp.QA, x, inp.stab, inp.u);
+    const cb = gaussianC(inp.QB, x, inp.stab, inp.u);
+    const pctA = c0 > 0 ? (1 - ca/c0) : 0;
+    const pctB = c0 > 0 ? (1 - cb/c0) : 0;
+    return { x, sy, sz, c0, ca, cb, pctA, pctB };
+  });
+
+  // Update model table
+  const tbody = document.getElementById('model_tbody');
+  tbody.innerHTML = '';
+  rows.forEach(r => {
+    const isRec1 = r.x === inp.rec1 || DISTANCES.findIndex(d=>d===inp.rec1) >= 0 && r.x === inp.rec1;
+    // check if this row matches a receptor
+    const isR1 = Math.abs(r.x - inp.rec1) === Math.min(...DISTANCES.map(d=>Math.abs(d-inp.rec1)));
+    const isR2 = Math.abs(r.x - inp.rec2) === Math.min(...DISTANCES.map(d=>Math.abs(d-inp.rec2)));
+    const snapR1 = DISTANCES.reduce((a,b)=>Math.abs(b-inp.rec1)<Math.abs(a-inp.rec1)?b:a);
+    const snapR2 = DISTANCES.reduce((a,b)=>Math.abs(b-inp.rec2)<Math.abs(a-inp.rec2)?b:a);
+    const isRec1Row = r.x === snapR1;
+    const isRec2Row = r.x === snapR2;
+    const cls = (isRec1Row||isRec2Row) ? 'receptor-row' : '';
+    const note = isRec1Row ? '◀ Kechter Farm' : isRec2Row ? '◀ Fossil Creek' : '';
+    tbody.innerHTML += `<tr class="${cls}">
+      <td>${r.x.toLocaleString()}${note ? ' <span style="color:var(--accent);font-size:10px">'+note+'</span>' : ''}</td>
+      <td>${r.sy.toFixed(1)}</td>
+      <td>${r.sz.toFixed(1)}</td>
+      <td class="val-baseline">${r.c0.toFixed(2)}</td>
+      <td class="val-a">${r.ca.toFixed(2)}</td>
+      <td class="val-b">${r.cb.toFixed(2)}</td>
+      <td class="val-pct-a">${(r.pctA*100).toFixed(1)}%</td>
+      <td class="val-pct-b">${(r.pctB*100).toFixed(1)}%</td>
+    </tr>`;
+  });
+
+  // Chart update
+  mainChart.data.labels = rows.map(r => r.x);
+  mainChart.data.datasets[0].data = rows.map(r => +r.c0.toFixed(3));
+  mainChart.data.datasets[1].data = rows.map(r => +r.ca.toFixed(3));
+  mainChart.data.datasets[2].data = rows.map(r => +r.cb.toFixed(3));
+  mainChart.update();
+
+  // Receptor stats
+  function getAtDist(targetDist) {
+    const snap = DISTANCES.reduce((a,b)=>Math.abs(b-targetDist)<Math.abs(a-targetDist)?b:a);
+    return rows.find(r=>r.x===snap);
+  }
+  const r1 = getAtDist(inp.rec1);
+  const r2 = getAtDist(inp.rec2);
+
+  function renderStats(containerId, rData) {
+    document.getElementById(containerId).innerHTML = `
+      <div class="stat-box baseline">
+        <div class="stat-label">Baseline</div>
+        <div class="stat-value baseline">${rData.c0.toFixed(2)}</div>
+        <div class="stat-sub">μg/m³ PM10</div>
+      </div>
+      <div class="stat-box alt-a">
+        <div class="stat-label">Alt A — Water</div>
+        <div class="stat-value alt-a">${rData.ca.toFixed(2)}</div>
+        <div class="stat-sub">μg/m³ PM10</div>
+        <div class="stat-reduction alt-a">↓ ${(rData.pctA*100).toFixed(1)}% reduction</div>
+      </div>
+      <div class="stat-box alt-b">
+        <div class="stat-label">Alt B — Chemical</div>
+        <div class="stat-value alt-b">${rData.cb.toFixed(2)}</div>
+        <div class="stat-sub">μg/m³ PM10</div>
+        <div class="stat-reduction alt-b">↓ ${(rData.pctB*100).toFixed(1)}% reduction</div>
+      </div>`;
+  }
+  renderStats('stats_rec1', r1);
+  renderStats('stats_rec2', r2);
+
+  // Sensitivity tables
+  renderSensitivity(inp);
+
+  // MCDA update
+  renderMCDA(inp, r1);
+}
+
+// ══════════════════════════════════════════════════════
+//  SENSITIVITY TABLES
+// ══════════════════════════════════════════════════════
+function heatColor(val, min, max) {
+  // dark (low conc) → bright (high conc): green-ish to red-ish
+  const t = Math.min(1, Math.max(0, (val - min) / (max - min + 0.001)));
+  const r = Math.round(13 + t * (180 - 13));
+  const g = Math.round(28 + (1-t) * (90 - 28));
+  const b = Math.round(23);
+  return `rgb(${r},${g},${b})`;
+}
+
+function renderSensitivity(inp) {
+  const container = document.getElementById('sens_tables');
+  const scenarios = [
+    { label: 'Baseline (No Control)', Q: inp.Q0, color: '#8b949e' },
+    { label: 'Alt A — Water Suppression', Q: inp.QA, color: '#e08b3a' },
+    { label: 'Alt B — Chemical Stabilizer', Q: inp.QB, color: '#3fb950' },
+  ];
+  const receptors = [
+    { label: 'Kechter Farm', dist: inp.rec1 },
+    { label: 'Fossil Creek Reservoir', dist: inp.rec2 },
+  ];
+
+  let html = '';
+  for (const rec of receptors) {
+    html += `<div class="section-label">${rec.label} (${rec.dist.toLocaleString()} m)</div>`;
+    html += `<div class="grid-3" style="margin-bottom:24px">`;
+    for (const sc of scenarios) {
+      // Build table data
+      const data = STAB_CLASSES.map(cls => ({
+        cls,
+        vals: WIND_SPEEDS.map(u => gaussianC(sc.Q, rec.dist, cls, u))
+      }));
+      const allVals = data.flatMap(d=>d.vals);
+      const minV = Math.min(...allVals), maxV = Math.max(...allVals);
+
+      html += `<div class="card"><div class="card-header">
+        <h3 style="font-size:11px">${sc.label}</h3>
+      </div><div class="card-body" style="padding:10px;overflow-x:auto">
+      <table class="sens-table"><thead><tr>
+        <th>Class</th>
+        ${WIND_SPEEDS.map(u=>`<th>${u} m/s</th>`).join('')}
+      </tr></thead><tbody>`;
+      data.forEach(({cls, vals}) => {
+        const isBaseline = cls === 'D';
+        html += `<tr>
+          <td class="sens-class" style="${isBaseline?'color:var(--accent)':''}">${cls}${isBaseline?' ←':''}</td>
+          ${vals.map((v,wi) => {
+            const bg = heatColor(v, minV, maxV);
+            const isBaselineCell = cls==='D' && WIND_SPEEDS[wi]===4;
+            return `<td style="background:${bg};color:#e6edf3;font-weight:${isBaselineCell?'700':'400'};
+              border:${isBaselineCell?'1px solid var(--accent)':'none'}">${v.toFixed(2)}</td>`;
+          }).join('')}
+        </tr>`;
+      });
+      html += `</tbody></table>
+        <div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:6px">
+          darker = lower conc · ← D/4m/s = baseline
+        </div>
+      </div></div>`;
+    }
+    html += `</div>`;
+  }
+  container.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════
+//  MCDA
+// ══════════════════════════════════════════════════════
+const mcdaCriteria = [
+  { key: 'tech',   label: 'Technical Effectiveness', auto: true,
+    rationale: 'Quantitative — auto-scored from model output (% PM10 reduction at Kechter Farm). Score = 1 + (reduction% / 25%), capped 1–5.' },
+  { key: 'cost',   label: 'Cost & Practicality', auto: false,
+    rationale: 'Alt A: low upfront cost but daily water truck operations, fuel & labor (~$15–30k/yr). Alt B: higher material cost (lignosulfonate ~$8–15/L) but monthly reapplication.' },
+  { key: 'health', label: 'Public Health & Safety', auto: false,
+    rationale: 'Alt B reduces dust more reliably across all wind conditions. Alt A is weather-dependent — less effective on hot, dry, windy days typical of Colorado.' },
+  { key: 'env',    label: 'Environmental Considerations', auto: false,
+    rationale: 'Alt A: water consumption is a concern in semi-arid Poudre basin. Alt B: lignosulfonate can leach to groundwater if over-applied — needs careful management.' },
+];
+
+function buildMCDA() {
+  const container = document.getElementById('mcda_rows');
+  container.innerHTML = '';
+  mcdaCriteria.forEach(cr => {
+    const div = document.createElement('div');
+    div.className = 'mcda-row';
+    const autoNote = cr.auto ? `<span class="tag tag-blue" style="font-size:10px">Auto-calculated</span>` : '';
+    div.innerHTML = `
+      <div class="mcda-row-header">
+        <div class="mcda-crit-name">${cr.label} ${autoNote}</div>
+        <div class="mcda-weight-input">
+          <input type="number" min="0" max="100" step="5"
+            value="${mcdaState.weights[cr.key]}"
+            id="w_${cr.key}"
+            oninput="mcdaState.weights['${cr.key}']=parseInt(this.value)||0;recalc()"
+            style="width:64px;text-align:center">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text3);text-align:center;margin-top:2px">weight %</div>
+        </div>
+      </div>
+      ${cr.auto
+        ? `<div class="mcda-scores">
+            <div>
+              <div class="mcda-score-label a">Alt A — Water</div>
+              <div id="auto_score_a_${cr.key}" style="font-family:var(--mono);font-size:20px;font-weight:600;color:var(--orange)">—</div>
+            </div>
+            <div>
+              <div class="mcda-score-label b">Alt B — Chemical</div>
+              <div id="auto_score_b_${cr.key}" style="font-family:var(--mono);font-size:20px;font-weight:600;color:var(--green)">—</div>
+            </div>
+           </div>`
+        : `<div class="mcda-scores">
+            <div>
+              <div class="mcda-score-label a">Alt A — Water</div>
+              <div class="score-stars" id="stars_a_${cr.key}"></div>
+            </div>
+            <div>
+              <div class="mcda-score-label b">Alt B — Chemical</div>
+              <div class="score-stars" id="stars_b_${cr.key}"></div>
+            </div>
+           </div>`}
+      <div class="mcda-rationale">${cr.rationale}</div>`;
+    container.appendChild(div);
+
+    if (!cr.auto) {
+      buildStars(`stars_a_${cr.key}`, cr.key, 'A');
+      buildStars(`stars_b_${cr.key}`, cr.key, 'B');
+    }
+  });
+}
+
+function buildStars(containerId, key, side) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  const scores = side === 'A' ? mcdaState.scoresA : mcdaState.scoresB;
+  for (let i = 1; i <= 5; i++) {
+    const btn = document.createElement('button');
+    btn.className = `star${scores[key] >= i ? ' active-'+side.toLowerCase() : ''}`;
+    btn.textContent = i;
+    btn.onclick = () => {
+      if (side === 'A') mcdaState.scoresA[key] = i;
+      else mcdaState.scoresB[key] = i;
+      buildStars(containerId, key, side);
+      recalc();
+    };
+    container.appendChild(btn);
+  }
+}
+
+function renderMCDA(inp, r1) {
+  // Weight check
+  const totalW = Object.values(mcdaState.weights).reduce((a,b)=>a+b,0);
+  const wStatus = document.getElementById('weight_status');
+  document.getElementById('weight_status_text').textContent =
+    totalW === 100 ? `Weights sum to ${totalW} — OK` : `⚠ Weights sum to ${totalW} — must equal 100`;
+  wStatus.className = 'weight-total ' + (totalW === 100 ? 'ok' : 'error');
+
+  // Auto-score for technical effectiveness
+  const autoScoreA = Math.max(1, Math.min(5, 1 + r1.pctA / 0.25));
+  const autoScoreB = Math.max(1, Math.min(5, 1 + r1.pctB / 0.25));
+  const elAuto_a = document.getElementById('auto_score_a_tech');
+  const elAuto_b = document.getElementById('auto_score_b_tech');
+  if (elAuto_a) elAuto_a.textContent = autoScoreA.toFixed(1);
+  if (elAuto_b) elAuto_b.textContent = autoScoreB.toFixed(1);
+
+  // Compute weighted scores
+  const allScores = {
+    tech:   { a: autoScoreA, b: autoScoreB },
+    cost:   { a: mcdaState.scoresA.cost,   b: mcdaState.scoresB.cost },
+    health: { a: mcdaState.scoresA.health, b: mcdaState.scoresB.health },
+    env:    { a: mcdaState.scoresA.env,    b: mcdaState.scoresB.env },
+  };
+
+  let totalA = 0, totalB = 0;
+  const breakdown = mcdaCriteria.map(cr => {
+    const w = mcdaState.weights[cr.key] / 100;
+    const sa = allScores[cr.key].a;
+    const sb = allScores[cr.key].b;
+    const wa = w * sa;
+    const wb = w * sb;
+    totalA += wa;
+    totalB += wb;
+    return { label: cr.label, w: mcdaState.weights[cr.key], sa, sb, wa, wb };
+  });
+
+  // Breakdown table
+  const tbody = document.getElementById('mcda_breakdown_body');
+  tbody.innerHTML = '';
+  breakdown.forEach(r => {
+    tbody.innerHTML += `<tr>
+      <td>${r.label}</td>
+      <td style="text-align:center">${r.w}%</td>
+      <td class="val-a" style="text-align:center">${r.sa.toFixed(1)}</td>
+      <td class="val-b" style="text-align:center">${r.sb.toFixed(1)}</td>
+      <td class="val-a" style="text-align:center">${r.wa.toFixed(2)}</td>
+      <td class="val-b" style="text-align:center">${r.wb.toFixed(2)}</td>
+    </tr>`;
+  });
+  tbody.innerHTML += `<tr style="border-top:2px solid var(--border);font-weight:700">
+    <td>TOTAL</td><td></td><td></td><td></td>
+    <td class="val-a" style="text-align:center;font-size:14px">${totalA.toFixed(2)}</td>
+    <td class="val-b" style="text-align:center;font-size:14px">${totalB.toFixed(2)}</td>
+  </tr>`;
+
+  // Result card
+  const winnerA = totalA >= totalB;
+  const maxScore = 5;
+  const pctA_bar = (totalA / maxScore) * 100;
+  const pctB_bar = (totalB / maxScore) * 100;
+
+  document.getElementById('mcda_result').innerHTML = `
+    <div class="mcda-result ${winnerA ? 'winner-a' : 'winner-b'}">
+      <div class="mcda-result-title">Recommended Alternative</div>
+      <div class="mcda-result-name">${winnerA
+        ? 'Alt A — Water Suppression'
+        : 'Alt B — Chemical Dust Stabilizer'}</div>
+      <div class="mcda-score-bars">
+        <div class="score-bar-wrap">
+          <div class="score-bar-label">Alt A — Water</div>
+          <div class="score-bar-track"><div class="score-bar-fill a" style="width:${pctA_bar.toFixed(1)}%"></div></div>
+          <div class="score-bar-val a">${totalA.toFixed(2)} / 5.00</div>
+        </div>
+        <div class="score-bar-wrap">
+          <div class="score-bar-label">Alt B — Chemical</div>
+          <div class="score-bar-track"><div class="score-bar-fill b" style="width:${pctB_bar.toFixed(1)}%"></div></div>
+          <div class="score-bar-val b">${totalB.toFixed(2)} / 5.00</div>
+        </div>
+      </div>
+    </div>
+    <div class="warn-box" style="margin-top:14px">
+      <strong>Note:</strong> This recommendation reflects current weight settings and qualitative scores. 
+      Adjust weights to explore how the recommendation changes under different priority frameworks 
+      (e.g., weight cost more heavily vs. weight public health more heavily).
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════
+//  TAB NAVIGATION
+// ══════════════════════════════════════════════════════
+document.querySelectorAll('.nav-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'results') mainChart.resize();
+  });
+});
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  initChart();
+  buildMCDA();
+  recalc();
+});
+</script>
+</body>
+</html>

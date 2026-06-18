@@ -1,9 +1,9 @@
 {
   "name": "Jasmine Moonbeam",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Cement Kiln PM Comparison Tool",
+  "description": "This tool models ground-level particulate matter (PM) concentrations downwind of a cement kiln using a simplified Gaussian dispersion approach, comparing three engineering control alternatives against an uncontrolled baseline. The user adjusts four inputs — stack height (H), wind speed (u), atmospheric stability class (A–F), and which alternatives to display — and the tool outputs a concentration vs. distance profile from 100 m to 10 km, peak concentration, receptor-point concentration at 1,500 m, and the downwind distance at which each alternative achieves EPA NAAQS PM₂.₅ compliance (9 µg/m³). The Gaussian model was selected because the cement kiln represents a continuous elevated point source in open terrain, well-suited to the Pasquill-Gifford dispersion framework. The only variable that changes between alternatives is the emission rate Q (g/s), which applies each device's rated removal efficiency to the uncontrolled kiln emission of 75 g/s. Outputs represent worst-case centerline ground-level concentrations under steady-state conditions — real concentrations will vary with wind direction, terrain, and equipment aging.",
+  "projectUrl": "tools/tool-2/projects/JM2.html",
   "projectPath": "../images/JM2.png",
   "folderName": "jaramillo"
 }

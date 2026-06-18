@@ -1,9 +1,9 @@
 {
   "name": "Kermode Harmony",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Air Quality Decision Tool: Data Center Backup Power Scenario",
+  "description": "Compare two engineering alternatives using a simplified Gaussian plume model and your MCDA/cost framework.",
+  "projectUrl": "tools/tool-2/projects/KH2.html",
   "projectPath": "../images/KH2.png",
   "folderName": "krumholz"
 }

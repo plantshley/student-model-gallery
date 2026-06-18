@@ -1,9 +1,9 @@
 {
   "name": "Emerald Hibiscus",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "Tool 2",
+  "projectTitle": "Commerce City Residential PM2.5 Exposure Tool",
+  "description": "This Excel-based tool compares two engineering alternatives for reducing PM2.5 exposure among Commerce City residents near the Suncor Refinery and Rawhide Energy Station: Alternative A (community vegetation buffer) and Alternative B (home HEPA filtration + envelope sealing). It models pollutant concentrations from source to occupant dose, calculates cost metrics, and evaluates both alternatives across four structured criteria using a weighted MCDA framework.",
+  "projectUrl": "tools/tool-2/projects/EH2.xlsx",
   "projectPath": "../images/EH2.png",
   "folderName": "haupt"
 }

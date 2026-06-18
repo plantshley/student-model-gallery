@@ -1,9 +1,9 @@
 {
   "name": "Snowdrop Kitten",
   "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "projectTitle": "Strang Pit AQI Tool",
+  "description": "This tool is a web-based decision-support instrument that uses a simplified Gaussian plume dispersion model to compare two dust control alternatives — periodic water suppression (Alt A) and lignosulfonate chemical stabilization (Alt B) — for fugitive PM10 emissions from the Strang Pit aggregate quarry in southeast Fort Collins. It accepts user-adjustable inputs including annual production rate, operating schedule, EPA AP-42 emission factors for haul roads and stockpiles, control efficiencies for each alternative, mean wind speed, and Pasquill-Gifford atmospheric stability class. The tool implements the ground-level Gaussian plume equation C(x) = Q / (π · σy · σz · u) with Pasquill-Gifford dispersion coefficients, computing PM10 concentrations at 13 downwind distances for all three scenarios (baseline, Alt A, Alt B) and reporting results at two named receptor locations: Kechter Farm (~1,500 m SE) and Fossil Creek Reservoir Natural Area (~3,000 m SE). Output includes an interactive concentration-vs-distance chart, a receptor summary table with percent reduction values, a sensitivity heatmap sweeping wind speed and stability class, and a multi-criteria decision analysis (MCDA) panel that auto-scores technical effectiveness from model output and allows the user to adjust qualitative scores and criterion weights for cost & practicality, public health & safety, and environmental considerations, producing a weighted recommendation. To interpret results: concentration values at the receptor cards represent worst-case daytime conditions under the selected stability class; values approaching or exceeding the PM10 24-hr NAAQS of 150 µg/m³ indicate a potential compliance concern; the sensitivity heatmap identifies conditions (high stability, low wind) where concentrations are highest and control efficiency matters most; and the MCDA panel translates the quantitative model output into a structured comparative recommendation that accounts for non-technical factors.",
+  "projectUrl": "tools/tool-2/projects/SK2.html",
   "projectPath": "../images/SK2.png",
   "folderName": "keyser"
 }

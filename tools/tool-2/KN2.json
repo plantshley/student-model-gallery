@@ -1,9 +1,9 @@
 {
   "name": "Katydid Nimbus",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Lawn Mower Emissions Calculator",
+  "description": "This is a tool designed for the tool 2 assignment in air quality engineering. It calculates emissions released from a typical two-stroke lawn mower in a typical home in Fort Collins. The two alternatives to address the pollution issue is to either switch to electric mowers or to mow at prime times when the air is most mixed. Click the buttons below to see how the values change for each alternative. Sliders are provided to change the yard area and time spent mowing for additional parameters. There is also a time selection box to see how different times of day affect air dispersion. Below the tool there is analysis on the two alternatives as well as a section explaining more about the tool itself.",
+  "projectUrl": "tools/tool-2/projects/KN2.html",
   "projectPath": "../images/KN2.png",
   "folderName": "knodel"
 }

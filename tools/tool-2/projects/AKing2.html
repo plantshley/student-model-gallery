@@ -1,0 +1,294 @@
+
+<style>
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+.section-label{font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin:0 0 10px;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;}
+.metric .mlabel{font-size:12px;color:var(--color-text-secondary);margin:0 0 4px;}
+.metric .mval{font-size:20px;font-weight:500;margin:0;}
+.row-ctrl{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.row-ctrl label{font-size:13px;color:var(--color-text-secondary);width:140px;flex-shrink:0;}
+.row-ctrl input[type=range]{flex:1;}
+.row-ctrl .readout{font-size:13px;font-weight:500;min-width:70px;text-align:right;}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th{text-align:left;padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;}
+.tbl td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);}
+.tbl tr:last-child td{border-bottom:none;}
+.badge{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:var(--border-radius-md);}
+.badge-red{background:#FCEBEB;color:#A32D2D;}
+.badge-green{background:#EAF3DE;color:#3B6D11;}
+.badge-amber{background:#FAEEDA;color:#854F0B;}
+.badge-blue{background:#E6F1FB;color:#185FA5;}
+.score-bar-wrap{background:var(--color-background-secondary);border-radius:4px;height:8px;width:100%;overflow:hidden;}
+.score-bar{height:8px;border-radius:4px;transition:width 0.3s;}
+.interp-box{border-left:3px solid;padding:10px 14px;border-radius:0;margin-bottom:10px;}
+.interp-high{border-color:#185FA5;background:#E6F1FB;}
+.interp-avg{border-color:#3B6D11;background:#EAF3DE;}
+.interp-high p, .interp-avg p{margin:0;font-size:13px;}
+.interp-high .it{color:#0C447C;font-weight:500;font-size:12px;margin:0 0 3px;}
+.interp-avg .it{color:#27500A;font-weight:500;font-size:12px;margin:0 0 3px;}
+.sect-divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:1rem 0;}
+</style>
+
+<h2 class="sr-only">Fugitive dust PM10 Gaussian dispersion decision-support tool comparing chemical sealant vs vegetative windbreak alternatives for mine tailings</h2>
+
+<div style="padding:1rem 0;">
+
+<div class="card">
+  <div class="section-label">Model inputs</div>
+  <div class="grid2">
+    <div>
+      <div class="row-ctrl"><label>Wind speed <i>u</i> (m/s)</label><input type="range" id="wind" min="1" max="12" step="0.5" value="4"><span class="readout" id="wind-out">4.0 m/s</span></div>
+      <div class="row-ctrl"><label>Emission rate <i>Q</i> (g/s)</label><input type="range" id="Q" min="0.01" max="5" step="0.01" value="1"><span class="readout" id="Q-out">1.00 g/s</span></div>
+      <div class="row-ctrl"><label>Receptor distance <i>x</i> (m)</label><input type="range" id="dist" min="100" max="5000" step="50" value="1000"><span class="readout" id="dist-out">1000 m</span></div>
+    </div>
+    <div>
+      <div class="row-ctrl" style="align-items:flex-start;flex-direction:column;gap:4px;">
+        <label style="width:auto;">Pasquill–Gifford Stability Class</label>
+        <select id="stability" style="width:100%;font-size:13px;">
+          <option value="A">A — Very unstable (sunny, light wind)</option>
+          <option value="B">B — Unstable</option>
+          <option value="C" selected>C — Slightly unstable</option>
+          <option value="D">D — Neutral (overcast)</option>
+          <option value="E">E — Slightly stable</option>
+          <option value="F">F — Stable (night, light wind)</option>
+        </select>
+      </div>
+      <div class="row-ctrl" style="margin-top:12px;"><label>Alt A efficiency η<sub>A</sub> (%)</label><input type="range" id="etaA" min="50" max="99" step="1" value="85"><span class="readout" id="etaA-out">85%</span></div>
+      <div class="row-ctrl"><label>Alt B efficiency η<sub>B</sub> (%)</label><input type="range" id="etaB" min="20" max="90" step="1" value="55"><span class="readout" id="etaB-out">55%</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-label">Concentration at receptor — Gaussian dispersion (H = 0)</div>
+  <div class="grid3">
+    <div class="metric"><p class="mlabel">No action baseline</p><p class="mval" id="c-base">—</p></div>
+    <div class="metric"><p class="mlabel">Alt A — chemical sealant</p><p class="mval" id="c-a" style="color:#185FA5;">—</p></div>
+    <div class="metric"><p class="mlabel">Alt B — vegetative windbreak</p><p class="mval" id="c-b" style="color:#3B6D11;">—</p></div>
+  </div>
+  <div style="margin-top:12px;">
+    <p class="section-label" style="margin-bottom:6px;">σ parameters used</p>
+    <div style="display:flex;gap:20px;font-size:12px;color:var(--color-text-secondary);">
+      <span>σ<sub>y</sub> = <span id="sy-out">—</span> m</span>
+      <span>σ<sub>z</sub> = <span id="sz-out">—</span> m</span>
+      <span>Stability class: <span id="cls-out">C</span></span>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-label">Comparison table</div>
+  <table class="tbl" id="comp-table">
+    <thead><tr><th>Scenario</th><th>Q effective (g/s)</th><th>C (μg/m³)</th><th>Reduction vs baseline</th><th>NAAQS status (150 μg/m³)</th></tr></thead>
+    <tbody id="comp-body"></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="section-label">Multi-criteria decision analysis (MCDA)</div>
+  <table class="tbl">
+    <thead><tr><th style="width:34%;">Criterion</th><th style="width:10%;">Weight</th><th style="width:22%;">Alt A — sealant</th><th style="width:22%;">Alt B — windbreak</th><th style="width:12%;"></th></tr></thead>
+    <tbody id="mcda-body"></tbody>
+    <tfoot><tr>
+      <td style="font-weight:500;padding:10px;">Weighted total</td>
+      <td></td>
+      <td style="font-weight:500;color:#185FA5;" id="mcda-totA">—</td>
+      <td style="font-weight:500;color:#3B6D11;" id="mcda-totB">—</td>
+      <td id="mcda-winner"></td>
+    </tr></tfoot>
+  </table>
+  <p style="font-size:11px;color:var(--color-text-secondary);margin:8px 0 0;">Scores 1–5 (higher = better). Effectiveness score updates dynamically with your inputs.</p>
+</div>
+
+<div class="card">
+  <div class="section-label">Engineering interpretation</div>
+  <div class="interp-box interp-high"><p class="it">High-wind scenario (u ≥ 6 m/s)</p><p id="interp-high">—</p></div>
+  <div class="interp-box interp-avg"><p class="it">Average-wind scenario (u &lt; 6 m/s)</p><p id="interp-avg">—</p></div>
+  <div style="margin-top:10px;font-size:12px;color:var(--color-text-secondary);">
+    NAAQS 24-hr PM₁₀ standard: 150 μg/m³ &nbsp;|&nbsp; Gaussian model assumes flat terrain, ground-level point source, steady-state conditions.
+  </div>
+</div>
+
+</div>
+
+<script>
+const PG = {
+  A:{ay:0.3658,by:0.9024,az:0.192,bz:0.936},
+  B:{ay:0.2751,by:0.8827,az:0.156,bz:0.822},
+  C:{ay:0.2090,by:0.8611,az:0.116,bz:0.838},
+  D:{ay:0.1471,by:0.8251,az:0.079,bz:0.815},
+  E:{ay:0.1046,by:0.7987,az:0.063,bz:0.784},
+  F:{ay:0.0722,by:0.7665,az:0.053,bz:0.719}
+};
+
+const MCDA_CRITERIA = [
+  {label:'Technical effectiveness',weight:0.30,scoresA:[null],scoresB:[null],dynamic:true},
+  {label:'Cost & practicality',weight:0.25,labelA:'High recurring cost',labelB:'Low ongoing cost',sA:2,sB:4},
+  {label:'Public health & safety',weight:0.25,dynamic:false,labelA:'Rapid PM₁₀ reduction',labelB:'Moderate reduction',sA:null,sB:null,healthDynamic:true},
+  {label:'Environmental co-benefits',weight:0.20,labelA:'Chemical inputs, limited ecology',labelB:'Habitat, carbon, erosion control',sA:2,sB:5}
+];
+
+function sigma(cls,x){
+  const p=PG[cls];
+  const sy=p.ay*Math.pow(x,p.by);
+  const sz=p.az*Math.pow(x,p.bz);
+  return{sy,sz};
+}
+
+function conc(Q,u,sy,sz){
+  if(sy<=0||sz<=0||u<=0)return 0;
+  return (Q/(Math.PI*u*sy*sz))*1e6;
+}
+
+function effScore(reduction){
+  if(reduction>=0.85)return 5;
+  if(reduction>=0.70)return 4;
+  if(reduction>=0.55)return 3;
+  if(reduction>=0.40)return 2;
+  return 1;
+}
+
+function healthScore(cVal){
+  if(cVal<50)return 5;
+  if(cVal<100)return 4;
+  if(cVal<150)return 3;
+  if(cVal<300)return 2;
+  return 1;
+}
+
+function fmt(v){
+  if(v>=1000)return v.toLocaleString('en-US',{maximumFractionDigits:0})+' μg/m³';
+  if(v>=100)return v.toFixed(1)+' μg/m³';
+  return v.toFixed(2)+' μg/m³';
+}
+
+function barColor(score){
+  const c=['#E24B4A','#EF9F27','#EF9F27','#63a122','#1D9E75'];
+  return c[Math.min(score-1,4)];
+}
+
+function update(){
+  const u=parseFloat(document.getElementById('wind').value);
+  const Q=parseFloat(document.getElementById('Q').value);
+  const x=parseFloat(document.getElementById('dist').value);
+  const cls=document.getElementById('stability').value;
+  const etaA=parseFloat(document.getElementById('etaA').value)/100;
+  const etaB=parseFloat(document.getElementById('etaB').value)/100;
+
+  document.getElementById('wind-out').textContent=u.toFixed(1)+' m/s';
+  document.getElementById('Q-out').textContent=Q.toFixed(2)+' g/s';
+  document.getElementById('dist-out').textContent=x.toLocaleString('en-US')+' m';
+  document.getElementById('etaA-out').textContent=(etaA*100).toFixed(0)+'%';
+  document.getElementById('etaB-out').textContent=(etaB*100).toFixed(0)+'%';
+  document.getElementById('cls-out').textContent=cls;
+
+  const{sy,sz}=sigma(cls,x);
+  document.getElementById('sy-out').textContent=sy.toFixed(1);
+  document.getElementById('sz-out').textContent=sz.toFixed(1);
+
+  const cBase=conc(Q,u,sy,sz);
+  const cA=conc(Q*(1-etaA),u,sy,sz);
+  const cB=conc(Q*(1-etaB),u,sy,sz);
+
+  document.getElementById('c-base').textContent=fmt(cBase);
+  document.getElementById('c-a').textContent=fmt(cA);
+  document.getElementById('c-b').textContent=fmt(cB);
+
+  const naaqs=150;
+  function naaqs_badge(c){
+    if(c<=naaqs)return '<span class="badge badge-green">Compliant</span>';
+    if(c<=naaqs*2)return '<span class="badge badge-amber">Borderline</span>';
+    return '<span class="badge badge-red">Exceeds</span>';
+  }
+
+  const tbody=document.getElementById('comp-body');
+  tbody.innerHTML=[
+    {label:'No action',q:Q,c:cBase,red:0},
+    {label:'Alt A — chemical sealant',q:Q*(1-etaA),c:cA,red:(cBase-cA)/cBase*100},
+    {label:'Alt B — vegetative windbreak',q:Q*(1-etaB),c:cB,red:(cBase-cB)/cBase*100}
+  ].map((r,i)=>`<tr>
+    <td style="font-weight:${i===0?400:500};color:${i===1?'#185FA5':i===2?'#3B6D11':'inherit'}">${r.label}</td>
+    <td>${r.q.toFixed(3)}</td>
+    <td>${fmt(r.c)}</td>
+    <td>${i===0?'—':r.red.toFixed(1)+'%'}</td>
+    <td>${naaqs_badge(r.c)}</td>
+  </tr>`).join('');
+
+  const sEA=effScore(etaA);
+  const sEB=effScore(etaB);
+  const sHA=healthScore(cA);
+  const sHB=healthScore(cB);
+
+  const criteria=[
+    {label:'Technical effectiveness',weight:0.30,
+      labelA:`η = ${(etaA*100).toFixed(0)}%, C = ${fmt(cA)}`,
+      labelB:`η = ${(etaB*100).toFixed(0)}%, C = ${fmt(cB)}`,
+      sA:sEA,sB:sEB},
+    {label:'Cost & practicality',weight:0.25,
+      labelA:'High recurring material cost',labelB:'Low ongoing cost; self-sustaining',sA:2,sB:4},
+    {label:'Public health & safety',weight:0.25,
+      labelA:`C = ${fmt(cA)}`,labelB:`C = ${fmt(cB)}`,sA:sHA,sB:sHB},
+    {label:'Environmental co-benefits',weight:0.20,
+      labelA:'Chemical inputs; limited ecology',labelB:'Habitat, carbon sequestration, erosion',sA:2,sB:5}
+  ];
+
+  let totA=0,totB=0;
+  document.getElementById('mcda-body').innerHTML=criteria.map(c=>{
+    totA+=c.weight*c.sA; totB+=c.weight*c.sB;
+    const winA=c.sA>c.sB,winB=c.sB>c.sA;
+    return`<tr>
+      <td>${c.label}<br><span style="font-size:11px;color:var(--color-text-secondary);">Weight: ${(c.weight*100).toFixed(0)}%</span></td>
+      <td><span style="font-size:11px;color:var(--color-text-secondary);">${(c.weight*100).toFixed(0)}%</span></td>
+      <td>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;">${c.labelA}</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="score-bar-wrap" style="flex:1;"><div class="score-bar" style="width:${c.sA/5*100}%;background:${barColor(c.sA)};"></div></div>
+          <span style="font-size:13px;font-weight:500;min-width:12px;${winA?'color:#185FA5':''}">${c.sA}/5</span>
+        </div>
+      </td>
+      <td>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;">${c.labelB}</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="score-bar-wrap" style="flex:1;"><div class="score-bar" style="width:${c.sB/5*100}%;background:${barColor(c.sB)};"></div></div>
+          <span style="font-size:13px;font-weight:500;min-width:12px;${winB?'color:#3B6D11':''}">${c.sB}/5</span>
+        </div>
+      </td>
+      <td>${winA?'<span class="badge badge-blue">A</span>':winB?'<span class="badge badge-green">B</span>':'<span class="badge badge-amber">Tie</span>'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('mcda-totA').textContent=(totA).toFixed(2);
+  document.getElementById('mcda-totB').textContent=(totB).toFixed(2);
+  const winner=totA>totB?'<span class="badge badge-blue">Alt A wins</span>':totA<totB?'<span class="badge badge-green">Alt B wins</span>':'<span class="badge badge-amber">Tie</span>';
+  document.getElementById('mcda-winner').innerHTML=winner;
+
+  const hiU=6;
+  const {sy:hsy,sz:hsz}=sigma(cls,x);
+  const cBaseHigh=conc(Q,hiU,hsy,hsz);
+  const cAHigh=conc(Q*(1-etaA),hiU,hsy,hsz);
+  const cBHigh=conc(Q*(1-etaB),hiU,hsy,hsz);
+
+  document.getElementById('interp-high').textContent=
+    `Under high-wind conditions (u ≥ 6 m/s), dilution increases but emission entrainment also intensifies. `+
+    `Alt A reduces C to ${fmt(cAHigh)} vs Alt B at ${fmt(cBHigh)} (baseline ${fmt(cBaseHigh)}). `+
+    `${cAHigh<cBHigh?'Alt A (chemical sealant) provides superior short-term suppression — critical for acute exposure events near the receptor.':'Alt B (windbreak) performs comparably or better by intercepting wind energy before it entrains fine particles.'}`;
+
+  const loU=3;
+  const cBaseLow=conc(Q,loU,sy,sz);
+  const cALow=conc(Q*(1-etaA),loU,sy,sz);
+  const cBLow=conc(Q*(1-etaB),loU,sy,sz);
+
+  document.getElementById('interp-avg').textContent=
+    `Under average-wind conditions (u ~ 3 m/s), lower dilution means higher ambient concentrations despite reduced suspension. `+
+    `Alt A reduces C to ${fmt(cALow)} vs Alt B at ${fmt(cBLow)} (baseline ${fmt(cBaseLow)}). `+
+    `Alt B's ${(etaB*100).toFixed(0)}% efficiency ${cBLow<naaqs?'achieves compliance':'falls short of the 150 μg/m³ NAAQS standard'} while delivering long-term ecological co-benefits that compound over the project lifetime — making it the preferred choice where chronic low-wind exposure dominates.`;
+}
+
+['wind','Q','dist','stability','etaA','etaB'].forEach(id=>
+  document.getElementById(id).addEventListener('input',update)
+);
+update();
+</script>

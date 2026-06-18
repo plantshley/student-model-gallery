@@ -1,0 +1,820 @@
+
+<style>
+  :root { --ff: var(--font-sans, system-ui, sans-serif); }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--ff); }
+  body, div { color: var(--color-text-primary); }
+
+  .shell { padding: 1.5rem 0; }
+  h1 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
+
+  .tabs { display: flex; gap: 4px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .tab { padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); font-size: 13px; cursor: pointer; background: transparent; color: var(--color-text-secondary); transition: all .15s; }
+  .tab.active { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
+  .tab:hover:not(.active) { background: var(--color-background-secondary); }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .grid2,.grid3,.grid4 { grid-template-columns: 1fr; } }
+
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+  .card-title { font-size: 13px; font-weight: 500; margin-bottom: 12px; }
+  .metric-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; }
+  .metric-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .metric-val { font-size: 22px; font-weight: 500; }
+  .metric-val.blue { color: #185FA5; }
+  .metric-val.green { color: #3B6D11; }
+  .metric-val.amber { color: #854F0B; }
+  .metric-val.red { color: #A32D2D; }
+
+  label { font-size: 12px; color: var(--color-text-secondary); display: block; margin-bottom: 4px; }
+  input[type=range] { width: 100%; }
+  .slider-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .slider-row input { flex: 1; }
+  .slider-val { font-size: 12px; font-weight: 500; min-width: 52px; text-align: right; color: var(--color-text-primary); }
+
+  .alt-a { border-left: 3px solid #185FA5; padding-left: 10px; }
+  .alt-b { border-left: 3px solid #3B6D11; padding-left: 10px; }
+  .alt-label-a { color: #185FA5; font-weight: 500; font-size: 13px; }
+  .alt-label-b { color: #3B6D11; font-weight: 500; font-size: 13px; }
+
+  .section-title { font-size: 15px; font-weight: 500; margin-bottom: 12px; margin-top: 1.5rem; }
+  .section-title:first-child { margin-top: 0; }
+
+  .note { font-size: 11px; color: var(--color-text-tertiary); margin-top: 6px; }
+
+  canvas { display: block; }
+  .chart-wrap { position: relative; width: 100%; }
+
+  .legend { display: flex; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
+  .leg-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--color-text-secondary); }
+  .leg-box { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-size: 12px; font-weight: 500; color: var(--color-text-secondary); padding: 6px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  td { padding: 7px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  tr:last-child td { border-bottom: none; }
+  .td-blue { color: #185FA5; font-weight: 500; }
+  .td-green { color: #3B6D11; font-weight: 500; }
+
+  .score-bar-wrap { background: var(--color-background-secondary); border-radius: 4px; height: 10px; flex: 1; overflow: hidden; }
+  .score-bar { height: 100%; border-radius: 4px; transition: width .4s; }
+  .score-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .score-name { font-size: 12px; color: var(--color-text-secondary); width: 120px; flex-shrink: 0; }
+  .score-num { font-size: 12px; font-weight: 500; min-width: 24px; text-align: right; }
+
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: var(--border-radius-md); margin-left: 6px; }
+  .badge-green { background: var(--color-background-success); color: var(--color-text-success); }
+  .badge-amber { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .badge-red { background: var(--color-background-danger); color: var(--color-text-danger); }
+  .badge-blue { background: var(--color-background-info); color: var(--color-text-info); }
+
+  .weight-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .weight-row label { margin: 0; width: 160px; flex-shrink: 0; font-size: 13px; color: var(--color-text-primary); }
+
+  .source-tag { font-size: 10px; color: var(--color-text-tertiary); font-style: italic; }
+
+  .infobox { background: var(--color-background-info); border: 0.5px solid var(--color-border-info); border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 12px; color: var(--color-text-info); margin-bottom: 1rem; }
+
+  .pct-improve { font-size: 12px; color: var(--color-text-success); font-weight: 500; }
+  .baseline-pill { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--color-background-secondary); color: var(--color-text-secondary); display: inline-block; }
+
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1rem 0; }
+</style>
+
+<div class="shell">
+  <h1>NOx Exposure Comparison Tool — Fort Collins, CO</h1>
+  <p class="sub">BNSF Front Range Subdivision · Gaussian Dispersion + Fixed-Box Model · MCDA Framework &nbsp;|&nbsp; <span class="source-tag">EPA Tier emission factors, EPA-420-F-09-025; Fort Collins train data: fcgov.com</span></p>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('inputs')">Inputs & Parameters</button>
+    <button class="tab" onclick="showTab('dispersion')">Air Dispersion Model</button>
+    <button class="tab" onclick="showTab('comparison')">Alternative Comparison</button>
+    <button class="tab" onclick="showTab('sensitivity')">Sensitivity Analysis</button>
+    <button class="tab" onclick="showTab('mcda')">MCDA Decision Matrix</button>
+  </div>
+
+  <!-- INPUTS PANEL -->
+  <div id="tab-inputs" class="panel active">
+    <div class="infobox">Adjust parameters below. All model outputs update in real time across all tabs. Default values reflect EPA Tier 2 fleet-average data and BNSF Front Range Sub. conditions.</div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Emission Parameters <span class="source-tag">(EPA-420-F-09-025, 2009)</span></div>
+        <label>Baseline NOx emission rate — idle (g/hr per locomotive)</label>
+        <div class="slider-row"><input type="range" id="s-nox-idle" min="50" max="600" step="10" value="240" oninput="update()"><span class="slider-val" id="v-nox-idle">240 g/hr</span></div>
+        <label>Baseline NOx emission rate — moving (g/hr per locomotive)</label>
+        <div class="slider-row"><input type="range" id="s-nox-move" min="100" max="1200" step="20" value="560" oninput="update()"><span class="slider-val" id="v-nox-move">560 g/hr</span></div>
+        <label>Trains per day (BNSF Front Range Sub.)</label>
+        <div class="slider-row"><input type="range" id="s-trains" min="4" max="20" step="1" value="9" oninput="update()"><span class="slider-val" id="v-trains">9 trains/day</span></div>
+        <label>Locomotives per train</label>
+        <div class="slider-row"><input type="range" id="s-locos" min="1" max="6" step="1" value="3" oninput="update()"><span class="slider-val" id="v-locos">3</span></div>
+        <label>Avg. idle duration per train pass (min)</label>
+        <div class="slider-row"><input type="range" id="s-idle-dur" min="1" max="30" step="1" value="7" oninput="update()"><span class="slider-val" id="v-idle-dur">7 min</span></div>
+        <p class="note">EPA Tier 2 fleet avg: ~7.3 g/bhp-hr NOx line-haul; ~9.5 switch. Class I mixed fleet ~2020.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Atmospheric & Site Conditions</div>
+        <label>Wind speed (m/s) — Fort Collins mean: 3.4 m/s</label>
+        <div class="slider-row"><input type="range" id="s-wind" min="0.5" max="10" step="0.1" value="3.4" oninput="update()"><span class="slider-val" id="v-wind">3.4 m/s</span></div>
+        <label>Stack/exhaust height (m)</label>
+        <div class="slider-row"><input type="range" id="s-stack" min="1" max="8" step="0.5" value="4" oninput="update()"><span class="slider-val" id="v-stack">4.0 m</span></div>
+        <label>Atmospheric stability class (1=A unstable → 6=F stable)</label>
+        <div class="slider-row"><input type="range" id="s-stab" min="1" max="6" step="1" value="3" oninput="update()"><span class="slider-val" id="v-stab">C (neutral)</span></div>
+        <label>Receptor height (m above ground)</label>
+        <div class="slider-row"><input type="range" id="s-recept" min="0" max="3" step="0.5" value="1.5" oninput="update()"><span class="slider-val" id="v-recept">1.5 m</span></div>
+        <label>Peak hour population density within 200m (persons)</label>
+        <div class="slider-row"><input type="range" id="s-pop" min="20" max="2000" step="10" value="400" oninput="update()"><span class="slider-val" id="v-pop">400</span></div>
+        <label>Off-peak population density within 200m (persons)</label>
+        <div class="slider-row"><input type="range" id="s-pop-off" min="5" max="500" step="5" value="60" oninput="update()"><span class="slider-val" id="v-pop-off">60</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Alternative A — Full Electrification</div>
+        <label>NOx emission reduction efficiency (%)</label>
+        <div class="slider-row"><input type="range" id="s-elec-eff" min="70" max="100" step="1" value="97" oninput="update()"><span class="slider-val" id="v-elec-eff">97%</span></div>
+        <label>Estimated capital cost ($ million, per 100mi corridor)</label>
+        <div class="slider-row"><input type="range" id="s-elec-cost" min="500" max="5000" step="50" value="1800" oninput="update()"><span class="slider-val" id="v-elec-cost">$1,800M</span></div>
+        <label>Implementation timeline (years)</label>
+        <div class="slider-row"><input type="range" id="s-elec-time" min="5" max="25" step="1" value="15" oninput="update()"><span class="slider-val" id="v-elec-time">15 yrs</span></div>
+        <p class="note">Based on BNSF/UP electrification pilots; European corridor benchmarks ~$8-18M/km. CO grid 2024: ~27% renewables, reducing upstream NOx.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Alternative B — Scheduling Modification</div>
+        <label>% of trains shifted to off-peak (midnight–6am)</label>
+        <div class="slider-row"><input type="range" id="s-sched-shift" min="10" max="80" step="5" value="50" oninput="update()"><span class="slider-val" id="v-sched-shift">50%</span></div>
+        <label>Peak hour traffic reduction (%)</label>
+        <div class="slider-row"><input type="range" id="s-sched-peak" min="10" max="70" step="5" value="45" oninput="update()"><span class="slider-val" id="v-sched-peak">45%</span></div>
+        <label>Estimated cost ($ million)</label>
+        <div class="slider-row"><input type="range" id="s-sched-cost" min="1" max="100" step="1" value="18" oninput="update()"><span class="slider-val" id="v-sched-cost">$18M</span></div>
+        <label>Implementation timeline (years)</label>
+        <div class="slider-row"><input type="range" id="s-sched-time" min="1" max="10" step="1" value="3" oninput="update()"><span class="slider-val" id="v-sched-time">3 yrs</span></div>
+        <p class="note">Total NOx not reduced — exposure redistributed to off-peak hours when populations near tracks are 80-90% lower. City of Fort Collins: 8-10 trains/day on BNSF.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISPERSION PANEL -->
+  <div id="tab-dispersion" class="panel">
+    <div class="infobox">Simplified Gaussian line-source dispersion model. Plume spread coefficients (σy, σz) use Pasquill-Gifford stability classes. Source: EPA Workbook of Atmospheric Dispersion Estimates (Turner, 1994).</div>
+
+    <p class="section-title">Centerline NOx Ground Concentration vs. Distance from Track (μg/m³)</p>
+    <div class="legend">
+      <span class="leg-item"><span class="leg-box" style="background:#D85A30"></span>Baseline (diesel)</span>
+      <span class="leg-item"><span class="leg-box" style="background:#185FA5"></span>Alt A: Electrification</span>
+      <span class="leg-item"><span class="leg-box" style="background:#3B6D11"></span>Alt B: Scheduling</span>
+      <span class="leg-item"><span class="leg-box" style="background:#888780;opacity:.5"></span>WHO NO₂ annual guideline (10 μg/m³)</span>
+    </div>
+    <div class="chart-wrap" style="height:280px"><canvas id="dispChart"></canvas></div>
+    <p class="note" style="margin-top:6px">Gaussian line source: C(x) = Q / (√(2π) · σ_z · u) · exp(-h²/(2σ_z²)) · f(x). Dispersion σ parameters scaled by Pasquill-Gifford stability. Source Q from EPA emission factors × train throughput.</p>
+
+    <hr class="divider">
+    <p class="section-title">24-hr Concentration Time Series — Peak Day (μg/m³ at 50m from track)</p>
+    <div class="legend">
+      <span class="leg-item"><span class="leg-box" style="background:#D85A30"></span>Baseline</span>
+      <span class="leg-item"><span class="leg-box" style="background:#185FA5"></span>Electrification</span>
+      <span class="leg-item"><span class="leg-box" style="background:#3B6D11"></span>Scheduling</span>
+    </div>
+    <div class="chart-wrap" style="height:240px"><canvas id="timeChart"></canvas></div>
+    <p class="note" style="margin-top:6px">Hypothetical train arrival schedule. Each train produces a concentration spike; scheduling moves spikes to 0-6am. Electrification reduces spike magnitude.</p>
+
+    <hr class="divider">
+    <div class="grid4">
+      <div class="metric-card"><div class="metric-label">Baseline peak conc. (50m)</div><div class="metric-val" id="m-base-peak">—</div></div>
+      <div class="metric-card"><div class="metric-label">Alt A peak conc. (50m)</div><div class="metric-val blue" id="m-elec-peak">—</div></div>
+      <div class="metric-card"><div class="metric-label">Alt B daytime peak (50m)</div><div class="metric-val green" id="m-sched-peak">—</div></div>
+      <div class="metric-card"><div class="metric-label">WHO guideline</div><div class="metric-val">10 μg/m³</div></div>
+    </div>
+  </div>
+
+  <!-- COMPARISON PANEL -->
+  <div id="tab-comparison" class="panel">
+    <div class="grid2">
+      <div>
+        <p class="section-title">Summary Metrics</p>
+        <div class="grid2" style="margin-bottom:12px">
+          <div class="metric-card"><div class="metric-label">Baseline annual exposure burden</div><div class="metric-val" id="m-base-burden">—</div></div>
+          <div class="metric-card"><div class="metric-label">Electrification reduction</div><div class="metric-val blue" id="m-elec-red">—</div></div>
+          <div class="metric-card"><div class="metric-label">Scheduling peak-hour reduction</div><div class="metric-val green" id="m-sched-red">—</div></div>
+          <div class="metric-card"><div class="metric-label">Cost-effectiveness ratio</div><div class="metric-val" id="m-coe">—</div></div>
+        </div>
+
+        <p class="section-title">Comparison Table</p>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Criterion</th><th class="td-blue">Electrification</th><th class="td-green">Scheduling</th></tr></thead>
+            <tbody>
+              <tr><td>NOx reduction (total)</td><td class="td-blue" id="t-nox-elec">—</td><td class="td-green" id="t-nox-sched">—</td></tr>
+              <tr><td>Daytime peak-hour NOx ↓</td><td class="td-blue" id="t-day-elec">—</td><td class="td-green" id="t-day-sched">—</td></tr>
+              <tr><td>Population-weighted exposure ↓</td><td class="td-blue" id="t-pop-elec">—</td><td class="td-green" id="t-pop-sched">—</td></tr>
+              <tr><td>Capital cost</td><td class="td-blue" id="t-cost-elec">—</td><td class="td-green" id="t-cost-sched">—</td></tr>
+              <tr><td>Implementation time</td><td class="td-blue" id="t-time-elec">—</td><td class="td-green" id="t-time-sched">—</td></tr>
+              <tr><td>Permanence</td><td class="td-blue">Permanent elimination</td><td class="td-green">Operational (reversible)</td></tr>
+              <tr><td>Secondary risk</td><td class="td-blue">Grid upstream emissions</td><td class="td-green">Nighttime noise burden</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <p class="section-title">NOx Reduction by Alternative (% vs. Baseline)</p>
+        <div class="legend">
+          <span class="leg-item"><span class="leg-box" style="background:#185FA5"></span>Electrification</span>
+          <span class="leg-item"><span class="leg-box" style="background:#3B6D11"></span>Scheduling (daytime)</span>
+        </div>
+        <div class="chart-wrap" style="height:200px"><canvas id="barChart"></canvas></div>
+
+        <p class="section-title" style="margin-top:1.2rem">Population-Weighted Exposure Impact</p>
+        <div class="chart-wrap" style="height:200px"><canvas id="popChart"></canvas></div>
+        <p class="note">Population density sourced from City of Fort Collins zoning data and Fort Collins train schedule (fcgov.com). Peak = 7am–9pm. Off-peak = 9pm–7am.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <p class="section-title">Concentration Profile Comparison at Key Distances</p>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table>
+        <thead><tr><th>Distance from track</th><th>Baseline (μg/m³)</th><th class="td-blue">Electrification (μg/m³)</th><th class="td-green">Scheduling daytime (μg/m³)</th><th>WHO guideline</th></tr></thead>
+        <tbody id="dist-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SENSITIVITY PANEL -->
+  <div id="tab-sensitivity" class="panel">
+    <div class="infobox">One-at-a-time (OAT) sensitivity: each parameter varied ±30% from baseline; charts show resulting change in peak NOx concentration at 50m. Identifies which assumptions most affect results.</div>
+
+    <p class="section-title">Tornado Chart — Sensitivity of Peak NOx at 50m to Parameter Variation (Baseline)</p>
+    <div class="chart-wrap" style="height:320px"><canvas id="tornadoChart"></canvas></div>
+
+    <hr class="divider">
+    <div class="grid2">
+      <div>
+        <p class="section-title">Wind Speed vs. Peak Concentration (at 50m)</p>
+        <div class="chart-wrap" style="height:220px"><canvas id="windChart"></canvas></div>
+      </div>
+      <div>
+        <p class="section-title">Scheduling Shift % vs. Daytime Exposure Reduction</p>
+        <div class="chart-wrap" style="height:220px"><canvas id="schedChart"></canvas></div>
+      </div>
+    </div>
+    <p class="note">All sensitivity runs use current slider values as the baseline. Key finding: wind speed and stability class dominate baseline concentrations; scheduling effectiveness is near-linear in shift percentage.</p>
+  </div>
+
+  <!-- MCDA PANEL -->
+  <div id="tab-mcda" class="panel">
+    <div class="infobox">Multi-Criteria Decision Analysis (MCDA) — weighted scoring matrix. Adjust criterion weights below. Quantitative scores for Technical Effectiveness are derived directly from model outputs. Qualitative scores use structured 1–5 expert rubrics.</div>
+
+    <div class="grid2">
+      <div>
+        <p class="section-title">Criterion Weights (total must = 100%)</p>
+        <div class="weight-row"><label>Technical Effectiveness</label><input type="range" id="w-tech" min="0" max="60" step="5" value="35" oninput="updateMCDA()"><span class="slider-val" id="wv-tech">35%</span></div>
+        <div class="weight-row"><label>Cost & Practicality</label><input type="range" id="w-cost" min="0" max="60" step="5" value="25" oninput="updateMCDA()"><span class="slider-val" id="wv-cost">25%</span></div>
+        <div class="weight-row"><label>Public Health & Safety</label><input type="range" id="w-health" min="0" max="60" step="5" value="25" oninput="updateMCDA()"><span class="slider-val" id="wv-health">25%</span></div>
+        <div class="weight-row"><label>Environmental</label><input type="range" id="w-env" min="0" max="60" step="5" value="15" oninput="updateMCDA()"><span class="slider-val" id="wv-env">15%</span></div>
+        <div class="note" id="weight-total-note" style="margin-top:4px">Weight total: 100%</div>
+      </div>
+
+      <div>
+        <p class="section-title">Weighted Scores</p>
+        <div style="margin-bottom:12px">
+          <p class="alt-label-a" style="margin-bottom:6px">Alt A — Electrification</p>
+          <div class="score-row"><span class="score-name">Technical Eff.</span><div class="score-bar-wrap"><div class="score-bar" id="sb-a-tech" style="background:#185FA5;width:0%"></div></div><span class="score-num" id="sn-a-tech">—</span></div>
+          <div class="score-row"><span class="score-name">Cost & Practicality</span><div class="score-bar-wrap"><div class="score-bar" id="sb-a-cost" style="background:#185FA5;width:0%"></div></div><span class="score-num" id="sn-a-cost">—</span></div>
+          <div class="score-row"><span class="score-name">Public Health</span><div class="score-bar-wrap"><div class="score-bar" id="sb-a-health" style="background:#185FA5;width:0%"></div></div><span class="score-num" id="sn-a-health">—</span></div>
+          <div class="score-row"><span class="score-name">Environmental</span><div class="score-bar-wrap"><div class="score-bar" id="sb-a-env" style="background:#185FA5;width:0%"></div></div><span class="score-num" id="sn-a-env">—</span></div>
+        </div>
+        <div>
+          <p class="alt-label-b" style="margin-bottom:6px">Alt B — Scheduling</p>
+          <div class="score-row"><span class="score-name">Technical Eff.</span><div class="score-bar-wrap"><div class="score-bar" id="sb-b-tech" style="background:#3B6D11;width:0%"></div></div><span class="score-num" id="sn-b-tech">—</span></div>
+          <div class="score-row"><span class="score-name">Cost & Practicality</span><div class="score-bar-wrap"><div class="score-bar" id="sb-b-cost" style="background:#3B6D11;width:0%"></div></div><span class="score-num" id="sn-b-cost">—</span></div>
+          <div class="score-row"><span class="score-name">Public Health</span><div class="score-bar-wrap"><div class="score-bar" id="sb-b-health" style="background:#3B6D11;width:0%"></div></div><span class="score-num" id="sn-b-health">—</span></div>
+          <div class="score-row"><span class="score-name">Environmental</span><div class="score-bar-wrap"><div class="score-bar" id="sb-b-env" style="background:#3B6D11;width:0%"></div></div><span class="score-num" id="sn-b-env">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <p class="section-title">Full MCDA Scoring Matrix</p>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table>
+        <thead>
+          <tr>
+            <th>Criterion</th><th>Basis</th>
+            <th class="td-blue">Alt A Score (1–5)</th><th>Rationale A</th>
+            <th class="td-green">Alt B Score (1–5)</th><th>Rationale B</th>
+          </tr>
+        </thead>
+        <tbody id="mcda-table"></tbody>
+      </table>
+    </div>
+
+    <hr class="divider">
+    <div class="grid2">
+      <div class="metric-card">
+        <div class="metric-label">Electrification weighted total (out of 5)</div>
+        <div class="metric-val blue" id="m-mcda-a">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Scheduling weighted total (out of 5)</div>
+        <div class="metric-val green" id="m-mcda-b">—</div>
+      </div>
+    </div>
+
+    <div style="margin-top:1rem" class="card">
+      <div class="card-title">Recommendation</div>
+      <div id="recommendation" style="font-size:13px;color:var(--color-text-secondary);line-height:1.7"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let charts = {};
+
+function showTab(t) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[onclick="showTab('${t}')"]`).classList.add('active');
+  document.getElementById('tab-' + t).classList.add('active');
+  setTimeout(update, 50);
+}
+
+function val(id) { return parseFloat(document.getElementById(id).value); }
+
+function getPgCoeffs(x, stability) {
+  const coeffs = {
+    1: [0.22, 0.16],
+    2: [0.16, 0.12],
+    3: [0.11, 0.08],
+    4: [0.08, 0.06],
+    5: [0.06, 0.04],
+    6: [0.04, 0.02]
+  };
+  const [ay, az] = coeffs[stability] || coeffs[3];
+  const sy = ay * Math.pow(x, 0.9);
+  const sz = az * Math.pow(x, 0.9);
+  return { sy, sz };
+}
+
+function gaussianConc(Q_gs, x, stability, u, h, z=1.5) {
+  if (x <= 0) return 0;
+  const { sy, sz } = getPgCoeffs(x, stability);
+  if (sz <= 0 || sy <= 0) return 0;
+  const C = Q_gs / (Math.PI * sy * sz * u)
+    * Math.exp(-0.5 * Math.pow(z - h, 2) / Math.pow(sz, 2));
+  return Math.max(0, C) * 1e6; // g/m³ → μg/m³
+}
+
+function getParams() {
+  const noxIdle = val('s-nox-idle');
+  const noxMove = val('s-nox-move');
+  const trains = val('s-trains');
+  const locos = val('s-locos');
+  const idleDur = val('s-idle-dur');
+  const wind = val('s-wind');
+  const stack = val('s-stack');
+  const stab = Math.round(val('s-stab'));
+  const recept = val('s-recept');
+  const elecEff = val('s-elec-eff') / 100;
+  const schedShift = val('s-sched-shift') / 100;
+  const schedPeak = val('s-sched-peak') / 100;
+  const popPeak = val('s-pop');
+  const popOff = val('s-pop-off');
+
+  // Source strength: during passing, Q = noxMove per loco; during idle Q = noxIdle per loco
+  // Effective Q per train (g/s) = weighted average
+  const totalLocos = trains * locos;
+  const idleFrac = (idleDur / 60) / 24;
+  const moveFrac = 1 - idleFrac;
+  const Q_base_ghr = totalLocos * (noxIdle * idleFrac + noxMove * moveFrac); // g/hr total fleet daily avg
+  const Q_base = Q_base_ghr / 3600; // g/s average line source
+
+  // Peak emission from one train passing (g/s)
+  const Q_peak_idle = locos * noxIdle / 3600;
+  const Q_peak_move = locos * noxMove / 3600;
+
+  return { noxIdle, noxMove, trains, locos, idleDur, wind, stack, stab, recept,
+           elecEff, schedShift, schedPeak, popPeak, popOff,
+           Q_base, Q_peak_idle, Q_peak_move };
+}
+
+function update() {
+  const p = getParams();
+
+  // Update slider display labels
+  const stabs = ['','A (very unstable)','B (unstable)','C (slightly unstable)','D (neutral)','E (slightly stable)','F (stable)'];
+  document.getElementById('v-nox-idle').textContent = val('s-nox-idle') + ' g/hr';
+  document.getElementById('v-nox-move').textContent = val('s-nox-move') + ' g/hr';
+  document.getElementById('v-trains').textContent = val('s-trains') + ' trains/day';
+  document.getElementById('v-locos').textContent = val('s-locos');
+  document.getElementById('v-idle-dur').textContent = val('s-idle-dur') + ' min';
+  document.getElementById('v-wind').textContent = parseFloat(val('s-wind')).toFixed(1) + ' m/s';
+  document.getElementById('v-stack').textContent = parseFloat(val('s-stack')).toFixed(1) + ' m';
+  document.getElementById('v-stab').textContent = stabs[Math.round(val('s-stab'))];
+  document.getElementById('v-recept').textContent = parseFloat(val('s-recept')).toFixed(1) + ' m';
+  document.getElementById('v-pop').textContent = Math.round(val('s-pop'));
+  document.getElementById('v-pop-off').textContent = Math.round(val('s-pop-off'));
+  document.getElementById('v-elec-eff').textContent = Math.round(val('s-elec-eff')) + '%';
+  document.getElementById('v-elec-cost').textContent = '$' + Math.round(val('s-elec-cost')) + 'M';
+  document.getElementById('v-elec-time').textContent = Math.round(val('s-elec-time')) + ' yrs';
+  document.getElementById('v-sched-shift').textContent = Math.round(val('s-sched-shift')) + '%';
+  document.getElementById('v-sched-peak').textContent = Math.round(val('s-sched-peak')) + '%';
+  document.getElementById('v-sched-cost').textContent = '$' + Math.round(val('s-sched-cost')) + 'M';
+  document.getElementById('v-sched-time').textContent = Math.round(val('s-sched-time')) + ' yrs';
+
+  buildDispChart(p);
+  buildTimeChart(p);
+  buildBarChart(p);
+  buildPopChart(p);
+  buildTornado(p);
+  buildWindChart(p);
+  buildSchedSensChart(p);
+  buildDistTable(p);
+  updateMetrics(p);
+  updateMCDA();
+}
+
+function concAtDist(Q_gs, x, p) {
+  return gaussianConc(Q_gs, x, p.stab, p.wind, p.stack, p.recept);
+}
+
+function buildDispChart(p) {
+  const distances = Array.from({length: 50}, (_, i) => (i + 1) * 10);
+  const base = distances.map(x => concAtDist(p.Q_peak_move, x, p));
+  const elec = base.map(v => v * (1 - p.elecEff));
+  const sched = base.map(v => v * (1 - p.schedPeak));
+  const who = distances.map(() => 10);
+
+  const ctx = document.getElementById('dispChart').getContext('2d');
+  if (charts.disp) { charts.disp.data.datasets[0].data = base; charts.disp.data.datasets[1].data = elec; charts.disp.data.datasets[2].data = sched; charts.disp.data.labels = distances; charts.disp.update(); return; }
+  charts.disp = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: distances,
+      datasets: [
+        { label: 'Baseline', data: base, borderColor: '#D85A30', backgroundColor: 'rgba(216,90,48,0.08)', fill: true, tension: 0.3, pointRadius: 0, borderWidth: 2 },
+        { label: 'Electrification', data: elec, borderColor: '#185FA5', backgroundColor: 'rgba(24,95,165,0.06)', fill: true, tension: 0.3, pointRadius: 0, borderWidth: 2 },
+        { label: 'Scheduling', data: sched, borderColor: '#3B6D11', backgroundColor: 'rgba(59,109,17,0.06)', fill: true, tension: 0.3, pointRadius: 0, borderWidth: 2 },
+        { label: 'WHO 10 μg/m³', data: who, borderColor: '#888780', borderDash: [6, 4], borderWidth: 1, pointRadius: 0, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: i => `${i.dataset.label}: ${i.raw.toFixed(2)} μg/m³` } } },
+      scales: {
+        x: { title: { display: true, text: 'Distance from track (m)', font: { size: 12 } }, ticks: { maxTicksLimit: 10, font: { size: 11 } } },
+        y: { title: { display: true, text: 'NOx concentration (μg/m³)', font: { size: 12 } }, ticks: { font: { size: 11 } }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+function buildTimeChart(p) {
+  const hours = Array.from({length: 24}, (_, i) => i);
+  // Baseline: trains spread across day (assume peaks at 7am, 10am, 1pm, 4pm, 7pm for ~9 trains)
+  const trainTimes = [0, 1, 2, 4, 7, 9, 11, 13, 15, 17, 19, 21, 22];
+  const base = hours.map(h => {
+    let conc = 0;
+    trainTimes.slice(0, p.trains).forEach(t => {
+      const dt = Math.abs(h - t);
+      conc += concAtDist(p.Q_peak_move, 50, p) * Math.exp(-dt * dt / 0.5);
+    });
+    return conc;
+  });
+  const elec = base.map(v => v * (1 - p.elecEff));
+
+  // Scheduling: night trains 0-6, some remain daytime
+  const dayTrains = trainTimes.slice(0, p.trains).filter(t => t >= 6 && t <= 22);
+  const nightTrains = [0, 1, 2, 3, 4, 5];
+  const shiftCount = Math.round(p.trains * p.schedShift);
+  const keptDay = dayTrains.slice(shiftCount);
+  const allSched = [...nightTrains.slice(0, shiftCount), ...keptDay];
+  const sched = hours.map(h => {
+    let conc = 0;
+    allSched.forEach(t => {
+      const dt = Math.abs(h - t);
+      conc += concAtDist(p.Q_peak_move, 50, p) * Math.exp(-dt * dt / 0.5);
+    });
+    return conc;
+  });
+
+  const ctx = document.getElementById('timeChart').getContext('2d');
+  if (charts.time) { charts.time.data.datasets[0].data = base; charts.time.data.datasets[1].data = elec; charts.time.data.datasets[2].data = sched; charts.time.update(); return; }
+  charts.time = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: hours.map(h => h + ':00'),
+      datasets: [
+        { label: 'Baseline', data: base, borderColor: '#D85A30', backgroundColor: 'rgba(216,90,48,0.1)', fill: true, tension: 0.3, pointRadius: 0, borderWidth: 2 },
+        { label: 'Electrification', data: elec, borderColor: '#185FA5', tension: 0.3, pointRadius: 0, borderWidth: 2, fill: false },
+        { label: 'Scheduling', data: sched, borderColor: '#3B6D11', tension: 0.3, pointRadius: 0, borderWidth: 2, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: i => `${i.dataset.label}: ${i.raw.toFixed(2)} μg/m³` } } },
+      scales: {
+        x: { title: { display: true, text: 'Hour of day', font: { size: 12 } }, ticks: { maxTicksLimit: 12, font: { size: 11 } } },
+        y: { title: { display: true, text: 'NOx at 50m (μg/m³)', font: { size: 12 } }, beginAtZero: true, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+function buildBarChart(p) {
+  const elecRed = p.elecEff * 100;
+  const schedRed = p.schedPeak * 100;
+  const ctx = document.getElementById('barChart').getContext('2d');
+  if (charts.bar) { charts.bar.data.datasets[0].data = [elecRed, schedRed]; charts.bar.update(); return; }
+  charts.bar = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Electrification', 'Scheduling (daytime)'],
+      datasets: [{ label: 'Reduction %', data: [elecRed, schedRed], backgroundColor: ['#185FA5', '#3B6D11'], borderRadius: 4, barThickness: 48 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: i => i.raw.toFixed(1) + '% reduction' } } },
+      scales: {
+        y: { max: 100, beginAtZero: true, ticks: { callback: v => v + '%', font: { size: 11 } } },
+        x: { ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+function buildPopChart(p) {
+  const peakPop = p.popPeak, offPop = p.popOff;
+  const peakFrac = 16/24, offFrac = 8/24;
+  const baseBurden = peakPop * peakFrac + offPop * offFrac;
+
+  const elecBurden = peakPop * p.elecEff * peakFrac + offPop * p.elecEff * offFrac;
+  const schedBurden = peakPop * p.schedPeak * peakFrac;
+
+  const ctx = document.getElementById('popChart').getContext('2d');
+  const d = [baseBurden.toFixed(0), (baseBurden - elecBurden).toFixed(0), (baseBurden - schedBurden).toFixed(0)];
+  if (charts.pop) { charts.pop.data.datasets[0].data = d; charts.pop.update(); return; }
+  charts.pop = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Baseline burden', 'Elec. reduction', 'Sched. reduction'],
+      datasets: [{ data: d, backgroundColor: ['#D85A30', '#185FA5', '#3B6D11'], borderRadius: 4, barThickness: 40 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: i => 'Person-hour weighted: ' + Number(i.raw).toFixed(0) } } },
+      scales: {
+        y: { beginAtZero: true, ticks: { font: { size: 11 } }, title: { display: true, text: 'Person-conc. burden (arb.)', font: { size: 11 } } },
+        x: { ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+function buildTornado(p) {
+  const baseC = concAtDist(p.Q_peak_move, 50, p);
+  const params = [
+    { label: 'Wind speed', id: 's-wind', pct: 0.3, invert: true },
+    { label: 'Stability class', id: 's-stab', pct: 0.3, invert: false },
+    { label: 'NOx move rate', id: 's-nox-move', pct: 0.3, invert: false },
+    { label: 'Stack height', id: 's-stack', pct: 0.3, invert: true },
+    { label: 'No. locomotives', id: 's-locos', pct: 0.3, invert: false },
+    { label: 'Trains per day', id: 's-trains', pct: 0.3, invert: false },
+    { label: 'NOx idle rate', id: 's-nox-idle', pct: 0.3, invert: false },
+  ];
+  const sensData = params.map(param => {
+    const orig = val(param.id);
+    const lo = orig * (1 - param.pct), hi = orig * (1 + param.pct);
+    document.getElementById(param.id).value = hi;
+    const p2 = getParams(); const cHi = concAtDist(p2.Q_peak_move, 50, p2);
+    document.getElementById(param.id).value = lo;
+    const p3 = getParams(); const cLo = concAtDist(p3.Q_peak_move, 50, p3);
+    document.getElementById(param.id).value = orig;
+    const dHi = param.invert ? cLo - baseC : cHi - baseC;
+    const dLo = param.invert ? cHi - baseC : cLo - baseC;
+    return { label: param.label, low: dLo, high: dHi, range: Math.abs(dHi - dLo) };
+  });
+  sensData.sort((a, b) => b.range - a.range);
+
+  const ctx = document.getElementById('tornadoChart').getContext('2d');
+  if (charts.tornado) {
+    charts.tornado.data.labels = sensData.map(d => d.label);
+    charts.tornado.data.datasets[0].data = sensData.map(d => d.low.toFixed(2));
+    charts.tornado.data.datasets[1].data = sensData.map(d => d.high.toFixed(2));
+    charts.tornado.update(); return;
+  }
+  charts.tornado = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sensData.map(d => d.label),
+      datasets: [
+        { label: '-30% change', data: sensData.map(d => d.low.toFixed(2)), backgroundColor: 'rgba(216,90,48,0.6)', borderRadius: 4 },
+        { label: '+30% change', data: sensData.map(d => d.high.toFixed(2)), backgroundColor: 'rgba(24,95,165,0.6)', borderRadius: 4 }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: i => `${i.dataset.label}: ${Number(i.raw) > 0 ? '+' : ''}${Number(i.raw).toFixed(2)} μg/m³` } }
+      },
+      scales: {
+        x: { title: { display: true, text: 'Change in peak NOx at 50m (μg/m³)', font: { size: 12 } }, ticks: { font: { size: 11 } } },
+        y: { ticks: { font: { size: 12 } } }
+      }
+    }
+  });
+}
+
+function buildWindChart(p) {
+  const winds = [0.5,1,1.5,2,2.5,3,4,5,6,7,8,9,10];
+  const base = winds.map(w => gaussianConc(p.Q_peak_move, 50, p.stab, w, p.stack, p.recept));
+  const elec = base.map(v => v * (1 - p.elecEff));
+  const sched = base.map(v => v * (1 - p.schedPeak));
+  const ctx = document.getElementById('windChart').getContext('2d');
+  if (charts.wind) {
+    charts.wind.data.datasets[0].data = base; charts.wind.data.datasets[1].data = elec; charts.wind.data.datasets[2].data = sched;
+    charts.wind.update(); return;
+  }
+  charts.wind = new Chart(ctx, {
+    type: 'line',
+    data: { labels: winds,
+      datasets: [
+        { label: 'Baseline', data: base, borderColor: '#D85A30', pointRadius: 3, pointBackgroundColor: '#D85A30', tension: 0.2, borderWidth: 2, fill: false },
+        { label: 'Elec.', data: elec, borderColor: '#185FA5', pointRadius: 3, pointBackgroundColor: '#185FA5', tension: 0.2, borderWidth: 2, fill: false },
+        { label: 'Sched.', data: sched, borderColor: '#3B6D11', pointRadius: 3, pointBackgroundColor: '#3B6D11', tension: 0.2, borderWidth: 2, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: i => `${i.dataset.label}: ${Number(i.raw).toFixed(2)} μg/m³` } } },
+      scales: {
+        x: { title: { display: true, text: 'Wind speed (m/s)', font: { size: 11 } }, ticks: { font: { size: 10 } } },
+        y: { beginAtZero: true, ticks: { font: { size: 10 } }, title: { display: true, text: 'NOx at 50m (μg/m³)', font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+function buildSchedSensChart(p) {
+  const shifts = Array.from({length: 17}, (_, i) => i * 5);
+  const reductions = shifts.map(s => s * p.schedPeak / 100 * 100);
+  const ctx = document.getElementById('schedChart').getContext('2d');
+  if (charts.sched) { charts.sched.data.datasets[0].data = reductions; charts.sched.update(); return; }
+  charts.sched = new Chart(ctx, {
+    type: 'line',
+    data: { labels: shifts.map(s => s + '%'),
+      datasets: [{ label: 'Daytime exposure reduction', data: reductions, borderColor: '#3B6D11', backgroundColor: 'rgba(59,109,17,0.08)', fill: true, tension: 0.2, pointRadius: 2, borderWidth: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: i => 'Daytime reduction: ' + Number(i.raw).toFixed(1) + '%' } } },
+      scales: {
+        x: { title: { display: true, text: '% trains shifted off-peak', font: { size: 11 } }, ticks: { maxTicksLimit: 9, font: { size: 10 } } },
+        y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%', font: { size: 10 } } }
+      }
+    }
+  });
+}
+
+function buildDistTable(p) {
+  const dists = [25, 50, 100, 150, 200, 300, 500];
+  const who = 10;
+  let html = '';
+  dists.forEach(d => {
+    const base = concAtDist(p.Q_peak_move, d, p);
+    const elec = base * (1 - p.elecEff);
+    const sched = base * (1 - p.schedPeak);
+    const whoFlag = base > who ? '<span class="badge badge-amber">exceeds WHO</span>' : '';
+    const elecFlag = elec > who ? '<span class="badge badge-red">exceeds</span>' : '<span class="badge badge-green">below</span>';
+    const schedFlag = sched > who ? '<span class="badge badge-amber">exceeds</span>' : '<span class="badge badge-green">below</span>';
+    html += `<tr>
+      <td><strong>${d}m</strong></td>
+      <td>${base.toFixed(2)} ${whoFlag}</td>
+      <td class="td-blue">${elec.toFixed(2)} ${elecFlag}</td>
+      <td class="td-green">${sched.toFixed(2)} ${schedFlag}</td>
+      <td style="color:var(--color-text-secondary)">10 μg/m³</td>
+    </tr>`;
+  });
+  document.getElementById('dist-table').innerHTML = html;
+}
+
+function updateMetrics(p) {
+  const base50 = concAtDist(p.Q_peak_move, 50, p);
+  const elec50 = base50 * (1 - p.elecEff);
+  const sched50 = base50 * (1 - p.schedPeak);
+
+  const el = id => document.getElementById(id);
+  el('m-base-peak').textContent = base50.toFixed(2) + ' μg/m³';
+  el('m-elec-peak').textContent = elec50.toFixed(2) + ' μg/m³';
+  el('m-sched-peak').textContent = sched50.toFixed(2) + ' μg/m³';
+
+  const elecRed = (p.elecEff * 100).toFixed(1);
+  const schedRed = (p.schedPeak * 100).toFixed(1);
+  const popRed_elec = (p.elecEff * 100).toFixed(1);
+  const popRedSched = (p.schedPeak * (p.popPeak / (p.popPeak + p.popOff)) * 100).toFixed(1);
+
+  el('m-base-burden').textContent = (p.Q_base * 3600 / 1000).toFixed(1) + ' kg NOx/day';
+  el('m-elec-red').textContent = elecRed + '% total';
+  el('m-sched-red').textContent = schedRed + '% peak-hour';
+  el('m-coe').textContent = '$' + (val('s-elec-cost') / (p.elecEff * 100)).toFixed(0) + 'M per %';
+
+  el('t-nox-elec').textContent = elecRed + '%';
+  el('t-nox-sched').textContent = '~0% (redistribution)';
+  el('t-day-elec').textContent = elecRed + '% reduction';
+  el('t-day-sched').textContent = schedRed + '% reduction';
+  el('t-pop-elec').textContent = popRed_elec + '%';
+  el('t-pop-sched').textContent = popRedSched + '% (daytime)';
+  el('t-cost-elec').textContent = '$' + Math.round(val('s-elec-cost')) + 'M';
+  el('t-cost-sched').textContent = '$' + Math.round(val('s-sched-cost')) + 'M';
+  el('t-time-elec').textContent = Math.round(val('s-elec-time')) + ' years';
+  el('t-time-sched').textContent = Math.round(val('s-sched-time')) + ' years';
+}
+
+function updateMCDA() {
+  const wTech = val('w-tech'), wCost = val('w-cost'), wHealth = val('w-health'), wEnv = val('w-env');
+  const total = wTech + wCost + wHealth + wEnv;
+  const el = id => document.getElementById(id);
+  el('wv-tech').textContent = wTech + '%';
+  el('wv-cost').textContent = wCost + '%';
+  el('wv-health').textContent = wHealth + '%';
+  el('wv-env').textContent = wEnv + '%';
+  el('weight-total-note').textContent = 'Weight total: ' + total + '%' + (total !== 100 ? ' ⚠ not 100%' : '');
+
+  // Scores derived from model + qualitative rubric
+  const p = getParams();
+  const elecEff = p.elecEff;
+  const schedEff = p.schedPeak;
+  const elecTime = val('s-elec-time');
+  const schedTime = val('s-sched-time');
+  const elecCost = val('s-elec-cost');
+  const schedCost = val('s-sched-cost');
+
+  // Technical: 1-5 scale proportional to reduction; electrification higher
+  const aScoreTech = Math.min(5, Math.round(elecEff * 5 * 10) / 10);
+  const bScoreTech = Math.min(5, Math.round(schedEff * 4 * 10) / 10); // max 4: doesn't reduce total NOx
+
+  // Cost: lower is better. Elec is expensive ($1B+), sched is cheap
+  const aScoreCost = Math.max(1, 5 - Math.round((elecCost - 100) / 1000));
+  const bScoreCost = Math.min(5, Math.max(1, 5 - Math.round(schedCost / 25)));
+
+  // Health: elec eliminates, sched redistributes
+  const aScoreHealth = Math.min(5, Math.round(elecEff * 4.8 * 10) / 10);
+  const bScoreHealth = Math.round(schedEff * 3.5 * 10) / 10; // redistributes risk
+
+  // Env: elec has upstream grid; sched has noise
+  const aScoreEnv = 3.8;
+  const bScoreEnv = 2.8;
+
+  const wT = wTech / 100, wC = wCost / 100, wH = wHealth / 100, wE = wEnv / 100;
+  const aTotal = aScoreTech * wT + aScoreCost * wC + aScoreHealth * wH + aScoreEnv * wE;
+  const bTotal = bScoreTech * wT + bScoreCost * wC + bScoreHealth * wH + bScoreEnv * wE;
+
+  const setBars = (prefix, scores) => {
+    const ids = ['tech', 'cost', 'health', 'env'];
+    scores.forEach((s, i) => {
+      el(`sb-${prefix}-${ids[i]}`).style.width = (s / 5 * 100) + '%';
+      el(`sn-${prefix}-${ids[i]}`).textContent = s.toFixed(1);
+    });
+  };
+  setBars('a', [aScoreTech, aScoreCost, aScoreHealth, aScoreEnv]);
+  setBars('b', [bScoreTech, bScoreCost, bScoreHealth, bScoreEnv]);
+
+  el('m-mcda-a').textContent = aTotal.toFixed(2);
+  el('m-mcda-b').textContent = bTotal.toFixed(2);
+
+  // MCDA Table
+  const rows = [
+    { crit: 'Technical Effectiveness', basis: 'Quantitative (model output)', aScore: aScoreTech, aRat: `${(elecEff*100).toFixed(0)}% total NOx reduction at all distances and times`, bScore: bScoreTech, bRat: `${(schedEff*100).toFixed(0)}% daytime peak reduction; zero total NOx reduction` },
+    { crit: 'Cost & Practicality', basis: 'Qualitative', aScore: aScoreCost, aRat: `~$${Math.round(elecCost)}M capital; ${elecTime}-yr timeline; requires BNSF/FRA cooperation`, bScore: bScoreCost, bRat: `~$${Math.round(schedCost)}M; ${Math.round(val('s-sched-time'))}-yr timeline; operational agreement only` },
+    { crit: 'Public Health & Safety', basis: 'Qualitative + quantitative', aScore: aScoreHealth, aRat: 'Eliminates NOx at source; benefits all exposure groups; no second-hand risk shift', bScore: bScoreHealth, bRat: 'Reduces peak-hour exposure; nighttime noise risk shift; does not help 24hr avg residents' },
+    { crit: 'Environmental', basis: 'Qualitative', aScore: aScoreEnv, aRat: 'CO₂ upstream if grid not renewable; lifecycle battery/infrastructure impacts; co-benefit: PM2.5 reduction', bScore: bScoreEnv, bRat: 'No co-pollutant reduction; nighttime noise burden; noise ordinance compliance risk; minimal infrastructure impact' }
+  ];
+  el('mcda-table').innerHTML = rows.map(r => `
+    <tr>
+      <td><strong>${r.crit}</strong></td>
+      <td style="font-size:11px;color:var(--color-text-secondary)">${r.basis}</td>
+      <td class="td-blue">${r.aScore.toFixed(1)}/5</td>
+      <td style="font-size:12px">${r.aRat}</td>
+      <td class="td-green">${r.bScore.toFixed(1)}/5</td>
+      <td style="font-size:12px">${r.bRat}</td>
+    </tr>`).join('');
+
+  // Recommendation
+  const winner = aTotal >= bTotal ? 'Electrification' : 'Scheduling';
+  const margin = Math.abs(aTotal - bTotal).toFixed(2);
+  el('recommendation').innerHTML = `Based on current weights, <strong>${winner}</strong> scores higher by ${margin} points out of 5. 
+  ${aTotal >= bTotal
+    ? `Electrification offers a permanent, source-level solution preferred when technical effectiveness and public health weights are high. However, its cost and long implementation timeline (${elecTime} years) make it a long-term investment. A near-term scheduling intervention could bridge the gap while infrastructure is built.`
+    : `Scheduling modification offers the fastest and most cost-effective exposure reduction for peak-hour populations, especially at higher cost and practicality weights. It does not reduce total community NOx, and total environmental burden is unchanged — making it best framed as an interim or complementary measure rather than a standalone solution.`}
+  <br><br><em>Sensitivity note: at current model parameters, wind speed and atmospheric stability class have the largest influence on modeled concentrations. Under high-stability (night) conditions (Pasquill class E–F), off-peak trains can produce higher sustained near-field concentrations than daytime dispersal conditions, partially offsetting scheduling benefits for nighttime residents.</em>`;
+}
+
+update();
+</script>

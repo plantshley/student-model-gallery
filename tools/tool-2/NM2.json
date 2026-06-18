@@ -1,9 +1,9 @@
 {
   "name": "Nymphic Moonlight",
-  "toolTag": "★♡ Tool 2",
-  "projectTitle": "",
-  "description": "",
-  "projectUrl": "",
+  "toolTag": "♡ Tool 2",
+  "projectTitle": "Kiln Pollutant Solutions",
+  "description": "Kiln Pollutant Solutions models ground-level pollutant concentrations from ceramic kiln emissions and compares two control alternatives, a baghouse fabric filter (Train 1) and a venturi scrubber paired with a thermal oxidizer (Train 2), to support a structured control technology selection. The tool takes kiln source inputs, number of kilns, capacity, firings per week, and glaze type, alongside atmospheric conditions, stack height, wind speed, stability class, receptor distance, and receptor height. ",
+  "projectUrl": "https://claude.ai/public/artifacts/e915cea3-28e6-42fa-8e68-a514f4baafa6",
   "projectPath": "../images/NM2.png",
   "folderName": "mahlon"
 }
