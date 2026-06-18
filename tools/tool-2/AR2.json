@@ -1,0 +1,9 @@
+{
+  "name": "Amber Rosehip",
+  "toolTag": "Tool 2",
+  "projectTitle": "Bus Depot PM2.5 Modeling Tool",
+  "description": "This is a modeling tool that simulates PM 2.5 concentrations downwind of a bus depot that takes diesel and compares the two engineering options, which are fleet electrification and depot relocation, based on simplified Gaussian dispersion. It takes six inputs which are specified at the head of the script: rate at which the emission is taking place by each bus, number of buses, the wind speed, the type of atmospheric stability, distance of the receptor at base and the distance at which the relocation is to be proposed. Gaussian dispersion is suitable in this case since we have a single ground-level point source on flat urban ground with a distinctly defined downwind receptor, in which case the steady-state centerline equation is a highly suitable and justifiable simplification. The tool gives four plots of the downwind concentration curve, receptor bar chart, stability class sensitivity analysis, and MCDA scoring chart in addition to a print summary table. Alternatives are estimated to compare both quantitatively with EPA NAAQS thresholds and qualitatively in four weighted criteria: technical effectiveness, cost, public health and environmental impact. Any amount lower than 12 µg/m^3 passes the annual NAAQS, any amount lower than 35 µg/m^3 passes the 24-hour standard, and anything greater indicates unacceptable exposure; the MCDA weighted sums up then indicate which of the two options does better than the other in all dimensions combined.",
+  "projectUrl": "https://gemini.google.com/share/acef41c1d3be",
+  "projectPath": "../images/AR2.png",
+  "folderName": "alyami"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Dusk Andromeda",
+  "toolTag": "Tool 2",
+  "projectTitle": "",
+  "description": "This tool evaluates PM2.5 reduction strategies for a busy urban intersection using a Fixed-Box model rationale, chosen because it approximates the mass-balance of pollutants within a confined urban canyon volume. Users input traffic volume, area dimensions, and wind speeds to generate baseline concentrations. The tool then outputs a comparative MCDA matrix and ROM cost table for two interventions, active filtration and passive vegetation. Results are interpreted through a weighted score that balances technical effectiveness with social equity and environmental trade-offs, as well as taking into account the user input goal.",
+  "projectUrl": "",
+  "projectPath": "../images/DA2.png",
+  "folderName": "domini"
+}

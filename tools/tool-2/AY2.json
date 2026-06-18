@@ -1,0 +1,9 @@
+{
+  "name": "Almond Yuzu",
+  "toolTag": "Tool 2",
+  "projectTitle": "Hospital Back-up Generator NOx Dispersion Model",
+  "description": "The tool is a ground-level NOx dispersion model which models concentrations of NOx in the atmosphere downwind of a diesel mounted hospital back-up power generator using the Gaussian point-source dispersion equation with Pasquill-Gifford stability classes. It takes user-modifiable inputs in the form of emission rate, stack height, wind speed, stability type and receptor location and calculates concentrations of a base and two engineering options Alt A (DPF+SCR retrofit, Q reduced by a user-set efficiency) and Alt B (fuel cell replaced, effectively zero Q). Gaussian dispersion is suitable since the source is one elevated point in open semi-urban environment, the receptor is at a fixed downwind position and the model yields closed form estimates of the concentrations without using the complexity of CFD. The tool generates concentration profiles, a summary table where the WHO guidelines are compared, an MCDA radar chart with weighted scores on four criteria and a ROM cost side-by-side table, and a sensitivity analysis of the impact that each input has on receptor concentration. The WHO guideline comparisons should be viewed by the users as a pass/fail measure of risk to public health, the MCDA scores as the structured yet approximate ranking (not the definitive answer), and the cost numbers as the order of magnitude only, not the procurement ready ones.",
+  "projectUrl": "https://gemini.google.com/share/ce51e4c5f829",
+  "projectPath": "../images/AY2.png",
+  "folderName": "aloyana"
+}

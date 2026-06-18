@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compost Pile Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body { font-family: 'DM Sans', sans-serif; background: #f4f7f0; color: #2c3a1e; min-height: 100vh; padding: 2rem 1rem 4rem; }
+  .page { max-width: 680px; margin: 0 auto; }
+  header { margin-bottom: 2rem; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: 32px; font-weight: 400; color: #1d3a0e; line-height: 1.2; margin-bottom: 6px; }
+  header p { font-size: 15px; color: #4a6632; line-height: 1.6; }
+  .card { background: #fff; border: 1px solid #c9ddb4; border-radius: 14px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: #4a6632; margin-bottom: 1rem; }
+  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 520px) { .input-grid { grid-template-columns: 1fr; } }
+  .field { display: flex; flex-direction: column; }
+  .field label { font-size: 13px; font-weight: 500; color: #2c3a1e; margin-bottom: 6px; }
+  .input-row { display: flex; align-items: center; border: 1px solid #c9ddb4; border-radius: 8px; overflow: hidden; background: #fff; transition: border-color 0.15s; }
+  .input-row:focus-within { border-color: #3B6D11; box-shadow: 0 0 0 3px rgba(59,109,17,0.12); }
+  .input-row input { border: none; outline: none; background: transparent; padding: 9px 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #2c3a1e; width: 100%; min-width: 0; }
+  .input-row input::placeholder { color: #a0b090; }
+  .input-unit { padding: 9px 10px 9px 4px; font-size: 13px; color: #7a9460; white-space: nowrap; flex-shrink: 0; }
+  .field-meta { font-size: 12px; color: #7a9460; margin-top: 5px; line-height: 1.4; }
+  .temp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 520px) { .temp-grid { grid-template-columns: 1fr; } }
+  select { width: 100%; border: 1px solid #c9ddb4; border-radius: 8px; padding: 9px 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #2c3a1e; background: #fff; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a6632' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; cursor: pointer; outline: none; transition: border-color 0.15s; }
+  select:focus { border-color: #3B6D11; box-shadow: 0 0 0 3px rgba(59,109,17,0.12); }
+  .btn { display: block; width: 100%; background: #2d5a0e; color: #e8f5d8; border: none; border-radius: 10px; padding: 13px 24px; font-size: 15px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; letter-spacing: 0.01em; transition: background 0.15s, transform 0.1s; margin-top: 0.25rem; }
+  .btn:hover { background: #1d3a0e; }
+  .btn:active { transform: scale(0.99); }
+  .manure-flag { background: #fffbeb; border: 1px solid #f0c060; border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #6b4a00; margin-bottom: 1.25rem; display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; }
+  .flag-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  @media (max-width: 520px) { .result-grid { grid-template-columns: 1fr; } }
+  .metric { background: #f0f7e8; border: 1px solid #c9ddb4; border-radius: 10px; padding: 1.1rem 1rem; text-align: center; }
+  .metric .val { font-family: 'DM Serif Display', serif; font-size: 30px; font-weight: 400; color: #1d3a0e; line-height: 1.1; }
+  .metric .lbl { font-size: 12px; color: #4a6632; margin-top: 5px; letter-spacing: 0.03em; }
+  .status-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eef3e8; flex-wrap: wrap; }
+  .status-row:last-child { border-bottom: none; }
+  .badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; white-space: nowrap; letter-spacing: 0.03em; }
+  .badge-ok   { background: #e0f0c8; color: #1d5a08; border: 1px solid #b2d990; }
+  .badge-warn { background: #fff3d0; color: #7a4a00; border: 1px solid #f0c060; }
+  .badge-bad  { background: #fde8e8; color: #7a1a1a; border: 1px solid #f0a0a0; }
+  .status-text { font-size: 14px; color: #2c3a1e; flex: 1; min-width: 120px; }
+  .status-text strong { font-weight: 500; }
+  .status-range { font-size: 12px; color: #7a9460; }
+  .adj-row { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #eef3e8; font-size: 14px; color: #2c3a1e; line-height: 1.5; }
+  .adj-row:last-child { border-bottom: none; }
+  .adj-arrow { color: #3B6D11; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>Compost Pile Analyzer</h1>
+    <p>Estimate whether your compost system meets optimal conditions for effective and safe composting.</p>
+  </header>
+
+  <div class="card">
+    <p class="section-label">Organic materials</p>
+    <div class="input-grid">
+      <div class="field">
+        <label>Kitchen scraps</label>
+        <div class="input-row">
+          <input type="number" id="mk" placeholder="0">
+          <span class="input-unit">lbs</span>
+        </div>
+        <div class="field-meta">C:N 15:1 &nbsp;·&nbsp; 70% moisture</div>
+      </div>
+      <div class="field">
+        <label>Yard waste</label>
+        <div class="input-row">
+          <input type="number" id="my" placeholder="0">
+          <span class="input-unit">lbs</span>
+        </div>
+        <div class="field-meta">C:N 40:1 &nbsp;·&nbsp; 60% moisture</div>
+      </div>
+      <div class="field">
+        <label>Paper / cardboard</label>
+        <div class="input-row">
+          <input type="number" id="mp" placeholder="0">
+          <span class="input-unit">lbs</span>
+        </div>
+        <div class="field-meta">C:N 150:1 &nbsp;·&nbsp; 10% moisture</div>
+      </div>
+      <div class="field">
+        <label>Raw animal manure</label>
+        <div class="input-row">
+          <input type="number" id="mm" placeholder="0">
+          <span class="input-unit">lbs</span>
+        </div>
+        <div class="field-meta">C:N 15:1 &nbsp;·&nbsp; 75% moisture</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Temperature &amp; phase</p>
+    <div class="temp-grid">
+      <div class="field">
+        <label>Pile temperature</label>
+        <div class="input-row">
+          <input type="number" id="temp" placeholder="e.g. 140">
+          <span class="input-unit">°F</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Composting phase</label>
+        <select id="phase">
+          <option value="active">Active phase</option>
+          <option value="curing">Curing phase</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn" onclick="calculate()">Analyze compost pile</button>
+
+  <div id="results" style="display:none; margin-top:1.5rem;"></div>
+</div>
+
+<script>
+function safeNum(id) {
+  var raw = document.getElementById(id).value;
+  if (raw === '' || raw === null || raw === undefined) return 0;
+  var n = parseFloat(raw);
+  return (!isNaN(n) && n > 0) ? n : 0;
+}
+
+function manureEntered() {
+  var raw = document.getElementById('mm').value;
+  if (raw === '' || raw === null || raw === undefined) return false;
+  var n = parseFloat(raw);
+  return (!isNaN(n) && n > 0);
+}
+
+function calculate() {
+  var mk = safeNum('mk');
+  var my = safeNum('my');
+  var mp = safeNum('mp');
+  var mm = safeNum('mm');
+  var temp = parseFloat(document.getElementById('temp').value);
+  var phase = document.getElementById('phase').value;
+
+  var total = mk + my + mp + mm;
+  if (total <= 0) {
+    alert('Please enter at least one material with a mass greater than 0.');
+    return;
+  }
+
+  var C = mk*(15/16) + my*(40/41) + mp*(150/151) + mm*(15/16);
+  var N = mk*(1/16)  + my*(1/41)  + mp*(1/151)  + mm*(1/16);
+  var cn = C / N;
+  var moist = (0.70*mk + 0.60*my + 0.10*mp + 0.75*mm) / total * 100;
+  var cnRounded = Math.round(cn);
+
+  var html = '';
+
+  // Manure flag — only when user typed a number > 0
+  if (manureEntered()) {
+    html += '<div class="manure-flag"><span class="flag-icon">&#9888;</span><span><strong>Raw manure present:</strong> 90&#8211;120 day pre-harvest interval applies unless compost meets regulatory pathogen reduction standards.</span></div>';
+  }
+
+  // Calculated outputs
+  html += '<div class="card"><p class="section-label">Calculated outputs</p><div class="result-grid">';
+  html += '<div class="metric"><div class="val">' + cnRounded + ':1</div><div class="lbl">C:N ratio</div></div>';
+  html += '<div class="metric"><div class="val">' + moist.toFixed(1) + '%</div><div class="lbl">Moisture content</div></div>';
+  html += '</div></div>';
+
+  // Feasibility assessment
+  var rows = [];
+  var cnBadge, moistBadge;
+
+  if (cn < 25)      { rows.push({ label:'C:N ratio',  val:cnRounded+':1',        range:'Optimal: 25:1 – 35:1', status:'Too nitrogen-rich', badge:'badge-bad'  }); cnBadge = 'bad'; }
+  else if (cn > 35) { rows.push({ label:'C:N ratio',  val:cnRounded+':1',        range:'Optimal: 25:1 – 35:1', status:'Too carbon-rich',   badge:'badge-bad'  }); cnBadge = 'bad'; }
+  else              { rows.push({ label:'C:N ratio',  val:cnRounded+':1',        range:'Optimal: 25:1 – 35:1', status:'Optimal',           badge:'badge-ok'   }); cnBadge = 'ok'; }
+
+  if (moist < 45)      { rows.push({ label:'Moisture', val:moist.toFixed(1)+'%', range:'Optimal: 45–60%', status:'Too dry', badge:'badge-bad'  }); moistBadge = 'bad'; }
+  else if (moist > 60) { rows.push({ label:'Moisture', val:moist.toFixed(1)+'%', range:'Optimal: 45–60%', status:'Too wet', badge:'badge-bad'  }); moistBadge = 'bad'; }
+  else                 { rows.push({ label:'Moisture', val:moist.toFixed(1)+'%', range:'Optimal: 45–60%', status:'Optimal', badge:'badge-ok'  }); moistBadge = 'ok'; }
+
+  if (!isNaN(temp)) {
+    if (phase === 'active') {
+      if (temp < 130)      rows.push({ label:'Temperature (active phase)', val:temp+'°F', range:'Optimal: 130–150°F', status:'Not hot enough',                      badge:'badge-warn' });
+      else if (temp > 150) rows.push({ label:'Temperature (active phase)', val:temp+'°F', range:'Optimal: 130–150°F', status:'Too hot — microbial inhibition risk',  badge:'badge-bad'  });
+      else                 rows.push({ label:'Temperature (active phase)', val:temp+'°F', range:'Optimal: 130–150°F', status:'Optimal',                              badge:'badge-ok'   });
+    } else {
+      if (temp > 100) rows.push({ label:'Temperature (curing phase)', val:temp+'°F', range:'Optimal: ~100°F', status:'Not stabilized yet', badge:'badge-warn' });
+      else            rows.push({ label:'Temperature (curing phase)', val:temp+'°F', range:'Optimal: ~100°F', status:'Optimal',             badge:'badge-ok'   });
+    }
+  }
+
+  html += '<div class="card"><p class="section-label">Feasibility assessment</p>';
+  for (var i = 0; i < rows.length; i++) {
+    html += '<div class="status-row"><span class="badge ' + rows[i].badge + '">' + rows[i].status + '</span>';
+    html += '<span class="status-text"><strong>' + rows[i].label + '</strong> — ' + rows[i].val + '</span>';
+    html += '<span class="status-range">' + rows[i].range + '</span></div>';
+  }
+  html += '</div>';
+
+  // Recommended adjustments
+  var adjs = [];
+  if (cnBadge === 'bad') {
+    if (cn < 25) {
+      var xCN = (30*N - C) / (120/151);
+      if (xCN > 0) adjs.push('Add <strong>' + xCN.toFixed(1) + ' lbs of paper/cardboard</strong> to bring the C:N ratio to approximately 30:1 (currently too nitrogen-rich).');
+    } else {
+      var xCN2 = (C - 30*N) / (15/16);
+      if (xCN2 > 0) adjs.push('Add <strong>' + xCN2.toFixed(1) + ' lbs of kitchen scraps</strong> to bring the C:N ratio to approximately 30:1 (currently too carbon-rich).');
+    }
+  }
+  if (moistBadge === 'bad') {
+    if (moist > 60) {
+      adjs.push('Pile is <strong>too wet</strong>. Add dry paper/cardboard (10% moisture) to reduce moisture content. Add in small increments and re-measure until moisture falls within 45–60%.');
+    } else {
+      adjs.push('Pile is <strong>too dry</strong>. Add kitchen scraps (70% moisture) or yard waste (60% moisture) to increase moisture. Add gradually and re-check until moisture reaches 45–60%.');
+    }
+  }
+  if (adjs.length > 0) {
+    html += '<div class="card"><p class="section-label">Recommended adjustments</p>';
+    for (var j = 0; j < adjs.length; j++) {
+      html += '<div class="adj-row"><span class="adj-arrow">&#8594;</span><span>' + adjs[j] + '</span></div>';
+    }
+    html += '</div>';
+  }
+
+  var resultsEl = document.getElementById('results');
+  resultsEl.innerHTML = html;
+  resultsEl.style.display = 'block';
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "Taffy Apricot",
+  "toolTag": "Tool 2",
+  "projectTitle": "Reno NV Wildfire Smoke Tool",
+  "description": "This tool shows the difference in shelters with HEPA filters and shelters without HEPA filters by analyzing inputs of wind speed, emission rate, plume height, HEPA efficency, and shelter efficiency for wildfire smoke in Reno, NV.",
+  "projectUrl": "https://gemini.google.com/share/882baa87882c",
+  "projectPath": "../images/TA2.png",
+  "folderName": "tripp"
+}

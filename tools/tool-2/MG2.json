@@ -1,0 +1,9 @@
+{
+  "name": "Mochi Gumdrop",
+  "toolTag": "★♡ Tool 2",
+  "projectTitle": "Compost Pile Analyzer",
+  "description": "See full guide [here](tools/tool-2/projects/MG2_guide.pdf).\n\nThe Compost Pile Analyzer is a browser-based tool that calculates the blended carbon-to-nitrogen (C:N) ratio and moisture content of a multi-material compost pile and evaluates whether conditions are within optimal ranges. Each organic waste category is assigned a fixed C:N ratio and moisture content based on typical literature values (shown in the Notes column of the inputs table); actual waste characteristics may vary depending on source, season, and handling. If conditions are not within optimal ranges, the tool recommends material additions to correct the imbalance. The guide explains inputs, calculations, outputs, and how to act on results.",
+  "projectUrl": "tools/tool-2/projects/MG2.html",
+  "projectPath": "../images/MG2.png",
+  "folderName": "garrett"
+}

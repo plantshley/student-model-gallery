@@ -1,0 +1,9 @@
+{
+  "name": "Brownie Sundae",
+  "toolTag": "Tool 2",
+  "projectTitle": "Truck Emission Control Decision Support Tool",
+  "description": "The tool takes inputs from the truck and surrounding environment, takes the conditions of the alternatives, and weights of how much each part of the MCDA is most important to the consumer and puts out the recommended alternative. This includes multiple graphs comparing the alternatives to the baseline, a 2D plume graph to show the impact of the NOx, and an AI analysis that states limitations of the tool.",
+  "projectUrl": "https://gemini.google.com/share/da0421733c5b",
+  "projectPath": "../images/BS2.png",
+  "folderName": "smith"
+}
